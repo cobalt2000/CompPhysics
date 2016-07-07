@@ -1,8 +1,12 @@
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "eigenVec.h"
 
 
-int find_eigen_vectors(double **A, int n, double *eVal, double ** eVec ){
+//#define PRINT_ALL
+
+
+int find_eigen_vectors(double **A, int n, double *eVal, double **eVec ){
 /* 
 	int find_eigen_vectors()
 This funtion finds the eigen values and eigen vectors of the symmetric real matrix A.
@@ -23,14 +27,19 @@ Arguments:
 	int info;
 
 	U = (double*)malloc(sizeof(double)*n*n);
-	
-	for(i = 0; i < n; n++){
+	for(i = 0; i < n; i++){
 		U[i + n*i ] = A[i][i];
 		for( j = (i+1); j < n; j++){
 			U[n*i + j ] = A[i][j];
 			U[i + n*j ] = 0.0;
 		}
 	}
+
+#ifdef PRINT_ALL
+	printf("The matrix passed to LAPACK is:\n");
+	printVector(U, n*n);
+
+#endif
 
 	/*find the optimum size of workspace */
 	dsyev_( "V", "U", &n, U, &n, eVal, &wkopt, &lwork, &info );
@@ -108,6 +117,16 @@ From http://www.math.utah.edu/software/lapack/lapack-d/dsyev.html
 */
 
 
+/* Now the problem should be solved.  The data needs to be placed in the outgoing arrays */
+
+for( i = 0; i < n; i++){
+	for(j = 0; j < n; j++){
+		eVec[i][j] = U[i*n + j ];
+	}
+}
+
+
+
 free(U);
 free(work);
 
@@ -115,5 +134,25 @@ return info;
 
 }
 
+////////////////////////////////////////////////////////////
 
+void printArray(double **A, int n, int m){
+        int i, j;
+        for( i = 0; i < n; i++){
+                for(j = 0; j < m; j++){
+                        printf("%1.3lf ", A[i][j]);
+                }
+                printf("\n");
+        }
+
+        return;
+}
+
+/////////////////////////////////////////////////////////////
+void printVector(double *v, int n){
+	int i;
+	for(i = 0; i < n; i++)
+		printf(" %2.5lf\n", v[i]);
+	return;
+}
 
