@@ -3,7 +3,7 @@
 #include "eigenVec.h"
 
 
-//#define PRINT_ALL
+#define PRINT_ALL
 
 
 int find_eigen_vectors(double **A, int n, double *eVal, double **eVec ){
@@ -30,8 +30,8 @@ Arguments:
 	for(i = 0; i < n; i++){
 		U[i + n*i ] = A[i][i];
 		for( j = (i+1); j < n; j++){
-			U[n*i + j ] = A[i][j];
-			U[i + n*j ] = 0.0;
+			U[i + j*n ] = A[i][j];
+			U[i*n + j ] = 0.0;
 		}
 	}
 
@@ -121,7 +121,7 @@ From http://www.math.utah.edu/software/lapack/lapack-d/dsyev.html
 
 for( i = 0; i < n; i++){
 	for(j = 0; j < n; j++){
-		eVec[i][j] = U[i*n + j ];
+		eVec[i][j] = U[i + j*n ];
 	}
 }
 
@@ -140,7 +140,7 @@ void printArray(double **A, int n, int m){
         int i, j;
         for( i = 0; i < n; i++){
                 for(j = 0; j < m; j++){
-                        printf("%1.3lf ", A[i][j]);
+                        printf("%1.3lg ", A[i][j]);
                 }
                 printf("\n");
         }
@@ -152,7 +152,7 @@ void printArray(double **A, int n, int m){
 void printVector(double *v, int n){
 	int i;
 	for(i = 0; i < n; i++)
-		printf(" %2.5lf\n", v[i]);
+		printf(" %2.5lg\n", v[i]);
 	return;
 }
 

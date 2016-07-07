@@ -43,8 +43,10 @@ printArray(A, n, n);
 
 
 // Call solver
-find_eigen_vectors( A, n, eValues, eVectors );
-
+ info = find_eigen_vectors( A, n, eValues, eVectors );
+if(info != 0){
+printf("There was an error computing the eigenvalues: %d\n", info);
+}
 
 // Print solution
 printf("The eigen values are:\n");
