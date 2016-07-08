@@ -26,19 +26,27 @@ double h2glgl(double mhin,double ytin,double ybin){
 
 
 //    double ytin,ybin,mhin; //input from the user for the effective top coupling, bottom coupling, and mass of the higgs
+    
     double tau,gwsm;
     double complex amp;
     double complex ffermion,fvector;
     double ampsq,ampsqSM;
     double prefactor;
 
-//cccc	SM Reference: some declared and defined in the header file
-//    xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
-//    alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
-//    alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
-//    g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
-//    ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
-//    ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
+//cccc	SM Reference
+    double vev = 246.0;
+    double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
+    double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
+    double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
+    double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
+    double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
+    double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
+    double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
+    double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
+    double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
+    double g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+    double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
+    double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
     gwsm = vev*g2sm; //Fermi coupling??
     prefactor = (alphas*alphas)*(g2sm*g2sm)*(mhin*mhin*mhin)*(1.0/(512.0*(pi*pi*pi)*(mw*mw)))*2.0;
     
@@ -91,12 +99,20 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 
 
 //cccc	SM Reference
-xw = 0.2312;
-alphaw = 1.0/128.0;
-g2sm = sqrt(4.0*pi*alphaw)*(1.0/sqrt(xw));
-ytsm = sqrt(2.0)*mt/vev;
-ybsm = sqrt(2.0)*mb/vev;
-gwsm = vev*g2sm;
+    double vev = 246.0;
+    double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
+    double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
+    double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
+    double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
+    double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
+    double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
+    double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
+    double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
+    double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
+    double g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+    double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
+    double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
+    gwsm = vev*g2sm; //Fermi coupling??
 prefactor = (alphaw*alphaw)*(g2sm*g2sm)*(mhin*mhin*mhin) *1.0/(1024.0*(pi*pi*pi)*(mw*mw))*2.0;
 
     amp = 0.0+0.0*I;
@@ -143,6 +159,7 @@ double complex fvector(double tau) {
 
 //    double complex func;
 
+    double complex formvector;
     formvector = 2.0+3.0*tau+3.0*tau*(2.0-tau)*func(tau);
     return formvector;
 }
@@ -154,6 +171,7 @@ double complex ffermion(double tau){
 
 //    double complex func;
 
+    double complex formfermion;
     formfermion = -2.0*tau*(1.0+(1.0-tau)*func(tau));
     return formfermion;
 }
@@ -164,6 +182,7 @@ double complex fscalar(double tau) {
 
 //    double complex func;
 
+    double complex formscalar;
     formscalar = tau*(1.0-tau*func(tau));
 //	fscalar = (1.0,0.0)
     return formscalar;
