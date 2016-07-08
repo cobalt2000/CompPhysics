@@ -27,15 +27,15 @@ double h2glgl(double mhin,double ytin,double ybin){
     double complex amp;
     double complex ffermion,fvector;
     double ampsq,ampsqSM;
-    double alphaw,alphas,prefactor;
+    double prefactor;
 
-//cccc	SM Reference
-    xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
-    alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
-    alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
-    g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
-    ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
-    ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
+//cccc	SM Reference: some declared and defined in the header file
+//    xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
+//    alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
+//    alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
+//    g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+//    ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
+//    ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
     gwsm = vev*g2sm; //Fermi coupling??
     prefactor = (alphas*alphas)*(g2sm*g2sm)*(mhin*mhin*mhin)*(1.0/(512.0*(pi*pi*pi)*(mw*mw)))*2.0;
     
