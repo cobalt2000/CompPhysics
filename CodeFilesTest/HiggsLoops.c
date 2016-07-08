@@ -5,6 +5,10 @@
 //  Created by Valerie Plaus on 7/5/16.
 //
 //
+#include <stdio.h>
+#include <stlib.h>
+#include <math.h>
+#include "HiggsLoops.h"
 
 
 
@@ -19,10 +23,9 @@ double h2glgl(double mhin,double ytin,double ybin){
 //    adapted for C by Valerie Plaus, Wittenberg University, 2016
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
-#include "HiggsLoops.h"
 
 
-    double ytin,ybin,mhin; //input from the user for the effective top coupling, bottom coupling, and mass of the higgs
+//    double ytin,ybin,mhin; //input from the user for the effective top coupling, bottom coupling, and mass of the higgs
     double tau,gwsm;
     double complex amp;
     double complex ffermion,fvector;
@@ -79,9 +82,7 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 //c (This is not the ratio of the couplings)
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-#include 'HiggsLoops.h'
-
-    double ytin,ybin,gwsm,mhin,gw;
+    double gwsm;
     double tau;
     double complex amp;
     double complex ffermion,fvector;
@@ -109,7 +110,7 @@ prefactor = (alphaw*alphaw)*(g2sm*g2sm)*(mhin*mhin*mhin) *1.0/(1024.0*(pi*pi*pi)
 
 //c	W boson contribution in the Standard Model
     tau = 4.0*(mw*mw)/(mhin*mhin);
-    amp = amp + (1.0*1.0)*fvector(tau);
+    amp = amp + (1.0*1.0)*fvector(&tau);
 
     ampsqSM = amp*conj(amp)*prefactor;
 
@@ -125,7 +126,7 @@ prefactor = (alphaw*alphaw)*(g2sm*g2sm)*(mhin*mhin*mhin) *1.0/(1024.0*(pi*pi*pi)
 
 //c	W boson contribution in the new model
     tau = 4.0*(mw*mw)/(mhin*mhin);
-    amp = amp + (gw/gwsm)*(1.0*1.0)*fvector(tau);
+    amp = amp + (gw/gwsm)*(1.0*1.0)*fvector(&tau);
 
     ampsq = amp*conj(amp)*prefactor;
 
@@ -140,8 +141,6 @@ return
 double complex fvector(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-#include 'HiggsLoops.h'
-    double tau;
     double complex func;
 
     fvector = 2.0+3.0*tau+3.0*tau*(2.0-tau)*func(tau);
@@ -153,8 +152,6 @@ return fvector
 double complex ffermion(double tau){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-#include 'HiggsLoops.h'
-    double tau;
     double complex func;
 
     ffermion = -2.0*tau*(1.0+(1.0-tau)*func(tau));
@@ -165,8 +162,6 @@ return ffermion
 double complex fscalar(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-#include 'HiggsLoops.h'
-    double tau;
     double complex func;
 
     fscalar = tau*(1.0-tau*func(tau));
@@ -179,16 +174,13 @@ return fscalar
 double complex func(double complex tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-#include <math.h>
-#include 'HiggsLoops.h'
-    double tau;
-
     if(tau>1.0) {
-        func = pow(asin(sqrt(1.0/tau)),2)+ 0.0*I;}
+        func = pow(asin(sqrt(1.0/tau)),2)+ 0.0*I;
+    }
     else {
-        func = -.250*(log((1.0+sqrt(1.0-tau))/(1.0-sqrt(1.0-tau)))-(pi*I));}
-endif
+        func = -.250*(log((1.0+sqrt(1.0-tau))/(1.0-sqrt(1.0-tau)))-(pi*I));
+    }
 
-return func
+    return func;
 }
 
