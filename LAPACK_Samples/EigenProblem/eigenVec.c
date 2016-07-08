@@ -3,7 +3,7 @@
 #include "eigenVec.h"
 
 
-#define PRINT_ALL
+//#define PRINT_ALL
 
 
 int find_eigen_vectors(double **A, int n, double *eVal, double **eVec ){

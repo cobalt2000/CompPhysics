@@ -2,18 +2,20 @@
 #include <stdio.h>
 #include "eigenVec.h"
 
+
+
+
 /**************************************************
 This is a small program to test the library 
 eigenVec.  It will create a small matrix, and
 pass it to the library to solve the eigen problem.
 **************************************************/
-
 int main(int argc, char** argv){
 
 int i,j, k;  // Standard indexs
 int info;    // This is a flag used to tell if the function worked correctly.
 
-int n = 3;
+int n = 4;
 double **A; // The matrix to the solved.
 double **eVectors; // Pointer to the solution. 
 double *eValues;  // Pointer to the eigen values.
