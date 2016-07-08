@@ -29,7 +29,7 @@ double g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin c
 double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
 double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
 
-double h2glgl(double mhin,double ytin,double ybin)
+double h2glgl(double mhin,double ytin,double ybin);
 //c These calculate the production ratio of CP even Higgs bosons
 //c from 2 gluons, based on effective top (ytin) and bottom (ybin)
 //c yukawa couplings.
@@ -38,7 +38,7 @@ double h2glgl(double mhin,double ytin,double ybin)
 // Original code by Gabe Shaughnessy, UW Madison, 2011,
 //    adapted for C by Valerie Plaus, Wittenberg University, 2016
 
-double h2gaga(double mhin,double ytin,double ybin,double gw)
+double h2gaga(double mhin,double ytin,double ybin,double gw);
 //c These calculate the production ratio of CP even Higgs bosons
 //c from 2 photons, based on effective top and bottom yukawa couplings,
 //c and scaled weak coupling.
@@ -47,10 +47,10 @@ double h2gaga(double mhin,double ytin,double ybin,double gw)
 // Original code by Gabe Shaughnessy, UW Madison, 2011,
 //    adapted for C by Valerie Plaus, Wittenberg University, 2016
 
-double complex fvector(double tau)
+double complex fvector(double tau);
 
-double complex ffermion(double tau)
+double complex ffermion(double tau);
 
-double complex fscalar(double tau)
+double complex fscalar(double tau);
 
-double complex func(double complex tau) 
+double complex func(double complex tau);

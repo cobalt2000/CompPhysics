@@ -70,7 +70,7 @@ double h2glgl(double mhin,double ytin,double ybin){
 //Ratio of the gluon fusion to higgs with respect to the Standard Model
     h2glgl = ampsq/ampsqSM;
 
-return
+    return h2glgl;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -133,7 +133,7 @@ prefactor = (alphaw*alphaw)*(g2sm*g2sm)*(mhin*mhin*mhin) *1.0/(1024.0*(pi*pi*pi)
 
     h2gaga = ampsq/ampsqSM;
 
-return
+    return h2gaga;
 }
 
 
@@ -141,10 +141,10 @@ return
 double complex fvector(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double complex func;
+//    double complex func;
 
-    fvector = 2.0+3.0*tau+3.0*tau*(2.0-tau)*func(tau);
-return fvector
+    formvector = 2.0+3.0*tau+3.0*tau*(2.0-tau)*func(tau);
+    return formvector;
 }
 
 
@@ -152,21 +152,21 @@ return fvector
 double complex ffermion(double tau){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double complex func;
+//    double complex func;
 
-    ffermion = -2.0*tau*(1.0+(1.0-tau)*func(tau));
-return ffermion
+    formfermion = -2.0*tau*(1.0+(1.0-tau)*func(tau));
+    return formfermion;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double complex fscalar(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double complex func;
+//    double complex func;
 
-    fscalar = tau*(1.0-tau*func(tau));
+    formscalar = tau*(1.0-tau*func(tau));
 //	fscalar = (1.0,0.0)
-return fscalar
+    return formscalar;
 
 }
 
