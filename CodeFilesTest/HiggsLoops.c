@@ -47,7 +47,7 @@ double h2glgl(double mhin,double ytin,double ybin){
     double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
     double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
     double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
-    double g2sm = sqrt(4.0*pi*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+    double g2sm = sqrt(4.0*PIVALUE*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
     double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
     double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
     gwsm = vev*g2sm; //Fermi coupling??
