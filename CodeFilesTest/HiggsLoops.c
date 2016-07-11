@@ -29,7 +29,7 @@ double h2glgl(double mhin,double ytin,double ybin){
 //    double ytin   input   Effective top coupling for the Higgs mass eigenstate
 //    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
 //    double mhin   input   Mass of the Higgs mass eigenstate
-double PIVALUE = 4.0*ATAN(1.0);
+double PIVALUE = 4.0*atan(1.0);
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the interaction amplitude is real; if <1, the interaction aplitude is complex.
     double gwsm; //Not sure yet
     double complex amp;
@@ -102,7 +102,7 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 //    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
 //    double mhin   input   Mass of the Higgs mass eigenstate
     
-double PIVALUE = 4.0*ATAN(1.0);
+double PIVALUE = 4.0*atan(1.0);
     double gwsm;  //not sure
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the particles and the interaction amplitude are real; if <1, the particles are virtual and the interaction amplitude is complex.
     double complex amp;
@@ -220,7 +220,7 @@ double complex func(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double complex what;
-    double PIVALUE = 4.0*ATAN(1.0);
+    double PIVALUE = 4.0*atan(1.0);
   
     if(tau>1.0) {
         what = pow(asin(sqrt(1.0/tau)),2)+ 0.0*I;

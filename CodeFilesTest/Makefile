@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 RM = rm -f
 TAR = tar zcvf
-CC = gcc 
+CC = gcc -lm 
 CFLAGS = -O
 
 all:	DriverTest Makefile
