@@ -220,7 +220,8 @@ double complex func(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double complex what;
-    
+    double PIVALUE = 4.0*ATAN(1.0);
+  
     if(tau>1.0) {
         what = pow(asin(sqrt(1.0/tau)),2)+ 0.0*I;
     }
