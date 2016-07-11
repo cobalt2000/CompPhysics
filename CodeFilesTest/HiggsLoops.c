@@ -33,9 +33,9 @@ double PIVALUE = 4.0*ATAN(1.0);
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the interaction amplitude is real; if <1, the interaction aplitude is complex.
     double gwsm; //Not sure yet
     double complex amp;
-    double complex ffermion,fvector;
+//    double complex ffermion,fvector;
     double ampsq,ampsqSM;
-    double prefactor;
+    double prefactor, h2glglprod;
 
 //cccc	SM Reference
     double vev = 246.0;
@@ -84,9 +84,9 @@ double PIVALUE = 4.0*ATAN(1.0);
     ampsq = amp*conj(amp)*prefactor;
 
 //Ratio of the gluon fusion to higgs with respect to the Standard Model
-    h2glgl = ampsq/ampsqSM;
+    h2glglprod = ampsq/ampsqSM;
 
-    return h2glgl;
+    return h2glglprod;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -108,7 +108,7 @@ double PIVALUE = 4.0*ATAN(1.0);
     double complex amp;
 //    double complex ffermion,fvector; These are functions, not variables
     double ampsq,ampsqSM;
-    double prefactor;
+    double prefactor, h2gagaprod;
 
 
 //cccc	SM Reference
@@ -169,9 +169,9 @@ double PIVALUE = 4.0*ATAN(1.0);
     ampsq = amp*conj(amp)*prefactor;
 
 
-    h2gaga = ampsq/ampsqSM;
+    h2gagaprod = ampsq/ampsqSM;
 
-    return h2gaga;
+    return h2gagaprod;
 }
 
 
