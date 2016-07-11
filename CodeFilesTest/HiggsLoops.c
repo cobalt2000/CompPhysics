@@ -6,8 +6,9 @@
 //
 //
 #include <stdio.h>
-#include <stlib.h>
+#include <stdlib.h>
 #include <math.h>
+#include <complex.h>
 #include "HiggsLoops.h"
 
 
@@ -28,7 +29,7 @@ double h2glgl(double mhin,double ytin,double ybin){
 //    double ytin   input   Effective top coupling for the Higgs mass eigenstate
 //    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
 //    double mhin   input   Mass of the Higgs mass eigenstate
-    
+double PIVALUE = 4.0*ATAN(1.0);
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the interaction amplitude is real; if <1, the interaction aplitude is complex.
     double gwsm; //Not sure yet
     double complex amp;
@@ -101,7 +102,7 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 //    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
 //    double mhin   input   Mass of the Higgs mass eigenstate
     
-    
+double PIVALUE = 4.0*ATAN(1.0);
     double gwsm;  //not sure
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the particles and the interaction amplitude are real; if <1, the particles are virtual and the interaction amplitude is complex.
     double complex amp;
@@ -142,7 +143,7 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 
 //c	W boson contribution to the interaction matrix element in the Standard Model
     tau = 4.0*(mw*mw)/(mhin*mhin);
-    amp = amp + (1.0*1.0)*fvector(&tau);
+    amp = amp + (1.0*1.0)*fvector(tau);
     //1 for the colourless-ness of the W, 1 for the charge of the W, and the vector form factor for the loop.
 
     ampsqSM = amp*conj(amp)*prefactor;
@@ -175,7 +176,7 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double complex fvector(double tau) {
+double complex fvector(double complex tau) {
 // Calculates the form factor for a vector-like particle loop.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
@@ -188,7 +189,7 @@ double complex fvector(double tau) {
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double complex ffermion(double tau){
+double complex ffermion(double complex tau){
 // Calculates the form factor for a fermionic particle loop.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
@@ -200,7 +201,7 @@ double complex ffermion(double tau){
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double complex fscalar(double tau) {
+double complex fscalar(double complex tau) {
 // Calculates the form factor for a salar particle loop.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 

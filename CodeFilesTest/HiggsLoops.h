@@ -4,15 +4,16 @@
 //
 //  Created by Valerie Plaus on 7/5/16.
 //
-// I'm declaring and defining a lot of values here because then I can just copy and paste them into different header files.
+
 
 #ifndef HiggsLoops_h
 #define HiggsLoops_h
 
 #include <stdio.h>
 #include <math.h>
+#include <complex.h>
 
-const double PIVALUE 4.0*ATAN(1.0);
+//double PIVALUE 4.0*ATAN(1.0);
 
 double h2glgl(double mhin,double ytin,double ybin);
 //c These calculate the production ratio of CP even Higgs bosons
@@ -32,13 +33,13 @@ double h2gaga(double mhin,double ytin,double ybin,double gw);
 // Original code by Gabe Shaughnessy, UW Madison, 2011,
 //    adapted for C by Valerie Plaus, Wittenberg University, 2016
 
-double complex fvector(double tau);
+double complex fvector(double complex tau);
 
-double complex ffermion(double tau);
+double complex ffermion(double complex tau);
 
-double complex fscalar(double tau);
+double complex fscalar(double complex tau);
 
-double complex func(double complex tau);
+double complex func(double tau);
 
 #endif /* HiggsLoops_h */
 
