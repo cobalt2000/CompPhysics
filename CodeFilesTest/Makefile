@@ -1,16 +1,16 @@
 SHELL = /bin/sh
 RM = rm -f
 TAR = tar zcvf
-CC = gcc -llapack -lblas -lm -L/usr/local/linalg/lib/
+CC = gcc 
 CFLAGS = -O
 
 all:	DriverTest Makefile
 
-eigenDriver:	DriverTest.o HiggsLoops.o
+DriverTest:	DriverTest.o HiggsLoops.o
 
-eigenDriver.o:	DriverTest.c HiggsLoops.o
+DriverTest.o:	DriverTest.c HiggsLoops.o
 
-eigenVec.o:	HiggsLoops.c HiggsLoops.h
+HiggsLoops.o:	HiggsLoops.c HiggsLoops.h
 
 run:	DriverTest
 	./DriverTest
