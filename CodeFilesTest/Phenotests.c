@@ -116,32 +116,35 @@ c the lightest charged Higgs mass of Higgs-stew.            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-        double precision Yteff,Ybeff,geff;
+    double precision Yteff,Ybeff,geff;
 
 //c tb production vertex, unscaled
-        for (i=1,i<=3,i++){
+// The loop starts at 1 because the lightest charged Higgs eigenvalue should be a 0 (a Goldstone).
+    for (i=1,i<=3,i++){
         if (chmass[mch[i]]<=3000){
-            tbprod[i] = (Yb*cheigvec[1][mch[i]])**2 +
-                        (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])**2;
-            csprod[i] = (Ys*cheigvec[1][mch[i]])**2 +
-                        (Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]])**2;
-            mch_tb_prod(i) = tbprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71);
-            mch_cs_prod(i) = csprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71);
+            tbprod[i] = (Yb*cheigvec[1][mch[i]])*(Yb*cheigvec[1][mch[i]]) +
+                        (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])*
+                        (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]);
+            csprod[i] = (Ys*cheigvec[1][mch[i]])*(Ys*cheigvec[1][mch[i]]) +
+                        (Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]])*
+                        (Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]]);
+            mch_tb_prod[i] = tbprod[i]*lineint(chmass[mch[i]],MHc_MSSM,cross_MSSM,(sizeof(cross_MSSM)/sizeof(cross_MSSM[0])));
+            mch_cs_prod[i] = csprod[i]*lineint(chmass[mch[i]],MHc_MSSM,cross_MSSM,(sizeof(cross_MSSM)/sizeof(cross_MSSM[0])));
         }
-        else
+        else {
             tbprod(i) = 0.0;
             csprod(i) = 0.0;
             mch_tb_prod(i) = 0.0;
             mch_cs_prod(i) = 0.0;
-            }
         }
+    }
 
 //c production rates for h_0 as ratios relative to the SM
-    for (i=1,i<=4,i++){
-        Yteff = (Yt*heigvec[2][mh[i]] + Ytp*heigvec[4][mh[i]]);
-        Ybeff = Yb*heigvec[1][mh[i]];
-        geff = g2*(heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+
-                   heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4);
+    for (i=0,i<=3,i++){
+        Yteff = (Yt*heigvec[1][mh[i]] + Ytp*heigvec[3][mh[i]]);
+        Ybeff = Yb*heigvec[0][mh[i]];
+        geff = g2*(heigvec[0][mh[i]]*vevs[0]+heigvec[1][mh[i]]*vevs[1]+
+                   heigvec[2][mh[i]]*vevs[2]+heigvec[3][mh[i]]*vevs[3]);
         ggprod[i] = h2glgl(hmass(mh(i)),Yteff,Ybeff); //! Gabe's code gives prod ratio
         gagaprod[i] = h2gaga(hmass(mh(i)),Yteff,Ybeff,geff); //! Gabe's code gives prod ratio
 //c          mh_gg_prod(i) = ggprod(i)*?
@@ -153,16 +156,22 @@ c-----------------------------------------------------------c*/
 
 
 //c cross section for h_0 as ratios relative to the SM
-    for (i=1,i<=4,i++){
-        if (hmass(mh(i))>=100.0){
-            xsgg24l(i)=ggprod(i)* (BFcpe(i,7)/BFSM(i,7));
-            xsgg22l(i)=ggprod(i)* (BFcpe(i,8)/BFSM(i,8));
-            xsgg2ww(i)=ggprod(i)* (BFcpe(i,5)/BFSM(i,5));
-            xsgg2gaga(i)=ggprod(i)* (BFcpe(i,6)/BFSM(i,6));
+// The second indices for the BF__ arrays correspond to the correct column in an imported file.
+// 3rd Column: Higgs decay to 2 tau particles           [2]
+// 5th Column: Higgs decay to 2 W particles             [4]
+// 6th Column: Higgs decay to 2 photons (gamma-gamma)   [5]
+// 7th Column: Higgs decay to 4 leptons                 [6]
+// 8th Column: Higgs decay to 2 leptons, 2 neutrinos    [7]
+    for (i=0,i<=3,i++){
+        if (hmass[mh[i]]>=100.0){
+            xsgg2ww[i]=ggprod[i]* (BFcpe[i][4]/BFSM[i][4]);
+            xsgg2gaga[i]=ggprod[i]* (BFcpe[i][5]/BFSM[i][5]);
+            xsgg24l[i]=ggprod[i]* (BFcpe[i][6]/BFSM[i][6]);
+            xsgg22l[i]=ggprod[i]* (BFcpe[i][7]/BFSM[i][7]);
 
 //c       if (hmass(mh(i)).gt.80d0.and.hmass(mh(i)).lt.600d0) then
-            gghprod[i] = ggprod[i]*lineint(hmass[mh[i]],masshgg,hggprod,30);
-            xsgg2tautau[i]=gghprod[i]*(BFcpe[i][3]); //! the plot limit here is production x BF
+            gghprod[i] = ggprod[i]*lineint(hmass[mh[i]],masshgg,hggprod,(sizeof(hggprod)/sizeof(hggprod[0])));
+            xsgg2tautau[i]=gghprod[i]*(BFcpe[i][2]); //! the plot limit here is production x BF
 /*c           ATLAS-CONF-2011-132
 c          else
 c            hggprod(i) = 0d0
@@ -171,10 +180,10 @@ c          endif
 */
         }
         else {
-            xsgg24l(i)=0.0;
-            xsgg22l(i)=0.0;
-            xsgg2ww(i)=0.0;
-            xsgg2gaga(i)=0.0;
+            xsgg24l[i]=0.0;
+            xsgg22l[i]=0.0;
+            xsgg2ww[i]=0.0;
+            xsgg2gaga[i]=0.0;
         }
     }
 /*
