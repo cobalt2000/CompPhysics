@@ -79,19 +79,21 @@ int hzz_check(double **heigenvec, double *hmass, double *mh, double *vevs){
 // Lep constraint
     for (i=0;i<4;i++){
         if (hmass(mh(i))>=2.0*4.7) {
-            hzz_ratio(i) = (veves[1]*heigvec(1,mh(i)) + vevs[2]*heigvec(2,mh(i)) + vevs[3]*heigvec(3,mh(i)) + vevs[4]*heigvec(4,mh(i)))*(veves[1]*heigvec(1,mh(i)) + vevs[2]*heigvec(2,mh(i)) + vevs[3]*heigvec(3,mh(i)) + vevs[4]*heigvec(4,mh(i)))/(246.0*246.0)*(BFcpe(i,1)/BFSM(i,1));//!(1-BFinv_decay(i));
-        hzzcutoff = lineint(hmass(mh(i)),zzhmass,zzhcoup,217);
+            hzz_ratio(i) = (veves[0]*heigvec[0][mh[i]] + vevs[1]*heigvec[1][mh[i]] + vevs[2]*heigvec[2][mh[i]] + vevs[3]*heigvec[3][mh[i]])*(veves[0]*heigvec[0][mh[i]] + vevs[1]*heigvec[1][mh[i]] + vevs[2]*heigvec[2][mh[i]] + vevs[3]*heigvec[3][mh[i]])/(246.0*246.0)*(BFcpe[i][0]/BFSM[i][0]);//!(1-BFinv_decay(i));
+        hzzcutoff = lineint(hmass[mh[i]],zzhmass,zzhcoup,217);
         /*        else if (hmass(mh(i))>=2.0*1.78) then
          hzz_ratio(i) = (v1*heigvec(1,mh(i)) + v2*heigvec(2,mh(i)) + v3*heigvec(3,mh(i)) +  v4*heigvec(4,mh(i)))**2/246.d0**2*(BFcpe(i,3)/BFSM(i,3))! need to import tau tau lep constraint. this array is a guess
          hzzcutoff = lineint(hmass(mh(i)),zzhmass,zzhcouptau,217)
          printf (BFcpe(i,3),BFSM(i,3)) */
     }
     else{
-        hzzcheck = 0;}
+        hzzcheck = 0;
+    }
     
     //        if (hmass(mh(i))<=110.0 ) then
-    if (hmass(mh(i))<=114.0&&hzz_ratio(i)>=hzzcutoff) then{
-        hzzcheck = 0;}
+    if (hmass[mh[i]]<=114.0&&hzz_ratio[i]>=hzzcutoff) {
+        hzzcheck = 0;
+    }
     
     //      if (hmass(mh(i)).le.15d0) then
     //      printf (hmass(mh(i)), hzz_ratio(i), hzzcutoff,hzzcheck);
@@ -102,9 +104,9 @@ int hzz_check(double **heigenvec, double *hmass, double *mh, double *vevs){
 
 
 
-c-----------------------------------------------------------c
-subroutine cross_sections()
-c-----------------------------------------------------------c
+//c-----------------------------------------------------------c
+    void cross_sections(){
+/*c-----------------------------------------------------------c
 c                                                           c
 c This subroutine calculates the ratio fo the tbH+ coupling c
 c between the Higgs-nkr model and the MSSM.  To get the    c
@@ -112,75 +114,82 @@ c MSSM parameters we use \mu = \lambda_1*s1 and b = 100*mu. c
 c \tan(\beta) is set so that the MSSM charged higgs matches c
 c the lightest charged Higgs mass of Higgs-stew.            c
 c                                                           c
-c-----------------------------------------------------------c
-implicit none
-include 'manyhiggs.inc'
-double precision Yteff,Ybeff,geff
+c-----------------------------------------------------------c*/
 
-c tb production vertex, unscaled
-do i=1,3
-if (chmass(mch(i)).le.3d3) then
-tbprod(i) = (Yb*cheigvec(1,mch(i)))**2 + (Yt*cheigvec(2,mch(i)) + Ytp*cheigvec(4,mch(i)))**2
-csprod(i) = (Ys*cheigvec(1,mch(i)))**2 + (Yc*cheigvec(2,mch(i)) + Ycp*cheigvec(4,mch(i)))**2
-mch_tb_prod(i) = tbprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71)
-mch_cs_prod(i) = csprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71)
-else
-tbprod(i) = 0d0
-csprod(i) = 0d0
-mch_tb_prod(i) = 0d0
-mch_cs_prod(i) = 0d0
-endif
-enddo
+        double precision Yteff,Ybeff,geff;
 
-c production rates for h_0 as ratios relative to the SM
-do i=1,4
-Yteff = (Yt*heigvec(2,mh(i)) + Ytp*heigvec(4,mh(i)))
-Ybeff = Yb*heigvec(1,mh(i))
-geff = g2*(heigvec(1,mh(i))*v1+heigvec(2,mh(i))*v2+heigvec(3,mh(i))*v3+heigvec(4,mh(i))*v4)
-ggprod(i) = h2glgl(hmass(mh(i)),Yteff,Ybeff) ! Gabe's code gives prod ratio
-gagaprod(i) = h2gaga(hmass(mh(i)),Yteff,Ybeff,geff) ! Gabe's code gives prod ratio
-c          mh_gg_prod(i) = ggprod(i)*?
-c          mh_gaga_prod(i) = gagaprod(i)*?
-Yteff = 0
-Ybeff = 0
-geff = 0
-enddo
+//c tb production vertex, unscaled
+        for (i=1,i<=3,i++){
+        if (chmass[mch[i]]<=3000){
+            tbprod[i] = (Yb*cheigvec[1][mch[i]])**2 +
+                        (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])**2;
+            csprod[i] = (Ys*cheigvec[1][mch[i]])**2 +
+                        (Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]])**2;
+            mch_tb_prod(i) = tbprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71);
+            mch_cs_prod(i) = csprod(i)*lineint(chmass(mch(i)),MHc_MSSM,cross_MSSM,71);
+        }
+        else
+            tbprod(i) = 0.0;
+            csprod(i) = 0.0;
+            mch_tb_prod(i) = 0.0;
+            mch_cs_prod(i) = 0.0;
+            }
+        }
+
+//c production rates for h_0 as ratios relative to the SM
+    for (i=1,i<=4,i++){
+        Yteff = (Yt*heigvec[2][mh[i]] + Ytp*heigvec[4][mh[i]]);
+        Ybeff = Yb*heigvec[1][mh[i]];
+        geff = g2*(heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+
+                   heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4);
+        ggprod[i] = h2glgl(hmass(mh(i)),Yteff,Ybeff); //! Gabe's code gives prod ratio
+        gagaprod[i] = h2gaga(hmass(mh(i)),Yteff,Ybeff,geff); //! Gabe's code gives prod ratio
+//c          mh_gg_prod(i) = ggprod(i)*?
+//c          mh_gaga_prod(i) = gagaprod(i)*?
+        Yteff = 0;
+        Ybeff = 0;
+        geff = 0;
+    }
 
 
-c cross section for h_0 as ratios relative to the SM
-do i=1,4
-if (hmass(mh(i)).ge.100d0) then
-xsgg24l(i)=ggprod(i)* (BFcpe(i,7)/BFSM(i,7))
-xsgg22l(i)=ggprod(i)* (BFcpe(i,8)/BFSM(i,8))
-xsgg2ww(i)=ggprod(i)* (BFcpe(i,5)/BFSM(i,5))
-xsgg2gaga(i)=ggprod(i)* (BFcpe(i,6)/BFSM(i,6))
+//c cross section for h_0 as ratios relative to the SM
+    for (i=1,i<=4,i++){
+        if (hmass(mh(i))>=100.0){
+            xsgg24l(i)=ggprod(i)* (BFcpe(i,7)/BFSM(i,7));
+            xsgg22l(i)=ggprod(i)* (BFcpe(i,8)/BFSM(i,8));
+            xsgg2ww(i)=ggprod(i)* (BFcpe(i,5)/BFSM(i,5));
+            xsgg2gaga(i)=ggprod(i)* (BFcpe(i,6)/BFSM(i,6));
 
-c       if (hmass(mh(i)).gt.80d0.and.hmass(mh(i)).lt.600d0) then
-gghprod(i) = ggprod(i)*lineint(hmass(mh(i)),masshgg,hggprod,30)
-xsgg2tautau(i)=gghprod(i)*(BFcpe(i,3)) ! the plot limit here is production x BF
-c           ATLAS-CONF-2011-132
+//c       if (hmass(mh(i)).gt.80d0.and.hmass(mh(i)).lt.600d0) then
+            gghprod[i] = ggprod[i]*lineint(hmass[mh[i]],masshgg,hggprod,30);
+            xsgg2tautau[i]=gghprod[i]*(BFcpe[i][3]); //! the plot limit here is production x BF
+/*c           ATLAS-CONF-2011-132
 c          else
 c            hggprod(i) = 0d0
 c            xsgg2tautau(i) = 0
 c          endif
-else
-xsgg24l(i)=0d0
-xsgg22l(i)=0d0
-xsgg2ww(i)=0d0
-xsgg2gaga(i)=0d0
-endif
-enddo
-
+*/
+        }
+        else {
+            xsgg24l(i)=0.0;
+            xsgg22l(i)=0.0;
+            xsgg2ww(i)=0.0;
+            xsgg2gaga(i)=0.0;
+        }
+    }
+/*
 c output for testing purposes
 c        write(*,*) 'yukawas: Y1 =',Y1,', Y2 =',Y2,' Y2p =',Y2p
 c        write(*,*) 'MSSM parameters: mu =',mu_mssm,', tan(beta) =',dtan(beta_mssm)
 c        write(*,*) 'MSSM yukawas: Y1 =',Y1_mssm,', Y2 =',Y2_mssm
 c        write(*,*) 'Coupling ratio = ',ratio
-c      endif
+c      endif 
+*/
 
 return
-end
-
+}
+    
+///////////////////////////////////////////////////////////////////////
 c-----------------------------------------------------------c
 subroutine atlas_check_preJuly4()
 c-----------------------------------------------------------c
