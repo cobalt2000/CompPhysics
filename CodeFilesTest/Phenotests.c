@@ -373,19 +373,19 @@ c  hasn't already been excluded.                            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-        double Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF1!,chpull;
+        double Au[3],Ad[3],Yteff[3],Ybeff[3],mchtemp[3],chBF1;//!,chpull;
 
 //c bsg_nlo subroutine
         for (i=1;i<=3;i++) {
-            mchtemp(i) = chmass(mch[i]);
-            Yteff(i) = (Yt*cheigvec(2,mch[i]) + Ytp*cheigvec(4,mch[i]));
-            Ybeff(i) = Yb*cheigvec(1,mch[i]);
-            Au(i) = (Yt*cheigvec(2,mch[i]) + Ytp*cheigvec(4,mch[i]))/(sqrt(2.0)*mt/246d0);
-            Ad(i) = Yb*cheigvec(1,mch[i])/(sqrt(2.0)*mb/246);
+            mchtemp[i] = chmass[mch[i]];
+            Yteff[i] = (Yt*cheigvec[2,mch[i]] + Ytp*cheigvec[4,mch[i]]);
+            Ybeff[i] = Yb*cheigvec[1,mch[i]];
+            Au[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])/(sqrt(2.0)*mt/246);
+            Ad[i] = Yb*cheigvec[1][mch[i]]/(sqrt(2.0)*mb/246);
 //c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
         }
 
-        bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF1,chpull1)
+        bsg_nlo(Au[1],Ad[1],mchtemp[1],1,chBF1,chpull1)
 //c        call bsg_nlo(Au,Ad,mchtemp,3,chBF,chpull)
 //c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
 
@@ -406,11 +406,11 @@ c-----------------------------------------------------------c*/
         }
 
 
-return
+        return bsgcheck1;
     }
 
 //c-----------------------------------------------------------c
-    subroutine bsgam(){
+    int bsgam(){
 /*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine checks that the charged Higgs branching  c
@@ -418,38 +418,38 @@ c  hasn't already been excluded.                            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-double precision Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF3!,chpull
+    double Au[3],Ad[3],Yteff[3],Ybeff[3],mchtemp[3],chBF3;//!,chpull
 
-c bsg_nlo subroutine
-do i=1,3
-mchtemp(i) = chmass(mch(i))
-Yteff(i) = (Yt*cheigvec(2,mch(i)) + Ytp*cheigvec(4,mch(i)))
-Ybeff(i) = Yb*cheigvec(1,mch(i))
-Au(i) = (Yt*cheigvec(2,mch(i)) + Ytp*cheigvec(4,mch(i)))/(dsqrt(2d0)*mt/246d0)
-Ad(i) = Yb*cheigvec(1,mch(i))/(dsqrt(2d0)*mb/246d0)
-c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
-enddo
+//c bsg_nlo subroutine
+    for (i=1;i<=3;i++) {
+        mchtemp[i] = chmass[mch[i]];
+        Yteff[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]);
+        Ybeff[i] = Yb*cheigvec[1][mch[i]];
+        Au[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])/(sqrt(2.0)*mt/246.0);
+        Ad[i] = Yb*cheigvec[1][mch[i]]/(sqrt(2.0)*mb/246.0);
+//c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
+    }
 
-c        call bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF,chpull)
-call bsg_nlo(Au,Ad,mchtemp,3,chBF3,chpull3)
-c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
+//c        call bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF,chpull)
+        bsg_nlo(Au,Ad,mchtemp,3,chBF3,chpull3);
+//c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
 
-if(chpull3.ge.(1.96d0)) then
-bsgcheck3 = 0
-endif
+    if(chpull3.ge.(1.96.0)) {
+        bsgcheck3 = 0;
+    }
 
-c        if (higgscheck*chiggscheck*cpoddcheck*charginocheck*neutralinocheck.gt.0) then
-c        write(*,*) chpull, bsgcheck
-c        endif
+//c        if (higgscheck*chiggscheck*cpoddcheck*charginocheck*neutralinocheck.gt.0) then
+//c        write(*,*) chpull, bsgcheck
+//c        endif
 
-do i=1,3
-mchtemp(i) = 0d0
-Yteff(i) = 0d0
-Ybeff(i) = 0d0
-Au(i) = 0d0
-Ad(i) = 0d0
-enddo
+    for (i=1;i<=3;i++) {
+        mchtemp[i] = 0.0;
+        Yteff[i] = 0.0;
+        Ybeff[i] = 0.0;
+        Au[i] = 0.0;
+        Ad[i] = 0.0;
+    }
 
 
-return
+    return bsgcheck3;
     }
