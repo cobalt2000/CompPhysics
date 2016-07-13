@@ -116,11 +116,11 @@ c the lightest charged Higgs mass of Higgs-stew.            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-    double precision Yteff,Ybeff,geff;
+    double precision Yteff,Ybeff,geff;  //intermediate memory places to make the code more readable
 
 //c tb production vertex, unscaled
 // The loop starts at 1 because the lightest charged Higgs eigenvalue should be a 0 (a Goldstone).
-    for (i=1,i<=3,i++){
+    for (i=1;i<=3;i++){
         if (chmass[mch[i]]<=3000){
             tbprod[i] = (Yb*cheigvec[1][mch[i]])*(Yb*cheigvec[1][mch[i]]) +
                         (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])*
@@ -140,7 +140,7 @@ c-----------------------------------------------------------c*/
     }
 
 //c production rates for h_0 as ratios relative to the SM
-    for (i=0,i<=3,i++){
+    for (i=0;i<=3;i++){
         Yteff = (Yt*heigvec[1][mh[i]] + Ytp*heigvec[3][mh[i]]);
         Ybeff = Yb*heigvec[0][mh[i]];
         geff = g2*(heigvec[0][mh[i]]*vevs[0]+heigvec[1][mh[i]]*vevs[1]+
@@ -162,7 +162,7 @@ c-----------------------------------------------------------c*/
 // 6th Column: Higgs decay to 2 photons (gamma-gamma)   [5]
 // 7th Column: Higgs decay to 4 leptons                 [6]
 // 8th Column: Higgs decay to 2 leptons, 2 neutrinos    [7]
-    for (i=0,i<=3,i++){
+    for (i=0;i<=3;i++){
         if (hmass[mh[i]]>=100.0){
             xsgg2ww[i]=ggprod[i]* (BFcpe[i][4]/BFSM[i][4]);
             xsgg2gaga[i]=ggprod[i]* (BFcpe[i][5]/BFSM[i][5]);
@@ -199,73 +199,74 @@ return
 }
     
 ///////////////////////////////////////////////////////////////////////
-c-----------------------------------------------------------c
-subroutine atlas_check_preJuly4()
-c-----------------------------------------------------------c
-implicit none
-include 'manyhiggs.inc'
-
-c parameters in this subroutine only
-double precision hwwcutoff,hzz2lcutoff,hzz4lcutoff,hgagacutoff,htautaucutoff
+//c-----------------------------------------------------------c
+    int atlas_check_preJuly4(){
+//c-----------------------------------------------------------c
 
 
-c Atlas suggested excess
-do i=1,4
-hwwcutoff=0d0
-hzz2lcutoff=0d0
-hzz4lcutoff=0d0
-hgagacutoff=0d0
-htautaucutoff=0d0
-if (hmass(mh(i)).gt.110.305d0.and.hmass(mh(i)).lt.600d0) then
-hwwcutoff = lineint(hmass(mh(i)),masshww,hwwlimits,79)
-c	    print *,'ww',i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
-if (xsgg2ww(i) .ge. hwwcutoff) then
-atlaswwcheck = 0
-c          else
-c	    write(16,*) i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
-endif
-endif
-if (hmass(mh(i)).gt.200.345d0.and.hmass(mh(i)).lt.600d0) then
-hzz2lcutoff = lineint(hmass(mh(i)),massh2l2nu,hZZlnulimits,50)
-c	    print *,'zz',i,hmass(mh(i)),xsgg22l(i),hzz2lcutoff
-if (xsgg22l(i) .ge. hzz2lcutoff) then
-atlas2lcheck = 0
-endif
-endif
-if (hmass(mh(i)).gt.110.152d0.and.hmass(mh(i)).lt.598.344d0) then
-hzz4lcutoff = lineint(hmass(mh(i)),massh4l,hZZ4llimits,130)
-c	    print *,'4l',i,hmass(mh(i)),xsgg24l(i),hzz4lcutoff
-if (xsgg24l(i) .ge. hzz4lcutoff) then
-atlas4lcheck = 0
-endif
-endif
-if (hmass(mh(i)).gt.110.457d0.and.hmass(mh(i)).lt.150.102d0) then
-hgagacutoff = lineint(hmass(mh(i)),masshgaga,hgagalimits,67)
-c	    print *,'gaga',i,hmass(mh(i)),xsgg2gaga(i),hgagacutoff
-if (xsgg2gaga(i) .ge. hgagacutoff) then
-atlasgagacheck = 0
-endif
-endif
-if (hmass(mh(i)).gt.100d0.and.hmass(mh(i)).lt.600d0) then
-htautaucutoff = lineint(hmass(mh(i)),masshtautau,htautaulimits,16)
-c	    print *,'tata',i,hmass(mh(i)),xsgg2tautau(i),htautaucutoff
-if (xsgg2tautau(i) .ge. htautaucutoff) then
-atlastautaucheck = 0
-endif
-endif
-enddo
+//c parameters in this subroutine only
+        double hwwcutoff,hzz2lcutoff,hzz4lcutoff,hgagacutoff,htautaucutoff;
 
-c	  if(atlaswwcheck*atlas2lcheck*atlas4lcheck*atlasgagacheck*atlastautaucheck.eq.0) then
-c	   print *,'failed'
-c	  else
-c	   print *,'passed'
-c	   if(hmass(mh(1)).ge.114d0) pause
-c	  endif
 
-return
-end
+//c Atlas suggested excess
+        for (i=0;i<=3;i++){
+            hwwcutoff=0.0;
+            hzz2lcutoff=0.0;
+            hzz4lcutoff=0.0;
+            hgagacutoff=0.0;
+            htautaucutoff=0.0;
+            if (hmass[mh[i]] > 110.305 && hmass[mh[i]] < 600){
+                hwwcutoff = lineint(hmass[mh[i]],masshww,hwwlimits,79);
+//c	    print *,'ww',i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
+                if (xsgg2ww[i] .ge. hwwcutoff) {
+                    atlaswwcheck = 0;
+//c          else
+//c	    write(16,*) i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
+                }
+            }
+            if (hmass[mh[i]] > 200.345 && hmass[mh[i]] < 600){
+                hzz2lcutoff = lineint(hmass[mh[i]],massh2l2nu,hZZlnulimits,50);
+//c	    print *,'zz',i,hmass(mh(i)),xsgg22l(i),hzz2lcutoff
+                if (xsgg22l[i] >= hzz2lcutoff) {
+                    atlas2lcheck = 0;
+                }
+            }
+            if (hmass[mh[i]] > 110.152 && hmass[mh[i]] < 598.344) {
+                hzz4lcutoff = lineint(hmass[mh[i]],massh4l,hZZ4llimits,130);
+//c	    print *,'4l',i,hmass(mh(i)),xsgg24l(i),hzz4lcutoff
+                if (xsgg24l[i] .ge. hzz4lcutoff){
+                    atlas4lcheck = 0;
+                }
+            }
+            if (hmass[mh[i]] > 110.457 && hmass[mh[i]] < 150.102) {
+                hgagacutoff = lineint(hmass[mh[i]],masshgaga,hgagalimits,67);
+//c	    print *,'gaga',i,hmass(mh(i)),xsgg2gaga(i),hgagacutoff
+                if (xsgg2gaga[i] .ge. hgagacutoff){
+                    atlasgagacheck = 0;
+                }
+            }
+            if (hmass[mh[i]] > 100 && hmass[mh[i]] < 600) {
+                htautaucutoff = lineint(hmass[mh[i]],masshtautau,htautaulimits,16);
+//c	    print *,'tata',i,hmass(mh(i)),xsgg2tautau(i),htautaucutoff
+                if (xsgg2tautau[i] .ge. htautaucutoff) {
+                    atlastautaucheck = 0;
+                }
+        }
+    }
 
-c-----------------------------------------------------------c
+//c	  if(atlaswwcheck*atlas2lcheck*atlas4lcheck*atlasgagacheck*atlastautaucheck=0) then
+//c	   print *,'failed'
+//c	  else
+//c	   print *,'passed'
+//c	   if(hmass(mh(1)).ge.114d0) pause
+//c	  endif
+
+        return atlaswwcheck*atlas2lcheck*atlas4lcheck*atlasgagacheck*atlastautaucheck;
+    }
+
+    
+// There's no need for two copies for the pre- and post-July 4 data.
+/*c-----------------------------------------------------------c
 subroutine atlas_check_postJuly4()
 c-----------------------------------------------------------c
 implicit none
@@ -328,17 +329,16 @@ c	  endif
 
 return
 end
-
-c-----------------------------------------------------------c
-subroutine happypoint()
-c-----------------------------------------------------------c
+*/
+//c-----------------------------------------------------------c
+    int happypoint(){
+/*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine checks that the charged Higgs branching  c
 c  hasn't already been excluded.                            c
 c                                                           c
-c-----------------------------------------------------------c
-implicit none
-include 'manyhiggs.inc'
+c-----------------------------------------------------------c*/
+
 logical whscan
 common/scantype/whscan
 
@@ -357,18 +357,17 @@ c	if(hmass(mh(1)).gt.114d0) happy3 = 0
 c	if (chmass(mch(2)).gt.600d0) happy3 = 0
 
 return
-end
+    }
 
-c-----------------------------------------------------------c
-subroutine bsgam_1only()
-c-----------------------------------------------------------c
+//c-----------------------------------------------------------c
+    int bsgam_1only(){
+/*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine checks that the charged Higgs branching  c
 c  hasn't already been excluded.                            c
 c                                                           c
-c-----------------------------------------------------------c
-implicit none
-include 'manyhiggs.inc'
+c-----------------------------------------------------------c*/
+
 double precision Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF1!,chpull
 
 c bsg_nlo subroutine
@@ -403,18 +402,17 @@ enddo
 
 
 return
-end
+    }
 
-c-----------------------------------------------------------c
-subroutine bsgam()
-c-----------------------------------------------------------c
+//c-----------------------------------------------------------c
+    subroutine bsgam(){
+/*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine checks that the charged Higgs branching  c
 c  hasn't already been excluded.                            c
 c                                                           c
-c-----------------------------------------------------------c
-implicit none
-include 'manyhiggs.inc'
+c-----------------------------------------------------------c*/
+
 double precision Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF3!,chpull
 
 c bsg_nlo subroutine
@@ -449,4 +447,4 @@ enddo
 
 
 return
-end
+    }
