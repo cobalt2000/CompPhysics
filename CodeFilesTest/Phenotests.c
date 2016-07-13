@@ -218,7 +218,7 @@ return
             if (hmass[mh[i]] > 110.305 && hmass[mh[i]] < 600){
                 hwwcutoff = lineint(hmass[mh[i]],masshww,hwwlimits,79);
 //c	    print *,'ww',i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
-                if (xsgg2ww[i] .ge. hwwcutoff) {
+                if (xsgg2ww[i] >= hwwcutoff) {
                     atlaswwcheck = 0;
 //c          else
 //c	    write(16,*) i,hmass(mh(i)),xsgg2ww(i),hwwcutoff
@@ -234,21 +234,21 @@ return
             if (hmass[mh[i]] > 110.152 && hmass[mh[i]] < 598.344) {
                 hzz4lcutoff = lineint(hmass[mh[i]],massh4l,hZZ4llimits,130);
 //c	    print *,'4l',i,hmass(mh(i)),xsgg24l(i),hzz4lcutoff
-                if (xsgg24l[i] .ge. hzz4lcutoff){
+                if (xsgg24l[i] .>= hzz4lcutoff){
                     atlas4lcheck = 0;
                 }
             }
             if (hmass[mh[i]] > 110.457 && hmass[mh[i]] < 150.102) {
                 hgagacutoff = lineint(hmass[mh[i]],masshgaga,hgagalimits,67);
 //c	    print *,'gaga',i,hmass(mh(i)),xsgg2gaga(i),hgagacutoff
-                if (xsgg2gaga[i] .ge. hgagacutoff){
+                if (xsgg2gaga[i] >= hgagacutoff){
                     atlasgagacheck = 0;
                 }
             }
             if (hmass[mh[i]] > 100 && hmass[mh[i]] < 600) {
                 htautaucutoff = lineint(hmass[mh[i]],masshtautau,htautaulimits,16);
 //c	    print *,'tata',i,hmass(mh(i)),xsgg2tautau(i),htautaucutoff
-                if (xsgg2tautau[i] .ge. htautaucutoff) {
+                if (xsgg2tautau[i] >= htautaucutoff) {
                     atlastautaucheck = 0;
                 }
         }
@@ -342,21 +342,26 @@ c-----------------------------------------------------------c*/
 logical whscan
 common/scantype/whscan
 
-if (BFt(1)*BFch(1,3).gt.0.04d0) then
-happy1 = 0
-endif
-if (BFt(1)*BFch(1,1).gt.0.14d0) then
-happy2 = 0
-endif
+        if (BFt(1)*BFch[1][3] > 0.04) {
+            happy1 = 0;
+        }
+        if (BFt(1)*BFch[1][1] > 0.14)  {
+            happy2 = 0;
+        }
 
-if(whscan) then
-if (BFch(1,2)*mch_tb_prod(1).lt.3) happy3 = 0
-if (BFch(2,4)*mch_tb_prod(2).lt.3) happy3 = 0
-endif
-c	if(hmass(mh(1)).gt.114d0) happy3 = 0
-c	if (chmass(mch(2)).gt.600d0) happy3 = 0
+        if(whscan) {
+            if (BFch[1][2]*mch_tb_prod[1] < 3) {
+                happy3 = 0;
+            }
+            if (BFch[2][4]*mch_tb_prod[2] < 3) {
+                happy3 = 0;
+            }
+        }
+    
+//c	if(hmass(mh(1)).gt.114d0) happy3 = 0
+//c	if (chmass(mch(2)).gt.600d0) happy3 = 0
 
-return
+        return happy1*happy2*happy3;
     }
 
 //c-----------------------------------------------------------c
@@ -368,37 +373,37 @@ c  hasn't already been excluded.                            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-double precision Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF1!,chpull
+        double Au(3),Ad(3),Yteff(3),Ybeff(3),mchtemp(3),chBF1!,chpull;
 
-c bsg_nlo subroutine
-do i=1,3
-mchtemp(i) = chmass(mch(i))
-Yteff(i) = (Yt*cheigvec(2,mch(i)) + Ytp*cheigvec(4,mch(i)))
-Ybeff(i) = Yb*cheigvec(1,mch(i))
-Au(i) = (Yt*cheigvec(2,mch(i)) + Ytp*cheigvec(4,mch(i)))/(dsqrt(2d0)*mt/246d0)
-Ad(i) = Yb*cheigvec(1,mch(i))/(dsqrt(2d0)*mb/246d0)
-c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
-enddo
+//c bsg_nlo subroutine
+        for (i=1;i<=3;i++) {
+            mchtemp(i) = chmass(mch[i]);
+            Yteff(i) = (Yt*cheigvec(2,mch[i]) + Ytp*cheigvec(4,mch[i]));
+            Ybeff(i) = Yb*cheigvec(1,mch[i]);
+            Au(i) = (Yt*cheigvec(2,mch[i]) + Ytp*cheigvec(4,mch[i]))/(sqrt(2.0)*mt/246d0);
+            Ad(i) = Yb*cheigvec(1,mch[i])/(sqrt(2.0)*mb/246);
+//c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
+        }
 
-call bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF1,chpull1)
-c        call bsg_nlo(Au,Ad,mchtemp,3,chBF,chpull)
-c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
+        bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF1,chpull1)
+//c        call bsg_nlo(Au,Ad,mchtemp,3,chBF,chpull)
+//c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
 
-if(chpull1.ge.(1.96d0)) then
-bsgcheck1 = 0
-endif
+    if(chpull1. >= (1.96))  {
+        bsgcheck1 = 0;
+    }
 
-c        if (higgscheck*chiggscheck*cpoddcheck*charginocheck*neutralinocheck.gt.0) then
-c        write(*,*) chpull, bsgcheck
-c        endif
+//c        if (higgscheck*chiggscheck*cpoddcheck*charginocheck*neutralinocheck.gt.0) then
+//c        write(*,*) chpull, bsgcheck
+//c        endif
 
-do i=1,3
-mchtemp(i) = 0d0
-Yteff(i) = 0d0
-Ybeff(i) = 0d0
-Au(i) = 0d0
-Ad(i) = 0d0
-enddo
+        for (i=1;i<=3;i++){ //For the charged Higgses, we only check the massive states.
+            mchtemp[i] = 0.0;
+            Yteff[i] = 0.0;
+            Ybeff[i] = 0.0;
+            Au[i] = 0.0;
+            Ad[i] = 0.0;
+        }
 
 
 return
