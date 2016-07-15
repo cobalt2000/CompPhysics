@@ -14,7 +14,7 @@
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double h2glgl(double mhin,double ytin,double ybin){
+double h2glgl(const double mhin,const double ytin,const double ybin){
 //c These calculate the production ratio of CP even Higgs bosons
 //c from 2 gluons, based on effective top (ytin) and bottom (ybin)
 //c yukawa couplings.
@@ -24,12 +24,13 @@ double h2glgl(double mhin,double ytin,double ybin){
 //    adapted for C by Valerie Plaus, Wittenberg University, 2016
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
+    const double PIVALUE = 4.0*atan(1.0);
+//    double PIVALUE = MYPI;
 
-
-//    double ytin   input   Effective top coupling for the Higgs mass eigenstate
-//    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
-//    double mhin   input   Mass of the Higgs mass eigenstate
-double PIVALUE = 4.0*atan(1.0);
+//    double ytin           input   Effective top coupling for the Higgs mass eigenstate
+//    double ybin           input   Effective bottom coupling for the Higgs mass eigenstate
+//    double mhin           input   Mass of the Higgs mass eigenstate
+//    double h2glglprod     return  The produciton rate of the Higgs from gluon fusion.
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the interaction amplitude is real; if <1, the interaction aplitude is complex.
     double gwsm; //Not sure yet
     double complex amp;
@@ -38,19 +39,19 @@ double PIVALUE = 4.0*atan(1.0);
     double prefactor, h2glglprod;
 
 //cccc	SM Reference
-    double vev = 246.0;
-    double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
-    double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
-    double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
-    double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
-    double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
-    double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
-    double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
-    double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
-    double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
-    double g2sm = sqrt(4.0*PIVALUE*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
-    double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
-    double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
+    const double vev = 246.0;
+    const double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
+    const double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
+    const double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
+    const double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
+    const double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
+    const double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
+    const double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
+    const double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
+    const double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
+    const double g2sm = sqrt(4.0*PIVALUE*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+    const double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
+    const double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
     gwsm = vev*g2sm; //Fermi coupling??
     prefactor = (alphas*alphas)*(g2sm*g2sm)*(mhin*mhin*mhin)*(1.0/(512.0*(PIVALUE*PIVALUE*PIVALUE)*(mw*mw)))*2.0;
     
@@ -90,7 +91,7 @@ double PIVALUE = 4.0*atan(1.0);
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double h2gaga(double mhin,double ytin,double ybin,double gw) {
+double h2gaga(const double mhin,const double ytin,const double ybin,double gw) {
 //c These calculate the production ratio of CP even Higgs bosons
 //c from 2 photons, based on effective top and bottom yukawa couplings,
 //c and scaled weak coupling.
@@ -98,11 +99,13 @@ double h2gaga(double mhin,double ytin,double ybin,double gw) {
 //c (This is not the ratio of the couplings)
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-//    double ytin   input   Effective top coupling for the Higgs mass eigenstate
-//    double ybin   input   Effective bottom coupling for the Higgs mass eigenstate
-//    double mhin   input   Mass of the Higgs mass eigenstate
+//    double ytin           input   Effective top coupling for the Higgs mass eigenstate
+//    double ybin           input   Effective bottom coupling for the Higgs mass eigenstate
+//    double mhin           input   Mass of the Higgs mass eigenstate
+//    double h2gagaprod     return  The produciton rate of the Higgs from photon fusion.
     
-double PIVALUE = 4.0*atan(1.0);
+    const double PIVALUE = 4.0*atan(1.0);
+
     double gwsm;  //not sure
     double tau; //This variable calculates ability for a particle to split into particle/antiparticle pairs.  If >1, the particles and the interaction amplitude are real; if <1, the particles are virtual and the interaction amplitude is complex.
     double complex amp;
@@ -112,19 +115,19 @@ double PIVALUE = 4.0*atan(1.0);
 
 
 //cccc	SM Reference
-    double vev = 246.0;
-    double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
-    double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
-    double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
-    double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
-    double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
-    double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
-    double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
-    double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
-    double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
-    double g2sm = sqrt(4.0*PIVALUE*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
-    double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
-    double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
+    const double vev = 246.0;
+    const double mw = 80.38; //Mass of the W particle, Particle Data Group 2015 Summary Tables
+    const double mz = 91.187; //Mass of the Z particle, Particle Data Group 2015 Summary Tables
+    const double mt = 173; //Mass of the top particle, Particle Data Group 2015 Summary Tables
+    const double mb = 4.66; //Mass of the bottom particle, Particle Data Group 2015 Summary Tables
+    const double mc = 1.27; //Mass of the charm particle, Particle Data Group 2015 Summary Tables
+    const double ms = 0.095; //Mass of the strange particle, Particle Data Group 2015 Summary Tables
+    const double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
+    const double alphaw = 1.0/128; //fine structure constant Particle Data Group 2015 physical constants
+    const double alphas = 0.118; //strong coupling constant Particle Data Group 2015 physical constants
+    const double g2sm = sqrt(4.0*PIVALUE*alphaw)/sqrt(xw); //Standard Model value for isospin coupling
+    const double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
+    const double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
     gwsm = vev*g2sm; //Fermi coupling??
     prefactor = (alphaw*alphaw)*(g2sm*g2sm)*(mhin*mhin*mhin) *1.0/(1024.0*(PIVALUE*PIVALUE*PIVALUE)*(mw*mw))*2.0;
     // This calculation includes all the couplings for each vertex
@@ -202,7 +205,7 @@ double complex ffermion(double complex tau){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double complex fscalar(double complex tau) {
-// Calculates the form factor for a salar particle loop.
+// Calculates the form factor for a scalar particle loop.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //    double complex func;
@@ -220,8 +223,8 @@ double complex func(double tau) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double complex what;
-    double PIVALUE = 4.0*atan(1.0);
-  
+    const double PIVALUE = 4.0*atan(1.0);
+   
     if(tau>1.0) {
         what = pow(asin(sqrt(1.0/tau)),2)+ 0.0*I;
     }
