@@ -5,12 +5,15 @@ CC = mpic++
 CFLAGS = -O3 -I$(HOME)/sprng5/include
 CLIBS = -L$(HOME)/sprng5/lib -lsprng
 
-all:	sprng_mpi Makefile
+all:	sprng_mpi sprng_mpi_normal Makefile
 
 sprng_mpi:	sprng_mpi.cpp
 	$(CC) $(CFLAGS) -o sprng_mpi sprng_mpi.cpp $(CLIBS)
 
-run:	sprng_mpi
+sprng_mpi_normal:	sprng_mpi_normal.cpp
+	$(CC) $(CFLAGS) -o sprng_mpi_normal sprng_mpi_normal.cpp $(CLIBS)
+
+run:	all
 	mpiexec -np 2 ./sprng_mpi
 
 clean:
