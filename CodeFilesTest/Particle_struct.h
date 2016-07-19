@@ -19,4 +19,15 @@ void Calc_Yukawa (double *evec, double *Y, double *Y1, double *Y2)
  Y2     output  Places the effective Yukawa coupling for the up-type quark in the struct for the particle.
  */
 
+void Fill_Struct (double m, double *A, double *Y1, double *Y2, double *Y3, Particle *Higgs)
+/*
+ m      input   The eigenvalue of the mass state.
+ A      input   Pointer to the eigenvector of the mass state.
+ Y1     input   Pointer to the array holding the first family Yukawa couplings.
+ Y2     input   Pointer to the array holding the second family Yukawa couplings.
+ Y3     input   Pointer to the array holding the third family Yukawa couplings.
+ Higgs  output  Pointer to the struct for the particle in question.
+ */
+
+
 #endif /* Particle_struct_h */
