@@ -8,7 +8,7 @@
 
 #include "Particle_struct.h"
 
-datatype struct {
+struct {
     double  mass; //The mass eigenvalue of this particle state.
     double* eigenvec; //The vector composition of this particle state.
     double Y_ud; //The effective Yukawa couplings for up with this particle.
@@ -19,13 +19,19 @@ datatype struct {
     double Y_b; //The effective Yukawa couplings for bottom with this particle.
 } particle;
 
-datatype struct { // These would either be input by the user or randomized.  Each pointer points to an array of real numbers, and the number of elements is equal to the number of Higgs fields, if the model is holomorphic, or effectively so.  If not, the number of elements would be twice the number of Higgs fields.
+struct { // These would either be input by the user or randomized.  Each pointer points to an array of real numbers, and the number of elements is equal to the number of Higgs fields, if the model is holomorphic, or effectively so.  If not, the number of elements would be twice the number of Higgs fields.
     double* Y_ud; //The Yukawa couplings for the first quark family, up and down, for each Higgs field.
     double* Y_cs; //The Yukawa couplings for the second quark family, the charm and strange quarks, for each Higgs field.
     double* Y_tb;  //The  Yukawa couplings for the third quark family, the top and bottom quarks, for each Higgs field.
 } Yukawa;
 
 void Calc_Yukawa (double *evec, double *Y, double *Y1, double *Y2){
+    /*
+     evec   input   Pointer to the array for the eigenvector composition of the particle.
+     Y      input   Pointer to the array for the yukawas for whichever family, up/down, charm/strange, top/bottom.
+     Y1     output  Places the effective Yukawa coupling for the down-type quark in the struct for the particle.
+     Y2     output  Places the effective Yukawa coupling for the up-type quark in the struct for the particle.
+     */
     double n=sizeof(evec)/sizeof(evec[0]);
     int i;
     for (i=0;i<n;i+=2){
