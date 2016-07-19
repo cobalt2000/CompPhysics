@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "eigenVec.h"
-
-
 
 
 /**************************************************
@@ -16,31 +15,26 @@ int i,j, k;  // Standard indexs
 int info;    // This is a flag used to tell if the function worked correctly.
 
 int n = 4;
-double **A; // The matrix to the solved.
-double **eVectors; // Pointer to the solution. 
+double *A; // The matrix to the solved.
+double *eVectors; // Pointer to the solution. 
 double *eValues;  // Pointer to the eigen values.
 
 
 /* allocate memory for the matrix and the eigenvectors */
-A = (double**)malloc(sizeof(double*) * n);
-eVectors = (double**)malloc(sizeof(double*) * n);
+A = (double*)malloc(sizeof(double) * n * n);
+eVectors = (double*)malloc(sizeof(double) * n * n);
 eValues = (double*)malloc(sizeof(double) * n);
-
-for(i = 0; i < n; i++){
-        A[i] = (double*)malloc(sizeof(double) * n);
-        eVectors[i] = (double*)malloc(sizeof(double) * n);
-}
 
 
 // Fill in matrix
 
 for( i = 0; i < n; i++){
 	for(j = i; j < n; j++){
-		A[i][j] = i + j + 1;
-		A[j][i] = i + j + 1;
+		A[i + j * n] = i + j + 1;
+		A[j + i * n] = i + j + 1;
 	}
 }
-printArray(A, n, n);
+printVector(A, n * n);
 
 
 
@@ -56,15 +50,12 @@ printVector(eValues, n);
 
 
 printf("The eigen vectors are the columns of:\n");
-printArray(eVectors, n, n);
+printVector(eVectors, n * n);
 
 
 
 // free memory
-for (i = 0; i < n; i++){
-	free(A[i]);
-	free(eVectors[i]);
-}
+
 free(A);
 free(eVectors);
 free(eValues);

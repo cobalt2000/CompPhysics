@@ -1,17 +1,18 @@
 #ifndef EIGENVEC
 #define EIGENVEC
 
-int find_eigen_vectors(double **A, int n, double *eVal, double **eVec );
-/*
-        int find_eigen_vectors(double **A, int n, double *eVal, double ** eVec)
+int find_eigen_vectors(double *A, int n, double *eVal, double *eVec );
+/* 
+	int find_eigen_vectors()
 This funtion finds the eigen values and eigen vectors of the symmetric real matrix A.
 Funtion will return 0 if no error.
 
 Arguments:
-        double **A      input           Symmetric real matrix
-        int n           input           size of A
-        double *eVal    output          eigen values returned in a array of size n
-        double **eVec   output          egien vectors returned in the columns of the n x n array
+	double *A	input		Symmetric real matrix of size n by n
+	int n		input		size of A
+	double *eVal	output		eigen values returned in a array of size n
+	double *eVec	output		egien vectors returned in the columns of the n x n array
+	A and eVec should be column dominant.  That is, the first n elements will fill the first column.
 */
 
 

@@ -1,54 +1,58 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "eigenVec.h"
 
 
 //#define PRINT_ALL
 
 
-int find_eigen_vectors(double **A, int n, double *eVal, double **eVec ){
+int find_eigen_vectors(double *A, int n, double *eVal, double *eVec ){
 /* 
 	int find_eigen_vectors()
 This funtion finds the eigen values and eigen vectors of the symmetric real matrix A.
 Funtion will return 0 if no error.
 
 Arguments:
-	double **A	input		Symmetric real matrix
+	double *A	input		Symmetric real matrix of size n by n
 	int n		input		size of A
 	double *eVal	output		eigen values returned in a array of size n
-	double **eVec	output		egien vectors returned in the columns of the n x n array
+	double *eVec	output		egien vectors returned in the columns of the n x n array
+	A and eVec should be column dominant.  That is, the first n elements will fill the first column.
 */
 
 	int i, j;
-	double *U; // This is a temp matrix to pass data to LAPACK.
+//	double *U; // This is a temp matrix to pass data to LAPACK.
 	int lwork = -1; 	// the size of the workspace needed by LAPACK.	
 	double wkopt;
 	double* work;	//pointer to workspace needed by LAPACK
 	int info;
 
-	U = (double*)malloc(sizeof(double)*n*n);
-	for(i = 0; i < n; i++){
-		U[i + n*i ] = A[i][i];
-		for( j = (i+1); j < n; j++){
-			U[i + j*n ] = A[i][j];
-			U[i*n + j ] = 0.0;
-		}
-	}
+//	U = (double*)malloc(sizeof(double)*n*n);
+	//for(i = 0; i < n; i++){
+	//	U[i + n*i ] = A[i][i];
+	//	for( j = (i+1); j < n; j++){
+	//		U[i + j*n ] = A[i][j];
+	//		U[i*n + j ] = 0.0;
+	//	}
+	//}
+    
+    memcpy(eVec, A, sizeof(double) * n * n);
 
 #ifdef PRINT_ALL
 	printf("The matrix passed to LAPACK is:\n");
-	printVector(U, n*n);
+	printVector(eVec, n*n);
 
 #endif
 
 	/*find the optimum size of workspace */
-	dsyev_( "V", "U", &n, U, &n, eVal, &wkopt, &lwork, &info );
+	dsyev_( "V", "U", &n, eVec, &n, eVal, &wkopt, &lwork, &info );
 	
 	lwork = (int)wkopt;
 	work = (double*)malloc(sizeof(double)*lwork);
 
 	/* Solve eigen problem */
-	dsyev_( "V", "U", &n, U, &n, eVal, work, &lwork, &info );
+	dsyev_( "V", "U", &n, eVec, &n, eVal, work, &lwork, &info );
 /*
 From http://www.math.utah.edu/software/lapack/lapack-d/dsyev.html
  SUBROUTINE DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
@@ -119,15 +123,15 @@ From http://www.math.utah.edu/software/lapack/lapack-d/dsyev.html
 
 /* Now the problem should be solved.  The data needs to be placed in the outgoing arrays */
 
-for( i = 0; i < n; i++){
-	for(j = 0; j < n; j++){
-		eVec[i][j] = U[i + j*n ];
-	}
-}
+//for( i = 0; i < n; i++){
+//	for(j = 0; j < n; j++){
+//		eVec[i][j] = U[i + j*n ];
+//	}
+//}
 
 
 
-free(U);
+//free(U);
 free(work);
 
 return info;
