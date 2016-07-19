@@ -17,7 +17,7 @@ run:	all
 	mpiexec -np 2 ./sprng_mpi
 
 clean:
-	$(RM) sprng_mpi
+	$(RM) sprng_mpi sprng_mpi_normal
 	$(RM) *~
 
 tar:	clean
