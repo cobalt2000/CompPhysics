@@ -19,12 +19,16 @@ struct {
     double Y_t; //The effective Yukawa couplings for top with this particle.
 } Particle;
 
+/*
+
 struct { // These would either be input by the user or randomized.  Each pointer points to an array of real numbers, and the number of elements is equal to the number of Higgs fields, if the model is holomorphic, or effectively so.  If not, the number of elements would be twice the number of Higgs fields.
     double* Y_ud; //The Yukawa couplings for the first quark family, up and down, for each Higgs field.
     double* Y_cs; //The Yukawa couplings for the second quark family, the charm and strange quarks, for each Higgs field.
     double* Y_tb;  //The  Yukawa couplings for the third quark family, the top and bottom quarks, for each Higgs field.
 } Yukawa;
-
+*/
+ 
+ 
 void Calc_Yukawa (double *evec, double *Y, double *Y1, double *Y2){
     /*
      evec   input   Pointer to the array for the eigenvector composition of the particle.
@@ -55,4 +59,21 @@ void Fill_Struct (double m, double *A, double *Y1, double *Y2, double *Y3, Parti
     Calc_Yukawa(*A,*Y,Higgs.Y_d,Higgs.Y_u);
     Calc_Yukawa(*A,*Y,Higgs.Y_s,Higgs.Y_c);
     Calc_Yukawa(*A,*Y,Higgs.Y_b,Higgs.Y_t);
+}
+
+double Dot_Prod (double *A, double *B){
+    double Ans;
+    int i;
+    int n=sizeof(A)/sizeof(A[0]);
+    int m=sizeof(B)/sizeof(B[0]);
+    if(m!=n){
+        printf ("The arrays are not the same length.");
+        return 0;
+    }
+    else {
+        for (i=0;i<=n;i++){
+            Ans+=A[i]*B[i];
+        }
+    }
+    return Ans;
 }
