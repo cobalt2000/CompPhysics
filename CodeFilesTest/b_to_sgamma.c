@@ -898,46 +898,37 @@ end
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function G8H(x,xAu,xAd)
+double G8H(double x,double xAu,double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 xAu,xAd,x
-real*8 term1,term2
+
+//real*8 xAu,xAd,x
+    double whatever;
+    double term1,term2;
 
 
-term1 = xAd*xAu*1d0/3d0*x*(
-                           .	(-36d0+25d0*x-17d0*x**2)/(2d0*(x-1d0)**3)*Li2(1d0-1d0/x)+
-                           .	(19d0+17d0*x)/((x-1d0)**4)*dlog(x)**2+
-                           .	(-3d0-187d0*x+12d0*x**2-14d0*x**3)/(4d0*(x-1d0)**4)*dlog(x)+
-                           .	3d0*(143d0-44d0*x+29d0*x**2)/(8d0*(x-1d0)**3))
-term2 = xAu**2*1d0/6d0*x*(
-                          .	x*(30d0-17d0*x+13d0*x**2)/(x-1d0)**4*Li2(1d0-1d0/x) -
-                          .	x*(31d0+17d0*x)/(x-1d0)**5*dlog(x)**2 +
-                          .	(-226d0+817d0*x+1353d0*x**2+318d0*x**3+42d0*x**4)/(36d0*(x-1d0)**5)*dlog(x) +
-                          .	(1130d0-18153d0*x+7650d0*x**2-4451d0*x**3)/(216d0*(x-1d0)**4))
+    term1 = xAd*xAu*1/3*x*((-36+25*x-17*x*x)/(2*(x-1)**3)*Li2(1-1/x)+(19+17*x)/((x-1)**4)*log(x)**2+
+            (-3-187*x+12*x*x-14*x*x*x)/(4*(x-1)**4)*log(x)+3*(143-44*x+29*x*x)/(8*(x-1)**3));
+    term2 = xAu**2*1d0/6d0*x*(x*(30-17*x+13*x*x)/(x-1)**4*Li2(1-1/x) -x*(31+17*x)/(x-1)**5*log(x)**2 +
+            (-226+817*x+1353*x*x+318*x*x*x+42*x*x*x*x)/(36*(x-1)**5)*log(x) +(1130-18153*x+7650*x*x-4451d0*x*x*x)/(216*(x-1)**4));
 
-G8H = term1 + term2
+    whatever = term1 + term2;
 
 
 
-return
-end
+    return whatever;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Delta8H(x,xAu,xAd)
+double Delta8H(double x,double xAu,double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 xAu,xAd,x
+
+//    double xAu,xAd,x;
+    double what
 
 
-Delta8H = xAu*xAd*1d0/3d0*x*(
-                             .	(81d0-16d0*x+7d0*x**2)/(2d0*(x-1d0)**3)-(19d0+17d0*x)/(x-1d0)**4*dlog(x)) +
-.	xAu**2*1d0/6d0*x*(
-                      .	(-38d0-261d0*x+18d0*x**2-7d0*x**3)/(6d0*(x-1d0)**4)+x*(31d0+17d0*x)/(x-1d0)**5*dlog(x))
+    what = xAu*xAd*1/3*x*((81-16*x+7*x*x)/(2*pow((x-1),3))-(19+17*x)/pow((x-1),4)*log(x)) + xAu*xAu*1/6*x*((-38-261*x+18*x*x-7*x*x*x)/(6*pow((x-1),4))+x*(31+17*x)/pow((x-1),5)*log(x));
 
-return
-end
+    return what;
+}
 
