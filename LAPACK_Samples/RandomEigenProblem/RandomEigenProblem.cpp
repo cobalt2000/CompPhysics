@@ -3,8 +3,10 @@
 #include <mpi.h>		/* MPI header file                         */
 
 #include "sprng_cpp.h"
-#include "eigenVec.h"
 
+extern "C"{
+#include "eigenVec.h"
+}
 
 #define SEED 985456376
 
@@ -73,13 +75,68 @@ int main(int argc, char *argv[])
   }
   
   find_eigen_vectors(A, n, eVal, eVec );
+
+  /***************** Output data into a MATLAB readible file ***********/
+  char *outfilename;
+
+  outfilename = (char*)malloc(sizeof(char) * 56);
   
+  sprintf( outfilename, "output%d.m", myid);
   
+  //char *mode="r";
+  FILE *ifp;
+  if((ifp = fopen(outfilename, "w"))==NULL){
+      printf("Could not open file!!!\n");
+       return 2;
+    }
+ fprintf(ifp, "A%d = [ ", myid);
+ for(i = 0; i < n; i++){
+	for(j=0;j<n; j++){
+		fprintf(ifp, " %1.15lg ", A[i+j*n]); 
+
+	}
+	if(i < n-1)
+		fprintf(ifp, ";");
+	else
+		fprintf(ifp, "];\n");
+} 
+
+ fprintf(ifp, "eVec%d = [ ", myid);
+ for(i = 0; i < n; i++){
+        for(j=0;j<n; j++){
+                fprintf(ifp, " %1.15lg ", eVec[i+j*n]); 
+
+        }
+        if(i < n-1)
+                fprintf(ifp, ";");
+        else
+                fprintf(ifp, "];\n");
+}
+
+fprintf(ifp, "eVal%d = [ ", myid);
+ for(i = 0; i < n; i++){
+                fprintf(ifp, " %1.15lg ", eVal[i]); 
+
+        if(i < n-1)
+                fprintf(ifp, ";");
+        else
+                fprintf(ifp, "];\n");
+
+}
+
+
+
+  fclose(ifp);
+
+
+
+  /************************* Free Memory and End *******************/
   stream->free_sprng();		/* free memory used to store stream state  */
 
   free(A);
   free(eVec);
   free(eVal);
+  free(outfilename);
   
   
   MPI_Finalize();		/* Terminate MPI                           */
