@@ -1,0 +1,3 @@
+This is a small program to test the interface between LAPACK, sprng, and MPI.
+
+This program will create a small collection of random symmetric matricies and solve the related eigen problem for each matrix.
