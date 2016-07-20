@@ -91,7 +91,8 @@ c-----------------------------------------------------------c*/
 //c      write(*,*) i
         decaych(i,1) = 3.0*pf(chmass(mch(i)),1.42,0.104)*
         (
-             ( (Ys*cheigvec(1,mch(i)))**2 + ( Yc*cheigvec(2,mch(i)) + Ycp*cheigvec(4,mch(i)) )**2 )*
+//          Ys*cheigvec[1][i]*cheigvec[1][i]
+         ( (Ys*cheigvec(1,mch(i)))**2 + ( Yc*cheigvec(2,mch(i)) + Ycp*cheigvec(4,mch(i)) )**2 )*
              (chmass(mch(i))**2-1.42**2 - 0.104**2) +
              4. *1.42 *0.104 *(Ys*cheigvec(1,mch(i)))*(Yc*cheigvec(2,mch(i)) + Ycp*cheigvec(4,mch(i)))
         )
