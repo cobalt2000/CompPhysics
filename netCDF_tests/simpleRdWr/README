@@ -1,0 +1,6 @@
+This is a very simple code to test the read and write of the netCDF library.
+
+After running make, there should be two binary files.
+Run the one marked write to make a netCDF file.
+Run the one marked read to read the file.
+To see what is in the file, use ncdump.
