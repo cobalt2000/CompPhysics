@@ -814,49 +814,47 @@ end
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C1WHeff(i)
+double C1WHeff(int i){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i,j
-real*8 sum
-real*8 x
 
+    int j;
+    double sum,x;
+    double whatever =0;
 
-C1WHeff = 0d0
-return
-sum = 0d0
-do j=1,nhiggs
-x = mbart(mwbsg)**2/mhbsg(j)**2
+//    whatever = 0;
+    return; //Why is this here?  It returns 0, then a double, if there's a double? Why not wait?
+    sum = 0;
+    for (j=1;nhiggs;j++){ //I believe that this is where the function starts adding up contributions from multiple Higgs, hence the index "nhiggs".
+        x = mbart(mwbsg)**2/mhbsg(j)**2;
 
-if(i.eq.4) sum = sum + EH(x,Au(j),Ad(j))
-if(i.eq.7) sum = sum + G7H(x,Au(j),Ad(j)) + Delta7H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 4d0/9d0*EH(x,Au(j),Ad(j))
-if(i.eq.8) sum = sum + G8H(x,Au(j),Ad(j)) + Delta8H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 1d0/6d0*EH(x,Au(j),Ad(j))
-enddo
+        if(i.eq.4) sum = sum + EH(x,Au(j),Ad(j));
+        if(i.eq.7) sum = sum + G7H(x,Au(j),Ad(j)) + Delta7H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 4d0/9d0*EH(x,Au(j),Ad(j));
+        if(i.eq.8) sum = sum + G8H(x,Au(j),Ad(j)) + Delta8H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 1d0/6d0*EH(x,Au(j),Ad(j));
+    }
 
-C1WHeff = sum
+    whatever = sum;
 
-return
-end
+    return whatever;
+    }
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function EH(x,xAu,xAd)
+double EH(const double x,const double xAu,const double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 xAu,xAd,x
 
-EH = xAu**2*(x*(16d0-29d0*x+7d0*x**2)/(36d0*(x-1d0)**3)+x*(3d0*x-2d0)/(6d0*(x-1d0)**4)*dlog(x))
+    double whatever;
+//real*8 xAu,xAd,x
+
+    whatever = xAu*xAu*(x*(16-29*x+7*x*x)/(36*pow((x-1),3))+x*(3*x-2)/(6*pow((x-1),4))*log(x));
 
 
-return
-end
+    return whatever;
+}
 
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double G7H(double x,double xAu,double xAd){
+double G7H(const double x,const double xAu,const double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -883,7 +881,7 @@ double G7H(double x,double xAu,double xAd){
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double Delta7H(double x,double xAu,double xAd){
+double Delta7H(const double x,const double xAu,const double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -903,7 +901,7 @@ double Delta7H(double x,double xAu,double xAd){
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double G8H(double x,double xAu,double xAd){
+double G8H(const double x,const double xAu,const double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //real*8 xAu,xAd,x
@@ -929,11 +927,11 @@ double G8H(double x,double xAu,double xAd){
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double Delta8H(double x,double xAu,double xAd){
+double Delta8H(const double x,const double xAu,const double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //    double xAu,xAd,x;
-    double what
+    double what;
 
 
     what = xAu*xAd*1/3*x*( (81-16*x+7*x*x)/(2*pow((x-1),3))-(19+17*x)/pow((x-1),4)*log(x) ) + xAu*xAu*1/6*x*( (-38-261*x+18*x*x-7*x*x*x)/(6*pow((x-1),4))+x*(31+17*x)/pow((x-1),5)*log(x) );
