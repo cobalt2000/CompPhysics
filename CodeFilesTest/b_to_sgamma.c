@@ -856,45 +856,50 @@ end
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function G7H(x,xAu,xAd)
+double G7H(double x,double xAu,double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 xAu,xAd,x
-real*8 term1,term2
+
+    double whatever;
+    double term1,term2;
 
 
-term1 = xAd*xAu*4d0/3d0*x*(
-                           .	4d0*(-3d0+7d0*x-2d0*x**2)/(3d0*(x-1d0)**3)*Li2(1d0-1d0/x)+
-                           .	(8d0-14d0*x-3d0*x**2)/(3d0*(x-1d0)**4)*dlog(x)**2+
-                           .	(2d0*(-3d0-x+12d0*x**2-2d0*x**3)/(3d0*(x-1d0)**4))*dlog(x)+
-                           .	(7d0-13d0*x+2d0*x**2)/(x-1d0)**3)
-term2 = xAu**2*2d0/9d0*x*(
-                          .	x*(18d0-37d0*x+8d0*x**2)/(x-1d0)**4*Li2(1d0-1d0/x) +
-                          .	x*(-14d0+23d0*x+3d0*x**2)/(x-1d0)**5*dlog(x)**2 +
-                          .	(-50d0+251d0*x-174d0*x**2-192d0*x**3+21d0*x**4)/(9d0*(x-1d0)**5)*dlog(x) +
-                          .	(797d0-5436d0*x+7569d0*x**2-1202d0*x**3)/(108d0*(x-1d0)**4))
+    term1 = xAd*xAu*4/3*x*(
+                           4*(-3+7*x-2*x*x)/(3*pow((x-1),3))*Li2(1-1/x)+
+                           (8-14*x-3*x*x)/(3*pow((x-1),4))*pow(log(x),2)+
+                           (2*(-3-x+12*x*x-2*x*x*x)/(3*pow((x-1),4)))*log(x)+
+                           (7-13*x+2*x*x)/pow((x-1),3)
+                           );
+    term2 = xAu*xAu*2/9*x*(
+                          x*(18-37*x+8*x*x)/pow((x-1),4)*Li2(1-1/x) +
+                          x*(-14+23*x+3*x*x)/pow((x-1),5)*pow(log(x),2) +
+                          (-50+251*x-174*x*x-192*x*x*x+21*x*x*x*x)/(9*pow((x-1),5))*log(x) +
+                          (797-5436*x+7569*x*x-1202*x*x*x)/(108*pow((x-1),4))
+                           );
 
-G7H = term1 + term2
+    whatever = term1 + term2;
 
-return
-end
+    return whatever;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Delta7H(x,xAu,xAd)
+double Delta7H(double x,double xAu,double xAd){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 xAu,xAd,x
 
-Delta7H = xAu*xAd*2d0/9d0*x*(
-                             .	(21d0-47d0*x+8d0*x**2)/(x-1d0)**3+2d0*(-8d0+14d0*x+3d0*x**2)/(x-1d0)**4*dlog(x)) +
-.	xAu**2*2d0/9d0*x*(
-                      .	(-31d0-18d0*x+135d0*x**2-14d0*x**3)/(6d0*(x-1d0)**4)+x*(14d0-23d0*x-3d0*x**2)/(x-1d0)**5*dlog(x))
+    double whatever;
+    double xAu,xAd,x;
 
-return
-end
+    whatever = xAu*xAd*2/9*x*(
+                              (21-47*x+8*x*x)/pow((x-1),3)
+                              +2*(-8+14*x+3*x*x)/pow((x-1),4)*log(x)
+                              )
+                +xAu*xAu*2/9*x*(
+                                (-31-18*x+135*x*x-14*x*x*x)/(6*pow((x-1),4))
+                                +x*(14-23*x-3*x*x)/pow((x-1),5)*log(x)
+                                );
+
+    return whatever;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -906,10 +911,14 @@ double G8H(double x,double xAu,double xAd){
     double term1,term2;
 
 
-    term1 = xAd*xAu*1/3*x*((-36+25*x-17*x*x)/(2*(x-1)**3)*Li2(1-1/x)+(19+17*x)/((x-1)**4)*log(x)**2+
-            (-3-187*x+12*x*x-14*x*x*x)/(4*(x-1)**4)*log(x)+3*(143-44*x+29*x*x)/(8*(x-1)**3));
-    term2 = xAu**2*1d0/6d0*x*(x*(30-17*x+13*x*x)/(x-1)**4*Li2(1-1/x) -x*(31+17*x)/(x-1)**5*log(x)**2 +
-            (-226+817*x+1353*x*x+318*x*x*x+42*x*x*x*x)/(36*(x-1)**5)*log(x) +(1130-18153*x+7650*x*x-4451d0*x*x*x)/(216*(x-1)**4));
+    term1 = xAd*xAu*1/3*x*( (-36+25*x-17*x*x)/(2*pow((x-1),3))*Li2(1-1/x)
+                           +(19+17*x)/(pow((x-1),4))*pow(log(x),2)
+                           +(-3-187*x+12*x*x-14*x*x*x)/(4*pow((x-1),4))*log(x)
+                           +3*(143-44*x+29*x*x)/(8*pow((x-1),3)) );
+    term2 = xAu*xAu*1/6*x*( x*(30-17*x+13*x*x)/pow((x-1),4)*Li2(1-1/x)
+                           -x*(31+17*x)/pow((x-1),5)*pow(log(x),2)
+                           +(-226+817*x+1353*x*x+318*x*x*x+42*x*x*x*x)/(36*pow((x-1),5))*log(x)
+                           +(1130-18153*x+7650*x*x-4451*x*x*x)/(216*pow((x-1),4)) );
 
     whatever = term1 + term2;
 
@@ -927,7 +936,7 @@ double Delta8H(double x,double xAu,double xAd){
     double what
 
 
-    what = xAu*xAd*1/3*x*((81-16*x+7*x*x)/(2*pow((x-1),3))-(19+17*x)/pow((x-1),4)*log(x)) + xAu*xAu*1/6*x*((-38-261*x+18*x*x-7*x*x*x)/(6*pow((x-1),4))+x*(31+17*x)/pow((x-1),5)*log(x));
+    what = xAu*xAd*1/3*x*( (81-16*x+7*x*x)/(2*pow((x-1),3))-(19+17*x)/pow((x-1),4)*log(x) ) + xAu*xAu*1/6*x*( (-38-261*x+18*x*x-7*x*x*x)/(6*pow((x-1),4))+x*(31+17*x)/pow((x-1),5)*log(x) );
 
     return what;
 }
