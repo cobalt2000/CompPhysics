@@ -534,13 +534,12 @@ return
 end
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C0b(i)
+double C0b(int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i
 
+    double thing;
 
+/*
 if(i.eq.1) then
 C0b = -eta**(-12d0/23d0) + eta**(6d0/23d0)
 elseif(i.eq.2) then
@@ -564,28 +563,48 @@ C0b = -1d0/36d0*eta**(-12d0/23d0) - 1d0/84d0*eta**(6d0/23d0)
 else
 C0b = C0beff(i)
 
-
 endif
+*/
 
-
-
-return
-end
+    switch(i){
+        case 1: thing = -pow(eta,(-12/23)) + pow(eta,(6/23));
+            break;
+        case 2: thing = 1/3*pow(eta,(-12/23)) + 2/3*pow(eta,(6/23));
+            break;
+        case 3: thing = -1/27*pow(eta,(-12/23)) + 2/63*pow(eta,(6/23))
+                    - 0.0659*pow(eta,0.4086) + 0.0595*pow(eta,(-0.423))
+                - 0.0218*pow(eta,(-0.8994)) + 0.0335*pow(eta,(0.1456));
+            break;
+        case 4: thing = 1/9*pow(eta,(-12/23)) + 1/21*pow(eta,(6/23))
+            .	+ 0.0237*pow(eta,0.4086) - 0.0173*pow(eta,(-0.423))
+            .	- 0.1336*pow(eta,(-0.8994)) - 0.0316*pow(eta,(0.1456));
+            break;
+        case 5: thing = 1/108*pow(eta,(-12/23)) - 1/126*pow(eta,(6/23))
+            .	+ 0.0094*pow(eta,0.4086) - 0.0100*pow(eta,(-0.423))
+            .	+ 0.0010*pow(eta,(-0.8994)) - 0.0017*pow(eta,(0.1456));
+            break;
+        case 6: thing = -1/36*pow(eta,(-12/23)) - 1/84*pow(eta,(6/23))
+            .	+ 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
+            .	+ 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
+            break;
+    }
+    
+    return thing;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C1Weff(i)
+double C1Weff(int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i
-real*8 Q,x
 
-q = mwbsg
-x = mbart(q)**2/mwbsg**2
+    double thing;
+    double q,x;
 
-C1Weff = 0d0
-if(i.eq.1) then
+    q = mwbsg;
+    x = mbart(q)**2/mwbsg**2;
+
+    thing = 0;
+/*if(i.eq.1) then
 C1Weff = 15d0+6d0*dlog(q**2/mwbsg**2)
 return
 elseif(i.eq.4) then
@@ -598,97 +617,101 @@ elseif(i.eq.8) then
 C1Weff = G8(x) + Delta8(x)*dlog(q**2/mwbsg**2) + C1WHeff(i)
 return
 endif
+*/
+    switch(i){
+        case 1: thing = 15+6*log(q**2/mwbsg**2);
+            break;
+        case 4: thing = E(x) - 2/3 + 2/3*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+            break;
+        case 7: thing = G7(x) + Delta7(x)*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+            break;
+        case 8: thing = G8(x) + Delta8(x)*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+            break;
+        default: break;
+    }
+
+    return thing;
+    }
+
+
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+double E(double x){
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+    double what;
+
+    what = x*(-18+11*x+x*x)/(12*(x-1)*(x-1)*(x-1))
+            + x**2*(15-16*x+4*x*x)/(6*(x-1)*x-1)*x-1)*x-1))*log(x)
+            - 2/3*log(x);
+
+
+    return what;
+}
+
+
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+double G7(double x) {
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+    double what;
+    double term1,term2,term3,term4;
+
+
+    term1 = (-16*x*x*x*x-122*x*x*x+80*x*x-8*x)/(9*pow((x-1),4))*Li2(1-1/x);
+    term2 = (6*x*x*x*x+46*x*x*x-28*x*x)/(3*(x-1)**5)*pow(log(x),2);
+    term3 = (-102*pow(x,5)-588*x*x*x*x-2262*x*x*x+3244*x*x-1364*x+208)/(81*pow((x-1),5))*log(x);
+    term4 = (1646*x**4+12205*x**3-10740*x**2+2509*x-436)/(486*(x-1)**4);
+
+    what = term1 + term2 + term3 + term4;
 
 
 return
-end
-
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function E(x)
+double G8(double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
 
-E = x*(-18d0+11d0*x+x**2)/(12d0*(x-1d0)**3) + x**2*(15d0-16d0*x+4d0*x**2)/(6d0*(x-1d0)**4)*dlog(x) - 2d0/3d0*dlog(x)
+    double what;
+    double term1,term2,term3,term4;
 
+
+    term1 = (-4*x*x*x*x+40*x*x*x+41*x*x+x)/(6*(x-1)*(x-1)*(x-1)*(x-1))*Li2(1-1/x);
+    term2 = (-17*x*x*x-31*x*x)/(2*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*pow(log(x),2);
+    term3 = (-210*x*x*x*x*x+1086*x*x*x*x+4893*x*x*x+2857*x*x-1994*x+280)/(216*(x-1)**5)*log(x);
+    term4 = (737*x*x*x*x-14102*x*x*x-28209*x*x+610*x-508)/(1296*(x-1)*(x-1)*(x-1)*(x-1));
+
+    what = term1 + term2 + term3 + term4;
 
 return
-end
-
-
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function G7(x)
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
-real*8 term1,term2,term3,term4
-
-
-term1 = (-16d0*x**4-122d0*x**3+80d0*x**2-8d0*x)/(9d0*(x-1d0)**4)*Li2(1d0-1d0/x)
-term2 = (6d0*x**4+46d0*x**3-28d0*x**2)/(3d0*(x-1d0)**5)*dlog(x)**2
-term3 = (-102d0*x**5-588d0*x**4-2262d0*x**3+3244d0*x**2-1364d0*x+208d0)/(81d0*(x-1d0)**5)*dlog(x)
-term4 = (1646d0*x**4+12205d0*x**3-10740d0*x**2+2509d0*x-436d0)/(486d0*(x-1d0)**4)
-
-G7 = term1 + term2 + term3 + term4
-
-
-return
-end
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function G8(x)
+double Delta7(double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
-real*8 term1,term2,term3,term4
+
+    double whatever;
+
+    whatever = (208-1111*x+1086*x*x+383*x*x*x+82*x*x*x*x)/(81*(x-1)*(x-1)*(x-1)*(x-1))
+            + (2*x*x*(14-23*x-3*x*x))/(3*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*log(x);
 
 
-term1 = (-4d0*x**4+40d0*x**3+41d0*x**2+x)/(6d0*(x-1d0)**4)*Li2(1d0-1d0/x)
-term2 = (-17d0*x**3-31d0*x**2)/(2d0*(x-1d0)**5)*dlog(x)**2
-term3 = (-210d0*x**5+1086d0*x**4+4893d0*x**3+2857d0*x**2-1994d0*x+280d0)/(216d0*(x-1d0)**5)*dlog(x)
-term4 = (737d0*x**4-14102d0*x**3-28209d0*x**2+610d0*x-508d0)/(1296d0*(x-1d0)**4)
-
-G8 = term1 + term2 + term3 + term4
-
-
-
-
-
-return
-end
+    return whatever;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Delta7(x)
+double Delta8(double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
 
-Delta7 = (208d0-1111d0*x+1086d0*x**2+383d0*x**3+82d0*x**4)/(81d0*(x-1d0)**4)
-.	+ (2d0*x**2*(14d0-23d0*x-3d0*x**2))/(3d0*(x-1d0)**5)*dlog(x)
+    double whatever;
 
 
-return
-end
-
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Delta8(x)
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
+    whatever = (140-902*x-1509*x*x-398*x*x*x+77*x*x*x*x)/(108*(x-1)*(x-1)*(x-1)*(x-1))
+        + (x*x*(31+17*x))/(2*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*log(x);
 
 
-Delta8 = (140d0-902d0*x-1509d0*x**2-398d0*x**3+77d0*x**4)/(108d0*(x-1d0)**4)
-.	+ (x**2*(31d0+17d0*x))/(2d0*(x-1d0)**5)*dlog(x)
-
-
-return
-end
+    return whatever;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 function C0Weff(i)
@@ -740,30 +763,30 @@ return
 end
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function F17(x)
+double F17(double x){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
 
-F17 = x*(7d0-5d0*x-8d0*x**2)/(24d0*(x-1d0)**3) + x**2*(3d0*x-2d0)/(4d0*(x-1d0)**4)*dlog(x)
+    double what;
+
+    what = x*(7-5*x-8*x*x)/(24*(x-1)*(x-1)*(x-1))
+            + x*x*(3*x-2)/(4*(x-1)*(x-1)*(x-1)*(x-1))*log(x);
 
 
-return
-end
+    return what;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function F18(x)
+double F18(double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
 
-F18 = x*(2d0+5d0*x-x**2)/(8d0*(x-1d0)**3) - 3d0*x**2/(4d0*(x-1d0)**4)*dlog(x)
+    double what;
+
+    what = x*(2+5*x-x*x)/(8*(x-1)*(x-1)*(x-1))
+            - 3*x*x/(4*(x-1)*(x-1)*(x-1)*(x-1))*log(x);
 
 
-return
-end
+    return what;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0WHiggs(int i) {
