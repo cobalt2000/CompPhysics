@@ -766,51 +766,48 @@ return
 end
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C0WHiggs(i)
+double C0WHiggs(int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i,j
-real*8 sum
-real*8 x
+
+    
+    int j;
+    double sum;
+    double x;
 
 
-sum = 0d0
-do j=1,nhiggs
-x = mbart(mwbsg)**2/mhbsg(j)**2
-if(i.eq.7) sum = sum + Au(j)**2/3d0*F17(x) - Au(j)*Ad(j)*F27(x)
-if(i.eq.8) sum = sum + Au(j)**2/3d0*F18(x) - Au(j)*Ad(j)*F28(x)
-enddo
+    sum = 0;
+    for (j=1,nhiggs){
+        x = mbart(mwbsg)**2/mhbsg(j)**2;
+        if(i.eq.7) sum = sum + Au(j)**2/3d0*F17(x) - Au(j)*Ad(j)*F27(x);
+        if(i.eq.8) sum = sum + Au(j)**2/3d0*F18(x) - Au(j)*Ad(j)*F28(x);
+    }
 
-C0WHiggs = sum
-return
-end
-
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function F27(x)
-//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
-
-F27 = x*(3d0-5d0*x)/(12d0*(x-1d0)**2) + x*(3d0*x-2d0)/(6d0*(x-1d0)**3)*dlog(x)
-
-
-return
-end
+//C0WHiggs = sum
+    return sum;
+    }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function F28(x)
+double F27(double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 x
 
-F28 = x*(3d0-x)/(4d0*(x-1d0)**2) - x/(2d0*(x-1d0)**3)*dlog(x)
+    double whatever;
+
+    whatever = x*(3-5*x)/(12*(x-1)*(x-1)) + x*(3*x-2)/(6*(x-1)*(x-1)*(x-1))*log(x);
 
 
-return
-end
+    return whatever;
+}
+
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+double F28(double x) {
+//cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+    double whatever;
+    whatever = x*(3-x)/(4*(x-1)*(x-1)) - x/(2*(x-1)*(x-1)*(x-1))*log(x);
+
+
+    return whatever;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -818,23 +815,27 @@ double C1WHeff(int i){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     int j;
-    double sum,x;
-    double whatever =0;
+    double x;
+    double sum =0;
 
 //    whatever = 0;
     return; //Why is this here?  It returns 0, then a double, if there's a double? Why not wait?
-    sum = 0;
+//    sum = 0;
     for (j=1;nhiggs;j++){ //I believe that this is where the function starts adding up contributions from multiple Higgs, hence the index "nhiggs".
         x = mbart(mwbsg)**2/mhbsg(j)**2;
 
         if(i.eq.4) sum = sum + EH(x,Au(j),Ad(j));
-        if(i.eq.7) sum = sum + G7H(x,Au(j),Ad(j)) + Delta7H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 4d0/9d0*EH(x,Au(j),Ad(j));
-        if(i.eq.8) sum = sum + G8H(x,Au(j),Ad(j)) + Delta8H(x,Au(j),Ad(j))*dlog(mwbsg**2/MHbsg(j)**2) - 1d0/6d0*EH(x,Au(j),Ad(j));
+        if(i.eq.7) sum = sum + G7H(x,Au(j),Ad(j))
+            + Delta7H(x,Au(j),Ad(j))*log(mwbsg**2/MHbsg(j)**2)
+            - 4/9*EH(x,Au(j),Ad(j));
+        if(i.eq.8) sum = sum + G8H(x,Au(j),Ad(j))
+            + Delta8H(x,Au(j),Ad(j))*log(mwbsg**2/MHbsg(j)**2)
+            - 1/6*EH(x,Au(j),Ad(j));
     }
 
-    whatever = sum;
+//    whatever = sum;
 
-    return whatever;
+    return sum;
     }
 
 
