@@ -87,7 +87,7 @@ order = 'NLO';
 
 
 
-    eta = alphasbsg(mwbsg)/alphasbsg(mub);
+    eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
 
     alphae = 1d0/130.3;
     CKMproductSq = 0.95;
@@ -504,16 +504,13 @@ return
 end
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C0beff(i)
+double C0beff(int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i,j
-real*8 sum
 
+    int i,j;
+    double sum, thing;
 
-
-
+/*
 if(i.eq.7) then
 sum = 0d0
 do j=1,8
@@ -529,9 +526,25 @@ C0beff = (C0W(8)+313063d0/363036d0)*eta**(14d0/23d0) -
 else
 C0beff = C0b(i)
 endif
+ */
+    switch(i) {
+        case 7: sum = 0;
+            for (j=1;j<=8;j++) {
+                sum = sum + eta**ai(j)*hi(j)
+            }
+            
+            thing = eta**(16/23)*C0W(7)+8d0/3d0*(eta**(14/23)-eta**(16/23))*C0W(8) + sum;
+            break;
+        case 8: thing = (C0W(8)+313063/363036)*eta**(14/23) -
+            .	0.9135*eta**(0.4086) + 0.0873*eta**(-0.4230)
+            .	- 0.0571*eta**(-0.8994) + 0.0209*eta**(0.1456);
+            break;
+        default: thing = C0b(i);
+            break;
+    }
 
-return
-end
+    return thing;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0b(int i) {
@@ -714,53 +727,50 @@ double Delta8(double x) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C0Weff(i)
+C0Weff(i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i
 
-C0Weff = C0W(i)
+    double thing;
+    
+    thing = C0W(i);
 
-return
-end
+    return thing;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C0W(i)
+double C0W(int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i
-real*8 Q,x
+    double thing;
+    double Q,x;
 
-q = mwbsg
+    q = mwbsg;
 
-x = mbart(Q)**2/MWbsg**2
+    x = mbart(Q)**2/MWbsg**2;
 
 //c	write(*,*)x,mbart(Q),mw,q
 //c	stop
-if(i.eq.2) then
-C0W = 1d0
+    if(i.eq.2) {
+        thing = 1;
+        return thing;
+    }
+
+    if(i.le.6) {
+        thing = 0;
+        return thing;
+    }
+
+    if(i.eq.7) {
+        thing = F17(x);
+    }
+
+    if(i.eq.8) {
+        thing = F18(x);
+    }
+
+    thing += C0WHiggs(i);
+
 return
-endif
-
-if(i.le.6) then
-C0W = 0d0
-return
-endif
-
-if(i.eq.7) then
-C0W = F17(x)
-endif
-
-if(i.eq.8) then
-C0W = F18(x)
-endif
-
-C0W = C0W + C0WHiggs(i)
-
-return
-end
+    }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double F17(double x){
