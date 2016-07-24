@@ -39,11 +39,11 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     double BFthref,BFthrefunc;
     double BFexp,BFexpunc;
     double relunc;
-    double pull; //The number of standard deviations from
+    double pull; //The number of standard deviations that the calculated branching fraction is from the experimental value.
 
 
     nhiggs = xnhiggs;
-    do i=1,nhiggs{ // I don't even know why he defined the two separate values... after this, they're the same.
+    for (i=1;i<=nhiggs;i++){ // I don't even know why he defined the two separate values... after this, they're the same.  Unless he didn't want to accidentally overwrite the values.
         Au(i) = xAu(i);
         Ad(i) = xAd(i);
         MHbsg(i) = xMH(i);
@@ -80,7 +80,7 @@ order = 'NLO';
     gam1m = 404/3-40/9*nf;
 
 
-    if(order.eq.'LO') {
+    if(order='LO') {
         beta1 = 0;
         gam1m = 0;
     }
@@ -111,7 +111,9 @@ order = 'NLO';
 
     BFcenu = 0.1049;	//! from PDG
 
-    BF = BFcenu * CKMproductSq * 6d0*alphae/(pibsg*f(z)*kap(z))*mbrun(mub)**2/mbbsg**2*(DtermSq(mub) + Aterm(mub))*(1d0- delNPSL / mbbsg**2 + delNPgam/mbbsg**2 + delNPc / mcbsg**2);
+    BF = BFcenu * CKMproductSq * 6*alphae/(pibsg*f(z)*kap(z))
+        *mbrun(mub)*mbrun(mub)/(mbbsg*mbbsg)*(DtermSq(mub) + Aterm(mub))
+        *(1- delNPSL / mbbsg**2 + delNPgam/(mbbsg*mbbsg) + delNPc / (mcbsg*mcbsg));
 
 //c	Comparison with Experiment
 //c	Taken from HFAG world average: 1010.1589
@@ -125,7 +127,7 @@ order = 'NLO';
     relunc = BFthrefunc/BFthref;
 
 
-    pull = dabs((BF-BFexp)/dsqrt(BFexpunc**2 + (BF * relunc)**2));
+    pull = abs((BF-BFexp)/sqrt(BFexpunc*BFexpunc + (BF * relunc)*(BF * relunc)));
 
 
 
@@ -136,361 +138,408 @@ order = 'NLO';
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function DtermSq(Q)
+double DtermSq(double Q) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 Q,sumreal,sumimag
-real*8 r1r,r1c,r2r,r2c,r7,r8r,r8c
-real*8 logz
-real*8 z
-real*8 zeta3
-real*8 dtermreal,dtermimag
 
-zeta3 = 1.20206d0
+    double sumreal,sumimag;
+    double r1r,r1c,r2r,r2c,r7,r8r,r8c;
+    double logz;
+    double z;
+    double zeta3;
+    double dtermreal,dtermimag;
+    double moose;
 
-z = mcbsg**2/mbbsg**2
+    zeta3 = 1.20206:
 
-
-logz = dlog(z)
+    z = mcbsg*mcbsg/(mbbsg*mbbsg);
 
 
-r2r = 2d0/243d0*(-833d0+144d0*pibsg**2*z**1.5d0
-                 .	+ (1728d0-180d0*pibsg**2-1296d0*zeta3+(1296d0-324d0*pibsg**2)*logz + 108d0*Log(z)**2+36d0*logz**3)*z
-                 .	+ (648d0+72d0*pibsg**2+(432d0-216d0*pibsg**2)*logz+36d0*logz**3)*z**2
-                 .	+ (-54d0-84d0*pibsg**2+1092d0*logz-756d0*logz**2)*z**3)
-r2c = 16d0*pibsg/81d0*(-5d0+(45d0-3d0*pibsg**2+9d0*logz+9d0*logz**2)*z
-                       .	+ (-3d0*pibsg**2+9d0*logz**2)*z**2 + (28d0-12d0*logz)*z**3)
-
-r7 = -10d0/3d0-8d0/9d0*pibsg**2
-
-r8r = -4d0/27d0*(-33d0+2d0*pibsg**2)
-r8c = 24d0/27d0*pibsg
-
-r1r = -1d0/6d0*r2r
-r1c = -1d0/6d0*r2c
+    logz = log(z);
 
 
+    r2r = 2/243*(-833+144*pibsg*pibsg*pow(z,1.5)
+            + (1728-180*pibsg*pibsg-1296*zeta3+(1296-324*pibsg*pibsg)*logz + 108*Log(z)**2+36*logz**3)*z
+                 .	+ (648+72*pibsg**2+(432-216*pibsg**2)*logz+36*logz**3)*z**2
+                 .	+ (-54d0-84*pibsg**2+1092*logz-756*logz**2)*z**3);
+    
+    r2c = 16*pibsg/81*(-5+(45-3*pibsg**2+9*logz+9*logz**2)*z
+                   .	+ (-3*pibsg**2+9*logz**2)*z**2 + (28-12*logz)*z**3);
+    
+
+    r7 = -10/3-8/9*pibsg*pibsg;
+
+    r8r = -4/27*(-33+2*pibsg*pibsg);
+    r8c = 24/27*pibsg;
+
+    r1r = -1/6*r2r;
+    r1c = -1/6*r2c;
 
 
-sumreal = 0d0
-sumreal = sumreal + C0beff(1)*(r1r + gam0eff(1,7)*dlog(mbbsg/mub))
-sumreal = sumreal + C0beff(2)*(r2r + gam0eff(2,7)*dlog(mbbsg/mub))
-sumreal = sumreal + C0beff(7)*(r7 + gam0eff(7,7)*dlog(mbbsg/mub))
-sumreal = sumreal + C0beff(8)*(r8r + gam0eff(8,7)*dlog(mbbsg/mub))
 
 
-sumimag = 0d0
-sumimag = sumimag + C0beff(1)*r1c
-sumimag = sumimag + C0beff(2)*r2c
-sumimag = sumimag + C0beff(8)*r8c
+    sumreal = 0;
+    sumreal = sumreal + C0beff(1)*(r1r + gam0eff(1,7)*log(mbbsg/mub));
+    sumreal = sumreal + C0beff(2)*(r2r + gam0eff(2,7)*log(mbbsg/mub));
+    sumreal = sumreal + C0beff(7)*(r7 + gam0eff(7,7)*log(mbbsg/mub));
+    sumreal = sumreal + C0beff(8)*(r8r + gam0eff(8,7)*log(mbbsg/mub));
 
 
-dtermreal = C0beff(7) + alphasbsg(mub)/(4d0*pibsg)*(C1beff(7) + sumreal)
-dtermimag = alphasbsg(mub)/(4d0*pibsg)*(sumimag)
+    sumimag = 0;
+    sumimag = sumimag + C0beff(1)*r1c;
+    sumimag = sumimag + C0beff(2)*r2c;
+    sumimag = sumimag + C0beff(8)*r8c;
 
-DtermSq = (dtermreal**2 + dtermimag**2)
+
+    dtermreal = C0beff(7) + alphasbsg(mub)/(4*pibsg)*(C1beff(7) + sumreal);
+    dtermimag = alphasbsg(mub)/(4*pibsg)*(sumimag);
+
+    moose = (dtermreal*dtermreal + dtermimag*dtermimag);
 
 //c	write(*,*)C0beff(7),alphas(mub)/(4d0*pi)*C1beff(7),sumreal,sumimag
 
-return
-end
+    return moose;
+}
 
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function gam0eff(i,j)
+double gam0eff(int i,int j) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i,j
+    
+    double moose;
 
-if(i.eq.1) gam0eff = -208d0/243d0
-if(i.eq.2) gam0eff = 416d0/81d0
-if(i.eq.3) gam0eff = -176d0/81d0
-if(i.eq.4) gam0eff = -152d0/243d0
-if(i.eq.5) gam0eff = -6272d0/81d0
-if(i.eq.6) gam0eff = 4624d0/243d0
-if(i.eq.7) gam0eff = 32d0/3d0
-if(i.eq.8) gam0eff = -32d0/9d0
+    switch(i){
+        case 1: moose = -208/243;
+        case 2: moose = 416/81;
+        case 3: moose = -176/81;
+        case 4: moose = -152/243;
+        case 5: moose = -6272/81;
+        case 6: moose = 4624/243;
+        case 7: moose = 32/3;
+        case 8: moose = -32/9;
+    }
 
 
-gam0eff = gam0eff*alphasbsg(mub)/(4d0*pibsg)
+    moose = moose*alphasbsg(mub)/(4*pibsg);
 
-return
-end
+    return moose;
+    }
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Aterm(Q)
+double Aterm(double Q) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 Q,sum
-integer i,j
 
-sum = 0d0
-do i=1,8
-do j=i,8
-sum = sum + C0beff(i)*C0beff(j)*fij(i,j)
-enddo
+    double Q,sum,moose;
+    int i,j;
+
+    sum = 0;
+    for (i=1;i<=8;i++){
+        for (j=i;i<=8;j++){
+            sum = sum + C0beff(i)*C0beff(j)*fij(i,j);
+        }
 //c	 write(*,*)i,C0beff(i)
-enddo
+    }
 
 //c	write(*,*)sum
 
-Aterm = (dexp(-alphasbsg(mub)*dlog(del)*(7d0+2d0*dlog(del))/(3d0*pibsg))-1d0)*
-.	C0beff(7)**2 +
-.	alphasbsg(mub)/pibsg * sum
+    moose = (exp(-alphasbsg(mub)*log(del)*(7+2*log(del))/(3*pibsg))-1) * C0beff(7)*C0beff(7)
+         + alphasbsg(mub)/pibsg * sum;
 
 
-return
-end
+    return moose;
+    }
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function mbart(Q)
+double mbart(double Q){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 Q
 
+    double what;
 
-mbart = mbartpole * (alphasbsg(Q)/alphasbsg(mtbsg))**(gam0m/(2d0*beta0))*
-.	(1d0 + alphasbsg(mtbsg)/(4d0*pibsg)*gam0m/(2d0*beta0)*(gam1m/gam0m-beta1/beta0)*
-     .		(alphasbsg(Q)/alphasbsg(mtbsg)-1d0))
+    what = mbartpole * pow((alphasbsg(Q)/alphasbsg(mtbsg)),(gam0m/(2d0*beta0)))*
+        (1 + alphasbsg(mtbsg)/(4*pibsg)*gam0m/(2*beta0)*(gam1m/gam0m-beta1/beta0)*
+     .		(alphasbsg(Q)/alphasbsg(mtbsg)-1));
 
 //c	write(*,*)mbart,mbartpole,alphas(Q),gam0m,beta0,gam1m,beta1,nf
-return
-end
+    return what;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function fij(i,j)
+double fij(int i,int j) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-integer i,j
-include 'bsg_nlo.inc'
 
-if(del.ne.0.99d0) then
+    double A;
+
+    if(del!=0.99) {
 write(*,*)'Delta not 0.99'
 stop
-endif
+    }
+/*
+if(i.eq.1.and.j.eq.1) A =  0.0009;
+if(i.eq.1.and.j.eq.2) A = -0.0113;
+if(i.eq.1.and.j.eq.3) A = -0.0035;
+if(i.eq.1.and.j.eq.4) A =  0.0006;
+if(i.eq.1.and.j.eq.5) A = -0.0459;
+if(i.eq.1.and.j.eq.6) A = -0.0600;
+if(i.eq.1.and.j.eq.7) A = -0.0030;
+if(i.eq.1.and.j.eq.8) A =  0.0010;
 
-if(i.eq.1.and.j.eq.1) fij =  0.0009d0
-if(i.eq.1.and.j.eq.2) fij = -0.0113d0
-if(i.eq.1.and.j.eq.3) fij = -0.0035d0
-if(i.eq.1.and.j.eq.4) fij =  0.0006d0
-if(i.eq.1.and.j.eq.5) fij = -0.0459d0
-if(i.eq.1.and.j.eq.6) fij = -0.0600d0
-if(i.eq.1.and.j.eq.7) fij = -0.0030d0
-if(i.eq.1.and.j.eq.8) fij =  0.0010d0
+if(i.eq.2.and.j.eq.2) A =  0.0340;
+if(i.eq.2.and.j.eq.3) A =  0.0210;
+if(i.eq.2.and.j.eq.4) A = -0.0035;
+if(i.eq.2.and.j.eq.5) A =  0.2754;
+if(i.eq.2.and.j.eq.6) A =  0.3599;
+if(i.eq.2.and.j.eq.7) A =  0.0182;
+if(i.eq.2.and.j.eq.8) A = -0.0061;
 
-if(i.eq.2.and.j.eq.2) fij =  0.0340d0
-if(i.eq.2.and.j.eq.3) fij =  0.0210d0
-if(i.eq.2.and.j.eq.4) fij = -0.0035d0
-if(i.eq.2.and.j.eq.5) fij =  0.2754d0
-if(i.eq.2.and.j.eq.6) fij =  0.3599d0
-if(i.eq.2.and.j.eq.7) fij =  0.0182d0
-if(i.eq.2.and.j.eq.8) fij = -0.0061d0
+if(i.eq.3.and.j.eq.3) A =  0.0140;
+if(i.eq.3.and.j.eq.4) A = -0.0047;
+if(i.eq.3.and.j.eq.5) A =  0.3277;
+if(i.eq.3.and.j.eq.6) A =  0.0666;
+if(i.eq.3.and.j.eq.7) A =  0.0421;
+if(i.eq.3.and.j.eq.8) A = -0.0140;
 
-if(i.eq.3.and.j.eq.3) fij =  0.0140d0
-if(i.eq.3.and.j.eq.4) fij = -0.0047d0
-if(i.eq.3.and.j.eq.5) fij =  0.3277d0
-if(i.eq.3.and.j.eq.6) fij =  0.0666d0
-if(i.eq.3.and.j.eq.7) fij =  0.0421d0
-if(i.eq.3.and.j.eq.8) fij = -0.0140d0
+if(i.eq.4.and.j.eq.4) A =  0.0088;
+if(i.eq.4.and.j.eq.5) A = -0.0546;
+if(i.eq.4.and.j.eq.6) A =  0.1570;
+if(i.eq.4.and.j.eq.7) A = -0.0070;
+if(i.eq.4.and.j.eq.8) A =  0.0023;
 
-if(i.eq.4.and.j.eq.4) fij =  0.0088d0
-if(i.eq.4.and.j.eq.5) fij = -0.0546d0
-if(i.eq.4.and.j.eq.6) fij =  0.1570d0
-if(i.eq.4.and.j.eq.7) fij = -0.0070d0
-if(i.eq.4.and.j.eq.8) fij =  0.0023d0
-
-if(i.eq.5.and.j.eq.5) fij =  1.9369d0
-if(i.eq.5.and.j.eq.6) fij =  0.9506d0
-if(i.eq.5.and.j.eq.7) fij =  0.5926d0
-if(i.eq.5.and.j.eq.8) fij = -0.1975d0
-
-
-if(i.eq.6.and.j.eq.6) fij =  0.9305d0
-if(i.eq.6.and.j.eq.7) fij =  0.0002d0
-if(i.eq.6.and.j.eq.8) fij = -0.0001d0
-
-if(i.eq.7.and.j.eq.7) fij =  3.4211d0
-if(i.eq.7.and.j.eq.8) fij =  0.3897d0
-
-if(i.eq.8.and.j.eq.8) fij =  3.2162d0
+if(i.eq.5.and.j.eq.5) A =  1.9369;
+if(i.eq.5.and.j.eq.6) A =  0.9506;
+if(i.eq.5.and.j.eq.7) A =  0.5926;
+if(i.eq.5.and.j.eq.8) A = -0.1975;
 
 
+if(i.eq.6.and.j.eq.6) A =  0.9305;
+if(i.eq.6.and.j.eq.7) A =  0.0002;
+if(i.eq.6.and.j.eq.8) A = -0.0001;
 
-return
-end
+if(i.eq.7.and.j.eq.7) A =  3.4211;
+if(i.eq.7.and.j.eq.8) A =  0.3897;
+
+if(i.eq.8.and.j.eq.8) A =  3.2162;
+*/
+    switch(i){
+        case 1: switch (j){
+            case 1: A =  0.0009; break;
+            case 2: A = -0.0113; break;
+            case 3: A = -0.0035; break;
+            case 4: A =  0.0006; break;
+            case 5: A = -0.0459; break;
+            case 6: A = -0.0600; break;
+            case 7: A = -0.0030; break;
+            case 8: A =  0.0010; break;
+        }  break;
+    
+        case 2: switch(j) {
+            case 2: A =  0.0340; break;
+            case 3: A =  0.0210; break;
+            case 4: A = -0.0035; break;
+            case 5: A =  0.2754; break;
+            case 6: A =  0.3599; break;
+            case 7: A =  0.0182; break;
+            case 8: A = -0.0061; break;
+        } break;
+    
+        case 3: switch(j){
+            case 3: A =  0.0140; break;
+            case 4: A = -0.0047; break;
+            case 5: A =  0.3277; break;
+            case 6: A =  0.0666; break;
+            case 7: A =  0.0421; break;
+            case 8: A = -0.0140; break;
+        } break;
+    
+        case 4: switch(j) {
+            case 4: A =  0.0088; break;
+            case 5: A = -0.0546; break;
+            case 6: A =  0.1570; break;
+            case 7: A = -0.0070; break;
+            case 8: A =  0.0023; break;
+        } break;
+    
+        case 5: switch(j) {
+            case 5: A =  1.9369; break;
+            case 6: A =  0.9506; break;
+            case 7: A =  0.5926; break;
+            case 8: A = -0.1975; break;
+        } break;
+            
+    
+        case 6: switch(j) {
+            case 6: A =  0.9305; break;
+            case 7: A =  0.0002; break;
+            case 8: A = -0.0001; break;
+        } break;
+                
+        case 7: switch(j) {
+            case 7: A =  3.4211;  break;
+            case 8: A =  0.3897; break;
+        } break;
+    
+        case 8: switch(j) {
+            case 8: A =  3.2162; break;
+        }
+    }
+
+    return A;
+    }
 
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function mbrun(Q)
+double mbrun(const double Q) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 Q
 
-mbrun = Q*(1d0-4d0/3d0*alphasbsg(Q)/pibsg)
 
-return
-end
+    double moose = Q*(1-4/3*alphasbsg(Q)/pibsg);
+
+    return moose;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function alphasbsg(Q)
+double alphasbsg(const double Q){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 Q,v,alphasMZ
+
+    double moose;
+    double v,alphasMZ;
 
 
-alphasMZ = 0.118d0
+    alphasMZ = 0.118;
 
-v = 1d0+beta0*alphasMZ/(2d0*pibsg)*dlog(Q/MZbsg)
+    v = 1+beta0*alphasMZ/(2*pibsg)*log(Q/MZbsg);
 //c	write(*,*)v,beta0,beta1,alphasMZ,pi,q,mz
 //c	stop
 
-alphasbsg = alphasMZ / v *(1d0-beta1/beta0*alphasMZ/(4d0*pibsg)*dlog(v)/v)
+    moose = alphasMZ / v *(1-beta1/beta0*alphasMZ/(4*pibsg)*log(v)/v);
 
-return
-end
+    return moose;
+}
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function kap(z)
+double kap(const double z) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 z
 
-kap = 1d0 - 2d0*alphasbsg(mubarb)/(3d0*pibsg)*h(z)/f(z)
 
-if(order.eq.'LO') kap = 1d0
+    double thing = 1 - 2*alphasbsg(mubarb)/(3*pibsg)*h(z)/f(z);
 
-return
-end
+    if(order='LO') kap = 1;
+
+    return thing;
+}
 
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function f(z)
+double f(const double z) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 z
 
-
-f = 1d0-8d0*z+8d0*z**3-z**4-12d0*z**2*dlog(z)
-return
-end
+    double thing = 1-8*z+8*z*z*z-z*z*z*z-12*z*z*log(z);
+    return thing;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function h(z)
+double h(const double z) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 z
-real*8 term1,term2,term3,term4,term5,term6,term7
+
+    double term1,term2,term3,term4,term5,term6,term7,sum;
 
 
-term1 = -(1d0-z**2)*(25d0/4d0-239d0/3d0*z+25d0/4d0*z**2)
-term2 = z*dlog(z)*(20d0+90d0*z-4d0/3d0*z**2+17d0/3d0*z**3)
-term3 = z**2*dlog(z)**2*(36d0+z**2)
-term4 = (1d0-z**2)*(17d0/3d0-64d0/3d0*z+17d0/3d0*z**2)*dlog(1d0-z)
-term5 = -4d0*(1d0+30d0*z**2+z**4)*dlog(z)*dlog(1d0-z)
-term6 = -(1d0+16d0*z**2+z**4)*(6d0*Li2(z) - pibsg**2)
-term7 = -32d0*z**1.5d0*(1d0+z)*(pibsg**2-4d0*Li2(dsqrt(z))+4d0*Li2(-dsqrt(z))-2d0*dlog(z)*dlog((1d0-dsqrt(z))/(1d0+dsqrt(z))))
+    term1 = -(1-z*z)*(25/4-239/3*z+25/4*z*z);
+    term2 = z*log(z)*(20+90*z-4/3*z*z+17/3*z*z*z);
+    term3 = z*z*(log(z)*log(z))*(36+z*z);
+    term4 = (1-z*z)*(17/3-64/3*z+17/3*z*z)*log(1-z);
+    term5 = -4*(1+30*z*z+z*z*z*z)*log(z)*log(1-z);
+    term6 = -(1+16*z*z+z*z*z*z)*(6*Li2(z) - pibsg*pibsg);
+    term7 = -32*pow(z,1.5)*(1+z)*(pibsg*pibsg-4*Li2(sqrt(z))+4*Li2(-sqrt(z))-2*log(z)*log((1-sqrt(z))/(1+sqrt(z))));
 
 
 
-h = term1 + term2 + term3 + term4 + term5 + term6 + term7
+    sum = term1 + term2 + term3 + term4 + term5 + term6 + term7;
 
-return
-end
+    return sum;
+}
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Li2(z)			!either positive or negative arguments allowerd
+double Li2(const double z) {			//!either positive or negative arguments allowed
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 z
 
-if(z.lt.0d0) then
-Li2 = 0.5d0*Li2p(z**2) - Li2p(dabs(z))
-return
-else
-Li2 = Li2p(z)
-endif
+    double thing=0;
+
+    if(z<0) {
+        thing = 0.5*Li2p(z*z) - Li2p(abs(z));
+        return thing; //Why twice?
+    }
+    else {
+        thing = Li2p(z);
+    }
 
 
-
-return
-end
+    return thing;
+    }
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function Li2p(z)			! positive agruments only
+double Li2p(const double z)	{		//! positive arguments only
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-real*8 z
-real*8 sum
-integer i
 
-sum = 0d0
-z = dabs(z)
+//    double what;
+    double z,sum;
+    int i;
 
-if(z.lt.1d0) then
-do i=1,50
-sum = sum + z**i/(1d0*i)**2
-enddo
-elseif(z.ge.1d0) then
-sum = pibsg**2/3d0-1d0/2d0*dlog(z)**2
-do i=1,50
-sum = sum - 1d0/(i**2*z**i)
-enddo
-endif
-Li2p = sum
+    sum = 0;
+    z = abs(z);
 
-return
-end
+    if(z<1) {
+        for (i=1;i<=50;i++) {
+            sum = sum + pow(z,i)/(1*i)*(1*i);
+        }
+    }
+    else {     //(z.ge.1d0) then
+        sum = pibsg**2/3-1/2*(log(z)*log(z));  //AAAHHHHH What did you do Gabe? Must check paper.
+        for (i=1;i<=50;i++) {
+            sum = sum - 1/(i*i*pow(z,i));
+        }
+    }
+//    what = sum;
+
+//    return what;
+    return sum;
+}
 
 
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-function C1beff(i)
+double C1beff(const int i){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-implicit none
-include 'bsg_nlo.inc'
-integer i,j
-real*8 sum
-real*8 x
 
-x = mbart(mwbsg)**2/mwbsg**2
+    double thing;
+    int j;
+    double sum;
 
-if(i.eq.7) then
-sum = 0d0
-do j=1,8
-sum = sum + (ei(j)*eta*E(x)+fi(j)+gi(j)*eta)*eta**(ai(j))
-enddo
+    double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); //This looks like the run mass of some particle...
 
-C1beff = eta**(39d0/23d0)*C1Weff(7)+8d0/3d0*(eta**(37d0/23d0)-eta**(39d0/23d0))*C1Weff(8) +
-.	(297664d0/14283d0*eta**(16d0/23d0) - 7164416d0/357075d0*eta**(14d0/23d0)
-     .	 +256868d0/14283d0*eta**(37d0/23d0) - 6698884d0/357075d0 * eta**(39d0/23d0))*
-.	C0W(8) + 37208d0/4761d0*(eta**(39d0/23d0)-eta**(16d0/23d0))*C0W(7) + sum
+    if(i=7) {
+        sum = 0;
+        for (j=1;j<=8;j++) {
+            sum = sum + (ei(j)*eta*E(x)+fi(j)+gi(j)*eta)*eta**(ai(j));
+        }
 
+thing = eta**(39/23)*C1Weff(7) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Weff(8)
+            + ( 297664/14283*pow(eta,(16/23)) - 7164416/357075*pow(eta,(14/23))
+            +   256868/14283*pow(eta,(37/23)) - 6698884/357075*pow(eta,(39/23)) )*C0W(8)
+            + 37208/4761*( pow(eta,(39/23))-pow(eta,(16/23)) )*C0W(7) + sum;
 
-else
-stop 'wtf c1beff'
-
-endif
+    }
+    else {
+//  stop 'wtf c1beff'  ??
+    }
 
 
 //c	write(*,*)C1beff
@@ -498,16 +547,16 @@ endif
 //c	write(*,*)C1beff - (eta**(39d0/23d0)*C1Weff(7)+8d0/3d0*(eta**(37d0/23d0)-eta**(39d0/23d0))*C1Weff(8))
 //c	stop
 
-if(order.eq.'LO') C1beff = 0d0
+    if(order='LO') thing = 0;
 
-return
-end
+    return thing;
+    }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0beff(int i) {
+double C0beff(const int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    int i,j;
+    int j;
     double sum, thing;
 
 /*
@@ -530,14 +579,15 @@ endif
     switch(i) {
         case 7: sum = 0;
             for (j=1;j<=8;j++) {
-                sum = sum + eta**ai(j)*hi(j)
+                sum = sum + pow(eta,ai(j))*hi(j); //This looks like an integral?
             }
             
-            thing = eta**(16/23)*C0W(7)+8d0/3d0*(eta**(14/23)-eta**(16/23))*C0W(8) + sum;
+            thing = pow(eta,(16/23))*C0W(7)+8/3*(pow(eta,(14/23))-pow(eta,(16/23)))*C0W(8)
+            + sum;
             break;
-        case 8: thing = (C0W(8)+313063/363036)*eta**(14/23) -
-            .	0.9135*eta**(0.4086) + 0.0873*eta**(-0.4230)
-            .	- 0.0571*eta**(-0.8994) + 0.0209*eta**(0.1456);
+        case 8: thing = (C0W(8)+313063/363036)*pow(eta,(14/23)) -
+            .	0.9135*pow(eta,(0.4086)) + 0.0873*pow(eta,(-0.4230))
+            .	- 0.0571*pow(eta,(-0.8994)) + 0.0209*pow(eta,(0.1456));
             break;
         default: thing = C0b(i);
             break;
@@ -546,8 +596,18 @@ endif
     return thing;
 }
 
+/*  I need to figure out how to use this information, which is called here.
+ c	Arrays for running from mu_W to mu_b
+	real*8 ai(8),ei(8),fi(8),gi(8),hi(8)
+	data ai/0.6087d0,0.6957d0,0.2609d0,-0.5217d0,0.4086d0,-0.4230d0,-0.8994d0,0.1456d0/
+	data ei/5.7064d0,-3.8412d0,0d0,0d0,-1.9043d0,-0.1008d0,0.1216d0,0.0183d0/
+	data fi/-17.3023d0,8.5027d0,4.5508d0,0.7519d0,2.0040d0,0.7476d0,-0.5385d0,0.0914d0/
+	data gi/14.8088d0,-10.8090d0,-0.8740d0,0.4218d0,-2.9347d0,0.3971d0,0.1600d0,0.0225d0/
+	data hi/2.2996d0,-1.0880d0,-0.4286d0,-0.07143d0,-0.6494d0,-0.0380d0,-0.0186d0,-0.0057d0/
+ */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0b(int i) {
+double C0b(const int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
@@ -607,7 +667,7 @@ endif
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C1Weff(int i) {
+double C1Weff(const int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
@@ -615,6 +675,7 @@ double C1Weff(int i) {
 
     q = mwbsg;
     x = mbart(q)**2/mwbsg**2;
+//    double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); Is this what he meant?
 
     thing = 0;
 /*if(i.eq.1) then
@@ -631,6 +692,9 @@ C1Weff = G8(x) + Delta8(x)*dlog(q**2/mwbsg**2) + C1WHeff(i)
 return
 endif
 */
+
+    //These look like log(1) when q=mwbsg, as assigned above...
+
     switch(i){
         case 1: thing = 15+6*log(q**2/mwbsg**2);
             break;
@@ -648,7 +712,7 @@ endif
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double E(double x){
+double E(const double x){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -663,7 +727,7 @@ double E(double x){
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double G7(double x) {
+double G7(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -682,7 +746,7 @@ return
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double G8(double x) {
+double G8(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -700,7 +764,7 @@ return
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double Delta7(double x) {
+double Delta7(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -713,7 +777,7 @@ double Delta7(double x) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double Delta8(double x) {
+double Delta8(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -727,7 +791,7 @@ double Delta8(double x) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-C0Weff(i) {
+double C0Weff(const int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
@@ -738,42 +802,52 @@ C0Weff(i) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0W(int i) {
+double C0W(const int i) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     double thing;
     double Q,x;
 
     q = mwbsg;
 
-    x = mbart(Q)**2/MWbsg**2;
+    x = mbart(Q)*mbart(Q)/(MWbsg*MWbsg);
 
 //c	write(*,*)x,mbart(Q),mw,q
 //c	stop
-    if(i.eq.2) {
+ /*   if(i=2) {
         thing = 1;
         return thing;
     }
 
-    if(i.le.6) {
+    if(i=6) {
         thing = 0;
         return thing;
     }
 
-    if(i.eq.7) {
+    if(i=7) {
         thing = F17(x);
     }
 
-    if(i.eq.8) {
+    if(i=8) {
         thing = F18(x);
     }
 
     thing += C0WHiggs(i);
-
-return
+*/
+    
+    switch(i){
+        case 2: thing = 1; break;
+        case 6: thing = 0; break;
+        case 7: thing = F17(x); break;
+        case 8: thing = F18(x); break;
+    }
+  
+    thing += C0WHiggs(i);
+    
+    return thing;
     }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double F17(double x){
+double F17(const double x){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -786,7 +860,7 @@ double F17(double x){
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double F18(double x) {
+double F18(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -820,7 +894,7 @@ double C0WHiggs(int i) {
     }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double F27(double x) {
+double F27(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -832,7 +906,7 @@ double F27(double x) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double F28(double x) {
+double F28(const double x) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
