@@ -11,6 +11,9 @@
 
 #include <stdio.h>
 
+const static double pibsg = 4*atan(1);
+
+
 double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull){
     /*c
      c	Calculates the B -> X_S + gamma BF from the Standard model and 2HDM

@@ -53,7 +53,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 //c        write(*,*) MHbsg(i),Au(i),Ad(i)
     }
 
-order = 'NLO';
+//order = 'NLO';
 
     pibsg = 4*atan(1);
 
@@ -82,11 +82,11 @@ order = 'NLO';
     gam1m = 404/3-40/9*nf;
 
 
-    if(order='LO') {
+/*    if(order='LO') {
         beta1 = 0;
         gam1m = 0;
     }
-
+*/
 
 
     eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
@@ -163,7 +163,7 @@ double DtermSq(double Q) {
 
 
     r2r = 2/243*(-833+144*pibsg*pibsg*pow(z,1.5)
-            + (1728-180*pibsg*pibsg-1296*zeta3+(1296-324*pibsg*pibsg)*logz + 108*Log(z)**2+36*logz**3)*z
+            + (1728-180*pibsg*pibsg-1296*zeta3+(1296-324*pibsg*pibsg)*logz + 108*log(z)**2+36*logz**3)*z
                  .	+ (648+72*pibsg**2+(432-216*pibsg**2)*logz+36*logz**3)*z**2
                  .	+ (-54-84*pibsg**2+1092*logz-756*logz**2)*z**3);
     
@@ -215,18 +215,18 @@ double gam0eff(int i,int j) {
     double moose;
 
     switch(i){
-        case 1: moose = -208/243;
-        case 2: moose = 416/81;
-        case 3: moose = -176/81;
-        case 4: moose = -152/243;
-        case 5: moose = -6272/81;
-        case 6: moose = 4624/243;
-        case 7: moose = 32/3;
-        case 8: moose = -32/9;
+        case 1: moose = -208*1.0/243.0;
+        case 2: moose = 416*1.0/81.0;
+        case 3: moose = -176*1.0/81.0;
+        case 4: moose = -152*1.0/243.0;
+        case 5: moose = -6272*1.0/81.0;
+        case 6: moose = 4624*1.0/243.0;
+        case 7: moose = 32*1.0/3.0;
+        case 8: moose = -32*1.0/9.0;
     }
 
 
-    moose = moose*alphasbsg(mub)/(4*pibsg);
+    moose *= alphasbsg(mub)*1.0/(4*pibsg);
 
     return moose;
     }
@@ -291,7 +291,7 @@ double fij(int i,int j) {
     double A;
 
     if(del!=0.99) {
-write(*,*)'Delta not 0.99'
+//write(*,*)'Delta not 0.99'
 stop
     }
 /*
@@ -454,7 +454,7 @@ double kap(const double z) {
 
     double thing = 1 - 2*alphasbsg(mubarb)/(3*pibsg)*h(z)/f(z);
 
-    if(order='LO') kap = 1;
+//    if(order='LO') kap = 1;
 
     return thing;
 }
@@ -588,7 +588,7 @@ thing = eta**(39/23)*C1Weff(7) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Wef
 //c	write(*,*)C1beff - (eta**(39d0/23d0)*C1Weff(7)+8d0/3d0*(eta**(37d0/23d0)-eta**(39d0/23d0))*C1Weff(8))
 //c	stop
 
-    if(order='LO') thing = 0;
+//    if(order='LO') thing = 0;
 
     return thing;
     }
@@ -724,8 +724,8 @@ double C1Weff(const int i) {
     double Q,x,y;
 
     Q = mwbsg;
-    x = mbart(Q)*mbart(Q)/(mwbsg*mwbsg);
-    y = Q*Q/(mwbsg*mwbsg)  //Placing this here to shorten the calculation.
+    x = mbart(Q)*mbart(Q)*1.0/(mwbsg*mwbsg);
+    y = Q*Q*1.0/(mwbsg*mwbsg)  //Placing this here to shorten the calculation.
 //    double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); Is this what he meant?
 
     thing = 0;
@@ -878,7 +878,7 @@ double C0W(const int i) {
 
     Q = mwbsg;
 
-    x = mbart(Q)*mbart(Q)/(mwbsg*mwbsg);
+    x = mbart(Q)*mbart(Q)*1.0/(mwbsg*mwbsg);
 
 //c	write(*,*)x,mbart(Q),mw,q
 //c	stop
