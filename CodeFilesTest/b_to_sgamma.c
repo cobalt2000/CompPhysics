@@ -9,15 +9,15 @@
 #include "b_to_sgamma.h"
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double bsg_nlo(double xAu,double xAd,double xMH,double xnhiggs,double BF,double pull){
+double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull){
 /*c
 c	Calculates the B -> X_S + gamma BF from the Standard model and 2HDM
 c
 c	M. Ciuchini, G. Degrassi, P. Gambino, and G. F. Giudice, Nucl. Phys. B527, 21 (1998).
 c
 c
-c	xAu - Charged Higgs PL coupling (proportional to mu)
-c	xAd - Charged Higgs PR coupling (proportional to md)
+c	xAu - Charged Higgs PL coupling (proportional to mu) (Parity - Left)
+c	xAd - Charged Higgs PR coupling (proportional to md) (Parity - Right)
 c	xMH - Charged Higgs mass
 c	xnhiggs - Higgs index
 c
@@ -41,7 +41,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     double BFthref,BFthrefunc;
     double BFexp,BFexpunc;
     double relunc;
-    double pull;
+//    double pull;
 
 
     nhiggs = xnhiggs;
@@ -141,6 +141,9 @@ order = 'NLO';
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double DtermSq(double Q) {
+    /* Now we're actually getting to a calculation.
+     Q  input   energy scale of the calculation.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double sumreal,sumimag;
@@ -206,6 +209,7 @@ double DtermSq(double Q) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double gam0eff(int i,int j) {
+    //Why does he have J as an input here?  He doesn't use it.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
     double moose;
@@ -230,9 +234,14 @@ double gam0eff(int i,int j) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Aterm(double Q) {
+    /* Correction for low energy bremsstrahlang.
+     Q  input   energy of calculation
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double Q,sum,moose;
+    //Error: Gabe defines Q as an input, and never uses it. Instead, he uses the bottom mass, defined in mub=mbbsg above.
+    
+    double sum,moose;
     int i,j;
 
     sum = 0;
@@ -255,6 +264,9 @@ double Aterm(double Q) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double mbart(double Q){
+    /* Correction for low energy bremsstrahlang.
+     Q  input   energy of calculation
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -270,6 +282,10 @@ double mbart(double Q){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double fij(int i,int j) {
+    /* List of the matrix elements for the possible interactions.  Each element listed below corresponds to a particular particle interaction and Wilson coefficient.
+     i  input   column index for matrix element
+     j  input   row index for matrix element
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double A;
@@ -394,6 +410,9 @@ if(i.eq.8.and.j.eq.8) A =  3.2162;
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double mbrun(const double Q) {
+    /* The running value of the bottom mass. Eqn 42
+     Q   input   energy scale at which the calling function needs the bottom mass.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
@@ -404,6 +423,9 @@ double mbrun(const double Q) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double alphasbsg(const double Q){
+    /* The running value of the strong coupling constant. Eqn 42
+     Q   input   energy scale at which the calling function needs the strong coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double moose;
@@ -413,7 +435,7 @@ double alphasbsg(const double Q){
     alphasMZ = 0.118;
 
     v = 1+beta0*alphasMZ/(2*pibsg)*log(Q/MZbsg);
-//c	write(*,*)v,beta0,beta1,alphasMZ,pi,q,mz
+//c	write(*,*)v,beta0,beta1,alphasMZ,pi,Q,mz
 //c	stop
 
     moose = alphasMZ / v *(1-beta1/beta0*alphasMZ/(4*pibsg)*log(v)/v);
@@ -423,6 +445,10 @@ double alphasbsg(const double Q){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double kap(const double z) {
+    /* Phase space calculations for the SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
@@ -437,6 +463,10 @@ double kap(const double z) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double f(const double z) {
+    /* Phase space calculations for the SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing = 1-8*z+8*z*z*z-z*z*z*z-12*z*z*log(z);
@@ -446,6 +476,10 @@ double f(const double z) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double h(const double z) {
+    /* Phase space calculations for the SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double term1,term2,term3,term4,term5,term6,term7,sum;
@@ -469,6 +503,7 @@ double h(const double z) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Li2(const double z) {			//!either positive or negative arguments allowed
+    //Undefined in the paper.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing=0;
@@ -488,6 +523,7 @@ double Li2(const double z) {			//!either positive or negative arguments allowed
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Li2p(const double z)	{		//! positive arguments only
+    //Undefined in the paper.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //    double what;
@@ -519,6 +555,9 @@ double Li2p(const double z)	{		//! positive arguments only
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C1beff(const int i){
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
@@ -556,6 +595,9 @@ thing = eta**(39/23)*C1Weff(7) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Wef
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0beff(const int i) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     int j;
@@ -610,6 +652,9 @@ endif
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0b(const int i) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
@@ -670,13 +715,17 @@ endif
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C1Weff(const int i) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double thing;
-    double q,x;
+    double Q,x,y;
 
-    q = mwbsg;
-    x = mbart(q)**2/mwbsg**2;
+    Q = mwbsg;
+    x = mbart(Q)*mbart(Q)/(mwbsg*mwbsg);
+    y = Q*Q/(mwbsg*mwbsg)  //Placing this here to shorten the calculation.
 //    double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); Is this what he meant?
 
     thing = 0;
@@ -698,13 +747,13 @@ endif
     //These look like log(1) when q=mwbsg, as assigned above...
 
     switch(i){
-        case 1: thing = 15+6*log(q**2/mwbsg**2);
+        case 1: thing = 15+6*log(y);
             break;
-        case 4: thing = E(x) - 2/3 + 2/3*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+        case 4: thing = E(x) - 2/3 + 2/3*log(y) + C1WHeff(i);
             break;
-        case 7: thing = G7(x) + Delta7(x)*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+        case 7: thing = G7(x) + Delta7(x)*log(y) + C1WHeff(i);
             break;
-        case 8: thing = G8(x) + Delta8(x)*log(q*q/(mwbsg*mwbsg)) + C1WHeff(i);
+        case 8: thing = G8(x) + Delta8(x)*log(y) + C1WHeff(i);
             break;
         default: break;
     }
@@ -715,6 +764,9 @@ endif
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double E(const double x){
+    /* SM contributions at LO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -730,6 +782,9 @@ double E(const double x){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double G7(const double x) {
+    /* SM contributions at LO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -749,6 +804,9 @@ return
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double G8(const double x) {
+    /* SM contributions at LO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -767,6 +825,9 @@ return
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Delta7(const double x) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -780,6 +841,9 @@ double Delta7(const double x) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Delta8(const double x) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   ratio of top mass to W mass scale.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -794,24 +858,27 @@ double Delta8(const double x) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0Weff(const int i) {
+    //Why does this function exist?
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double thing;
-    
-    thing = C0W(i);
+    double thing = C0W(i);
 
     return thing;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0W(const int i) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     i   input   which coefficient is being calculated.
+     */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     double thing;
     double Q,x;
 
-    q = mwbsg;
+    Q = mwbsg;
 
-    x = mbart(Q)*mbart(Q)/(MWbsg*MWbsg);
+    x = mbart(Q)*mbart(Q)/(mwbsg*mwbsg);
 
 //c	write(*,*)x,mbart(Q),mw,q
 //c	stop
@@ -850,6 +917,10 @@ double C0W(const int i) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double F17(const double x){
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     */
+
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -863,6 +934,9 @@ double F17(const double x){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double F18(const double x) {
+    /* SM contributions at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
@@ -876,6 +950,11 @@ double F18(const double x) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0WHiggs(int i) {
+    /* Correction to the SM contributions by the charged Higgs at LO to the effective Wilson coefficients.
+     i   input   which coefficient correction is being calculated.
+     
+     Need to pass scaled Yukawas Au and Ad.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     
@@ -887,8 +966,8 @@ double C0WHiggs(int i) {
     sum = 0;
     for (j=1,nhiggs){
         x = mbart(mwbsg)*mbart(mwbsg)/(mhbsg(j)*mhbsg(j));
-        if(i.eq.7) sum = sum + Au(j)**2/3*F17(x) - Au(j)*Ad(j)*F27(x);
-        if(i.eq.8) sum = sum + Au(j)**2/3*F18(x) - Au(j)*Ad(j)*F28(x);
+        if(i=7) sum = sum + Au[j]*Au[j]/3*F17(x) - Au[j]*Ad[j]*F27(x);
+        if(i=8) sum = sum + Au[j]*Au[j]/3*F18(x) - Au[j]*Ad[j]*F28(x);
     }
 
 //C0WHiggs = sum
@@ -897,6 +976,9 @@ double C0WHiggs(int i) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double F27(const double x) {
+    /* Correction to the SM contributions by the charged Higgs at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -909,10 +991,13 @@ double F27(const double x) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double F28(const double x) {
+    /* Correction to the SM contributions by the charged Higgs at LO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-    double whatever;
-    whatever = x*(3-x)/(4*(x-1)*(x-1)) - x/(2*(x-1)*(x-1)*(x-1))*log(x);
+    double whatever = x*(3-x)/(4*(x-1)*(x-1)) - x/(2*(x-1)*(x-1)*(x-1))*log(x);
 
 
     return whatever;
@@ -921,6 +1006,7 @@ double F28(const double x) {
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C1WHeff(int i){
+// Summation of each effective Wilson coefficient (i) over all Higgses (j).
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     int j;
@@ -928,18 +1014,18 @@ double C1WHeff(int i){
     double sum =0;
 
 //    whatever = 0;
-    return; //Why is this here?  It returns 0, then a double, if there's a double? Why not wait?
+    return sum; //Why is this here?  It returns 0, then a double, if there's a double? Why not wait?
 //    sum = 0;
     for (j=1;nhiggs;j++){ //I believe that this is where the function starts adding up contributions from multiple Higgs, hence the index "nhiggs".
-        x = mbart(mwbsg)**2/mhbsg(j)**2;
+        x = mbart(mwbsg)*mbart(mwbsg)/(mhbsg(j)*mhbsg(j));
 
-        if(i.eq.4) sum = sum + EH(x,Au(j),Ad(j));
-        if(i.eq.7) sum = sum + G7H(x,Au(j),Ad(j))
-            + Delta7H(x,Au(j),Ad(j))*log(mwbsg**2/MHbsg(j)**2)
+        if(i=4) sum = sum + EH(x,Au[j],Ad[j]);
+        if(i=7) sum = sum + G7H(x,Au[j],Ad[j])
+            + Delta7H(x,Au(j),Ad(j))*log(mwbsg*mwbsg/(mhbsg(j)*mhbsg(j)))
             - 4/9*EH(x,Au(j),Ad(j));
-        if(i.eq.8) sum = sum + G8H(x,Au(j),Ad(j))
-            + Delta8H(x,Au(j),Ad(j))*log(mwbsg**2/MHbsg(j)**2)
-            - 1/6*EH(x,Au(j),Ad(j));
+        if(i=8) sum = sum + G8H(x,Au(j),Ad(j))
+            + Delta8H(x,Au[j],Ad[j])*log(mwbsg*mwbsg/(mhbsg(j)*mhbsg(j)))
+            - 1/6*EH(x,Au[j],Ad[j]);
     }
 
 //    whatever = sum;
@@ -950,6 +1036,11 @@ double C1WHeff(int i){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double EH(const double x,const double xAu,const double xAd){
+    /* Correction to the SM contributions by the charged Higgs at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     xAu input   Effective up-type (PL) Yukawa coupling, scaled by SM up-type Yukawa coupling.
+     xAd input   Effective down-type (PR) Yukawa coupling, scaled by SM down-type Yukawa coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -965,6 +1056,11 @@ double EH(const double x,const double xAu,const double xAd){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double G7H(const double x,const double xAu,const double xAd){
+    /* Correction to the SM contributions by the charged Higgs at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     xAu input   Effective up-type (PL) Yukawa coupling, scaled by SM up-type Yukawa coupling.
+     xAd input   Effective down-type (PR) Yukawa coupling, scaled by SM down-type Yukawa coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -992,6 +1088,11 @@ double G7H(const double x,const double xAu,const double xAd){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Delta7H(const double x,const double xAu,const double xAd){
+    /* Correction to the SM contributions by the charged Higgs at NLO to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     xAu input   Effective up-type (PL) Yukawa coupling, scaled by SM up-type Yukawa coupling.
+     xAd input   Effective down-type (PR) Yukawa coupling, scaled by SM down-type Yukawa coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double whatever;
@@ -1012,6 +1113,11 @@ double Delta7H(const double x,const double xAu,const double xAd){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double G8H(const double x,const double xAu,const double xAd){
+    /* Correction to the SM contributions to the effective Wilson coefficients.
+     x   input   running mass of the top quark at the W mass, divided by the W mass.
+     xAu input   Effective up-type (PL) Yukawa coupling, scaled by SM up-type Yukawa coupling.
+     xAd input   Effective down-type (PR) Yukawa coupling, scaled by SM down-type Yukawa coupling.
+     */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //real*8 xAu,xAd,x
@@ -1038,6 +1144,11 @@ double G8H(const double x,const double xAu,const double xAd){
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double Delta8H(const double x,const double xAu,const double xAd){
+/* Correction to the SM contributions to the effective Wilson coefficients.
+    x   input   running mass of the top quark at the W mass, divided by the W mass.
+    xAu input   Effective up-type (PL) Yukawa coupling, scaled by SM up-type Yukawa coupling.
+    xAd input   Effective down-type (PR) Yukawa coupling, scaled by SM down-type Yukawa coupling.
+*/
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //    double xAu,xAd,x;
