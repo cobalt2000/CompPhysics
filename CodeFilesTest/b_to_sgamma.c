@@ -32,6 +32,8 @@ c
 c
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc*/
 
+    
+    
 //real*8 xAu(maxhiggs),xAd(maxhiggs),xMh(maxhiggs)
     int i;
     double z;
@@ -39,14 +41,14 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     double BFthref,BFthrefunc;
     double BFexp,BFexpunc;
     double relunc;
-    double pull; //The number of standard deviations that the calculated branching fraction is from the experimental value.
+    double pull;
 
 
     nhiggs = xnhiggs;
     for (i=1;i<=nhiggs;i++){ // I don't even know why he defined the two separate values... after this, they're the same.  Unless he didn't want to accidentally overwrite the values.
-        Au(i) = xAu(i);
-        Ad(i) = xAd(i);
-        MHbsg(i) = xMH(i);
+        Au[i] = xAu[i];
+        Ad[i] = xAd[i];
+        MHbsg[i] = xMH[i];
 //c        write(*,*) xMH(i),xAu(i),xAd(i)
 //c        write(*,*) MHbsg(i),Au(i),Ad(i)
     }
@@ -89,10 +91,10 @@ order = 'NLO';
 
     eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
 
-    alphae = 1d0/130.3;
+    alphae = 1/130.3;
     CKMproductSq = 0.95;
 
-    z = mcbsg**2/mbbsg**2;
+    z = (mcbsg*mcbsg)/(mbbsg*mbbsg);
 
     lam1 = 0;	//! drops out anyway
 
@@ -100,8 +102,8 @@ order = 'NLO';
 
     delNPc = -1/9*lam2/C0b(7)*(C0b(2) - C0b(1)/6);
 
-    delNPSL = lam1/2 + 3d0*lam2/2*(1-4*(1-z)**4/f(z));
-    delNPgam = lam1/2 - 9d0/2*lam2;
+    delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
+    delNPgam = lam1/2 - 9/2*lam2;
     del = 0.99;
 
 //c	write(*,*)(C0beff(i),i=1,8)
@@ -113,7 +115,7 @@ order = 'NLO';
 
     BF = BFcenu * CKMproductSq * 6*alphae/(pibsg*f(z)*kap(z))
         *mbrun(mub)*mbrun(mub)/(mbbsg*mbbsg)*(DtermSq(mub) + Aterm(mub))
-        *(1- delNPSL / mbbsg**2 + delNPgam/(mbbsg*mbbsg) + delNPc / (mcbsg*mcbsg));
+        *(1- delNPSL / (mbbsg*mbbsg) + delNPgam/(mbbsg*mbbsg) + delNPc / (mcbsg*mcbsg));
 
 //c	Comparison with Experiment
 //c	Taken from HFAG world average: 1010.1589
@@ -160,7 +162,7 @@ double DtermSq(double Q) {
     r2r = 2/243*(-833+144*pibsg*pibsg*pow(z,1.5)
             + (1728-180*pibsg*pibsg-1296*zeta3+(1296-324*pibsg*pibsg)*logz + 108*Log(z)**2+36*logz**3)*z
                  .	+ (648+72*pibsg**2+(432-216*pibsg**2)*logz+36*logz**3)*z**2
-                 .	+ (-54d0-84*pibsg**2+1092*logz-756*logz**2)*z**3);
+                 .	+ (-54-84*pibsg**2+1092*logz-756*logz**2)*z**3);
     
     r2c = 16*pibsg/81*(-5+(45-3*pibsg**2+9*logz+9*logz**2)*z
                    .	+ (-3*pibsg**2+9*logz**2)*z**2 + (28-12*logz)*z**3);
@@ -257,7 +259,7 @@ double mbart(double Q){
 
     double what;
 
-    what = mbartpole * pow((alphasbsg(Q)/alphasbsg(mtbsg)),(gam0m/(2d0*beta0)))*
+    what = mbartpole * pow((alphasbsg(Q)/alphasbsg(mtbsg)),(gam0m/(2*beta0)))*
         (1 + alphasbsg(mtbsg)/(4*pibsg)*gam0m/(2*beta0)*(gam1m/gam0m-beta1/beta0)*
      .		(alphasbsg(Q)/alphasbsg(mtbsg)-1));
 
@@ -884,9 +886,9 @@ double C0WHiggs(int i) {
 
     sum = 0;
     for (j=1,nhiggs){
-        x = mbart(mwbsg)**2/mhbsg(j)**2;
-        if(i.eq.7) sum = sum + Au(j)**2/3d0*F17(x) - Au(j)*Ad(j)*F27(x);
-        if(i.eq.8) sum = sum + Au(j)**2/3d0*F18(x) - Au(j)*Ad(j)*F28(x);
+        x = mbart(mwbsg)*mbart(mwbsg)/(mhbsg(j)*mhbsg(j));
+        if(i.eq.7) sum = sum + Au(j)**2/3*F17(x) - Au(j)*Ad(j)*F27(x);
+        if(i.eq.8) sum = sum + Au(j)**2/3*F18(x) - Au(j)*Ad(j)*F28(x);
     }
 
 //C0WHiggs = sum
