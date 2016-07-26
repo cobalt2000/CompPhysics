@@ -16,6 +16,10 @@ c  of the charged higgses.                                  c
 c                                                           c
 c-----------------------------------------------------------c*/
 
+    //instead of initializing all the elements to zero, use "memset"
+    // i.e. memset(A, 0, sizeof(double).n)
+    //and memcopy(*A, *B, sizeof(A)), IF sizeof(A)=sizeof(double).n
+    // where B is copied into A (B is the source, A is the new location)
 
 //c parameters used in this subroutine only
     double precision Yteff,Ybeff,geff;
