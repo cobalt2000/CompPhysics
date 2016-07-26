@@ -127,11 +127,14 @@ c-----------------------------------------------------------c*/
             mch_tb_prod = 0.0;
             mch_cs_prod = 0.0;
         }
-
+//instead of initializing all the elements to zero, use "memset"
+// i.e. memset(A, 0, sizeof(double).n)
+        
+        
 //c production rates for h_0 as ratios relative to the SM
         geff = g2*(Dot_Prod(*vevs,*A.eigenvec));
-        ggprod[i] = h2glgl(A.mass,A.Y_t,A.Y_b); //! Gabe's code gives prod ratio
-        gagaprod[i] = h2gaga(A.mass,A.Y_t,A.Y_b,geff); //! Gabe's code gives prod ratio
+        ggprod= h2glgl(A.mass,A.Y_t,A.Y_b); //! Gabe's code gives prod ratio
+        gagaprod = h2gaga(A.mass,A.Y_t,A.Y_b,geff); //! Gabe's code gives prod ratio
 //c          mh_gg_prod(i) = ggprod(i)*?
 //c          mh_gaga_prod(i) = gagaprod(i)*?
         geff = 0;
