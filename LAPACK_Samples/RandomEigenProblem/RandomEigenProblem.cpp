@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
   if(myid == 0)
   {
       if(argc < 2){
-          gtype = 1;
+          gtype = 0;
       }else{
           gtype = atoi(argv[1]);
     }
