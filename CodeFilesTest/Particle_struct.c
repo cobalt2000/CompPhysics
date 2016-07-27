@@ -9,7 +9,7 @@
 #include "Particle_struct.h"
 
 typedef struct {
-    double  mass; //The mass eigenvalue of this particle state.
+    double mass; //The mass eigenvalue of this particle state.
     double Y_d; //The effective Yukawa couplings for down with this particle.
     double Y_u; //The effective Yukawa couplings for up with this particle.
     double Y_s; //The effective Yukawa couplings for strange with this particle.
@@ -37,16 +37,18 @@ struct { // These would either be input by the user or randomized.  Each pointer
  
 void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3){
     /*
-     evec   input   Pointer to the array for the eigenvector composition of the particle.
-     Y      input   Pointer to the array for the yukawas for whichever family, up/down, charm/strange, top/bottom.
-     Y1     output  Calculates the effective Yukawa coupling for the down-type quark. Needs the location in the struct for the particle.
-     Y2     output  Calculates the effective Yukawa coupling for the up-type quark.  Needs the location in struct for the particle.
+     Higgs   input/output   Pointer to the struct for the particle.
+     Y1      input   Pointer to the array for the yukawas for 1st family, down/up.
+     Y2      input   Pointer to the array for the yukawas for 2nd family, strange/charm.
+     Y3      input   Pointer to the array for the yukawas for 3rd family, bottom/top.
      */
-    const double n=sizeof(evec)/sizeof(evec[0]);
+    const double n=sizeof(Higgs.evec)/sizeof(Higgs.evec[0]);
     int i;
     for (i=0;i<n;i+=2){
         Higgs.Y_d += Higgs.evec[i]*Y1[i];
+        //Contracts the down-type Higgs field(s) with corresponding Yukawa couplings for down quark.
         Higgs.Y_u += Higgs.evec[i+1]*Y1[i+1];
+        //Contracts the up-type Higgs field(s) with corresponding Yukawa couplings for up quark.
         Higgs.Y_s += Higgs.evec[i]*Y2[i];
         Higgs.Y_c += Higgs.evec[i+1]*Y2[i+1];
         Higgs.Y_b += Higgs.evec[i]*Y3[i];
