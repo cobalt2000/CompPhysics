@@ -400,22 +400,15 @@ c  hasn't already been excluded.                            c
 c                                                           c
 c-----------------------------------------------------------c*/
 
-    double Au[3],Ad[3],Yteff[3],Ybeff[3],mchtemp[3],chBF3;//!,chpull
+    double chBF3,chpull3;//!,chpull
+    int bsgcheck3=1;
 
 //c bsg_nlo subroutine
-    for (i=0;i<3;i++) {
-        mchtemp[i] = chhiggs[i].mass;
-//        Yteff[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]);
-//        Ybeff[i] = Yb*cheigvec[1][mch[i]];
-        Au[i] = chhiggs[i].Y_t/(sqrt(2.0)*mt/246.0);
-        Ad[i] = chhiggs[i].Y_b/(sqrt(2.0)*mb/246.0);
-//c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
-    }
 
 //c        call bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF,chpull)
-        bsg_nlo(Au,Ad,mchtemp,3,chBF3,chpull3);
+        bsg_nlo(chhiggs,chBF3,chpull3);
 //c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
-
+//  The array of particles contains the unscaled Yukawa couplings.  The bsg_nlo program has been adapted to correctly scale the yukawas for the needed calculation.
     if(chpull3 >= (1.96)) {
         bsgcheck3 = 0;
     }
