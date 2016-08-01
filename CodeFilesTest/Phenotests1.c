@@ -74,7 +74,7 @@ int hzz_check(Particle *A, double *vevs){
 
 // Lep constraint
         if (A.mass>=2.0*4.7) {
-            hzz_ratio = (Dot_Prod(*A.eigenvec,*veves))*(Dot_Prod(*A.eigenvec,*veves))/(246.0*246.0)*(BFcpe[i][0]/BFSM[i][0]);//!(1-BFinv_decay(i));
+            hzz_ratio = (Dot_Prod(*A.eigenvec,*vevs))*(Dot_Prod(*A.eigenvec,*vevs))/(246.0*246.0)*(BFcpe[i][0]/BFSM[i][0]);//!(1-BFinv_decay(i));
         hzzcutoff = lineint(hmass[mh[i]],zzhmass,zzhcoup,217);
         /*        else if (hmass(mh(i))>=2.0*1.78) then
          hzz_ratio(i) = (v1*heigvec(1,mh(i)) + v2*heigvec(2,mh(i)) + v3*heigvec(3,mh(i)) +  v4*heigvec(4,mh(i)))**2/246.d0**2*(BFcpe(i,3)/BFSM(i,3))! need to import tau tau lep constraint. this array is a guess
@@ -127,11 +127,14 @@ c-----------------------------------------------------------c*/
             mch_tb_prod = 0.0;
             mch_cs_prod = 0.0;
         }
-
+//instead of initializing all the elements to zero, use "memset"
+// i.e. memset(A, 0, sizeof(double).n)
+        
+        
 //c production rates for h_0 as ratios relative to the SM
         geff = g2*(Dot_Prod(*vevs,*A.eigenvec));
-        ggprod[i] = h2glgl(A.mass,A.Y_t,A.Y_b); //! Gabe's code gives prod ratio
-        gagaprod[i] = h2gaga(A.mass,A.Y_t,A.Y_b,geff); //! Gabe's code gives prod ratio
+        ggprod= h2glgl(A.mass,A.Y_t,A.Y_b); //! Gabe's code gives prod ratio
+        gagaprod = h2gaga(A.mass,A.Y_t,A.Y_b,geff); //! Gabe's code gives prod ratio
 //c          mh_gg_prod(i) = ggprod(i)*?
 //c          mh_gaga_prod(i) = gagaprod(i)*?
         geff = 0;
@@ -389,30 +392,23 @@ c-----------------------------------------------------------c*/
 
 
 //c-----------------------------------------------------------c
-//    int bsgam(){
+    int bsgam(struct particle *chhiggs){
 /*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine checks that the charged Higgs branching  c
 c  hasn't already been excluded.                            c
 c                                                           c
 c-----------------------------------------------------------c*/
-/*
-    double Au[3],Ad[3],Yteff[3],Ybeff[3],mchtemp[3],chBF3;//!,chpull
+
+    double chBF3,chpull3;//!,chpull
+    int bsgcheck3=1;
 
 //c bsg_nlo subroutine
-    for (i=1;i<=3;i++) {
-        mchtemp[i] = chmass[mch[i]];
-        Yteff[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]);
-        Ybeff[i] = Yb*cheigvec[1][mch[i]];
-        Au[i] = (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])/(sqrt(2.0)*mt/246.0);
-        Ad[i] = Yb*cheigvec[1][mch[i]]/(sqrt(2.0)*mb/246.0);
-//c        write(*,*) mchtemp(i),Yteff(i),Ybeff(i)
-    }
 
 //c        call bsg_nlo(Au(1),Ad(1),mchtemp(1),1,chBF,chpull)
-        bsg_nlo(Au,Ad,mchtemp,3,chBF3,chpull3);
+        bsg_nlo(chhiggs,chBF3,chpull3);
 //c make sure the effective Y's are scaled by the SM coupling, which they now are. May 23, 2012
-
+//  The array of particles contains the unscaled Yukawa couplings.  The bsg_nlo program has been adapted to correctly scale the yukawas for the needed calculation.
     if(chpull3 >= (1.96)) {
         bsgcheck3 = 0;
     }
@@ -421,15 +417,15 @@ c-----------------------------------------------------------c*/
 //c        write(*,*) chpull, bsgcheck
 //c        endif
 
-    for (i=1;i<=3;i++) {
+/*    for (i=1;i<=3;i++) {
         mchtemp[i] = 0.0;
         Yteff[i] = 0.0;
         Ybeff[i] = 0.0;
         Au[i] = 0.0;
         Ad[i] = 0.0;
-    }
+    }*/
 
 
     return bsgcheck3;
     }
-*/
+
