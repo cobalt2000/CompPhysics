@@ -160,7 +160,12 @@ double DtermSq(double Q,    particle *chhiggs) {
 
     zeta3 = 1.20206;
 
-    z = mcbsg*mcbsg/(mbbsg*mbbsg);
+    const double eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
+    const double z = (mcbsg*mcbsg)/(mbbsg*mbbsg);
+    //The energy scale at which calculations will occur
+    const double mubarb = mbbsg;
+    const double mub = mbbsg;
+    //c	mub = 5d0
 
 
     logz = log(z);
