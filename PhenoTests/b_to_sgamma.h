@@ -96,7 +96,7 @@ double C1beff(const int i, double eta,   particle *chhiggs);
      x   input   ratio of top mass to W mass scale.
      */
     
-double C0beff(const int i, const double eta,   particle chhiggs) ;
+double C0beff(const int i, const double eta,   particle *chhiggs) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
@@ -136,7 +136,7 @@ double Delta8(const double x) ;
      x   input   ratio of top mass to W mass scale.
      */
 
-double C0Weff(const int i,   particle chhiggs) ;
+double C0Weff(const int i,   particle *chhiggs) ;
     //Why does this function exist?
 
 double C0W(const int i,   particle *chhiggs) ;
