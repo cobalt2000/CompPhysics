@@ -9,6 +9,7 @@
 #include "b_to_sgamma.h"
 #include <math.h>
 #include "Particle_struct.h"
+#define DEL .99
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 void bsg_nlo(   particle *chhiggs,double *BF,double *pull){
@@ -104,7 +105,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
     delNPgam = lam1/2 - 9/2*lam2;
-    del = 0.99;
+    del = DEL;
 
 //c	write(*,*)(C0beff(i),i=1,8)
 //c	write(*,*)C1beff(7)
@@ -149,23 +150,24 @@ double DtermSq(double Q,    particle *chhiggs) {
     const double mbbsg = 4.75;
     const double mtbsg = 175;
     const double mcbsg = 1.41;
+    const double mzbsg = 91.18;
+    const double mwbsg = 80.39;
     const double pibsg = 4*atan(1);
     double sumreal,sumimag;
     double r1r,r1c,r2r,r2c,r7,r8r,r8c;
     double logz;
-    double z;
     double zeta3;
     double dtermreal,dtermimag;
     double moose;
 
     zeta3 = 1.20206;
 
-    const double eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
-    const double z = (mcbsg*mcbsg)/(mbbsg*mbbsg);
     //The energy scale at which calculations will occur
     const double mubarb = mbbsg;
     const double mub = mbbsg;
     //c	mub = 5d0
+    const double eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
+    const double z = (mcbsg*mcbsg)/(mbbsg*mbbsg);
 
 
     logz = log(z);
@@ -222,6 +224,26 @@ double gam0eff(int i,int j) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
     const double pibsg = 4*atan(1);
+    
+    const double mcbsg = 1.41;
+    const double mbbsg = 4.75;
+    const double mtbsg = 175;
+    const double mbartpole = 175; //"m bar" at the t pole (renormalization scheme)
+    const double nf = 5;  //The top does not participate.
+    const double mzbsg = 91.18;
+    const double mwbsg = 80.39;
+    const double alphae = 1.0/130.3;
+    
+    //c	For comparison w/ the Literature
+    //c	mb = 4.8d0
+    //c	mc = mb - 3.39d0
+    //c	MW = 80.33d0
+    
+    //The energy scale at which calculations will occur
+    const double mubarb = mbbsg;
+    const double mub = mbbsg;
+    //c	mub = 5d0
+
     double moose;
 
     switch(i){
@@ -236,7 +258,7 @@ double gam0eff(int i,int j) {
     }
 
 
-    moose *= alphasbsg(mub)*1.0/(4*pibsg);
+    moose *= alphasbsg(mub)*1.0/(4.0*pibsg);
 
     return moose;
     }
@@ -252,13 +274,31 @@ double Aterm(double Q, double eta,   particle *chhiggs) {
     //Error: Gabe defines Q as an input, and never uses it. Instead, he uses the bottom mass, defined in mub=mbbsg above.  I used Q, so that if you change the calculation energy above, it actually changes here :).
     
     const double pibsg = 4*atan(1);
+    
+    const double mcbsg = 1.41;
+    const double mbbsg = 4.75;
+    const double mtbsg = 175;
+    const double mbartpole = 175;
+    const double nf = 5;  //The top does not participate.
+    const double mzbsg = 91.18;
+    const double mwbsg = 80.39;
+    const double alphae = 1.0/130.3;
+    const double del = DEL;
+    
+    //c	For comparison w/ the Literature
+    //c	mb = 4.8d0
+    //c	mc = mb - 3.39d0
+    //c	MW = 80.33d0
+    
+
+
     double sum,moose;
     int i,j;
 
     sum = 0;
     for (i=1;i<=8;i++){
         for (j=i;i<=8;j++){
-            sum = sum + C0beff(i, chhiggs)*C0beff(j,chhiggs)*fij(i,j);
+            sum = sum + C0beff(i,eta, chhiggs)*C0beff(j,eta,chhiggs)*fij(i,j);
         }
 //c	 write(*,*)i,C0beff(i)
     }
@@ -281,9 +321,10 @@ double mbart(double Q){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double what;
+    const double pibsg = 4*atan(1);
     const double mbbsg = 4.75;
     const double mtbsg = 175;
-    const double pibsg = 4*atan(1);
+    const double mbartpole = 175;
     //Parameters for the calculation from the paper
     const double nf = 5;  //The top does not participate.
     const double beta0 = 11-2.0/3.0*nf;
@@ -294,7 +335,7 @@ double mbart(double Q){
 
     what = mbartpole * pow((alphasbsg(Q)/alphasbsg(mtbsg)),(gam0m/(2*beta0)))*
         (1 + alphasbsg(mtbsg)/(4*pibsg)*gam0m/(2*beta0)*(gam1m/gam0m-beta1/beta0)*
-     .		(alphasbsg(Q)/alphasbsg(mtbsg)-1));
+     		(alphasbsg(Q)/alphasbsg(mtbsg)-1));
 
 //c	write(*,*)mbart,mbartpole,alphas(Q),gam0m,beta0,gam1m,beta1,nf
     return what;
@@ -310,11 +351,12 @@ double fij(int i,int j) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     double A;
+    const double del = DEL;
 
-    if(del!=0.99) {
+//    if(del!=0.99) {
 //write(*,*)'Delta not 0.99'
-stop
-    }
+//stop
+//    }
 /*
 if(i.eq.1.and.j.eq.1) A =  0.0009;
 if(i.eq.1.and.j.eq.2) A = -0.0113;
@@ -451,6 +493,9 @@ double alphasbsg(const double Q){
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     const double pibsg = 4*atan(1);
+    const double mzbsg = 91.18;
+    const double mwbsg = 80.39;
+
     double moose;
     double v,alphasMZ;
     //Parameters for the calculation from the paper
@@ -461,7 +506,7 @@ double alphasbsg(const double Q){
 
     alphasMZ = 0.118;
 
-    v = 1+beta0*alphasMZ/(2*pibsg)*log(Q/MZbsg);
+    v = 1+beta0*alphasMZ/(2*pibsg)*log(Q/mzbsg);
 //c	write(*,*)v,beta0,beta1,alphasMZ,pi,Q,mz
 //c	stop
 
@@ -479,7 +524,24 @@ double kap(const double z) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     const double pibsg = 4*atan(1);
-
+    const double mcbsg = 1.41;
+    const double mbbsg = 4.75;
+    const double mtbsg = 175;
+    const double mbartpole = 175;
+    const double nf = 5;  //The top does not participate.
+    const double mzbsg = 91.18;
+    const double mwbsg = 80.39;
+    const double alphae = 1.0/130.3;
+    
+    //c	For comparison w/ the Literature
+    //c	mb = 4.8d0
+    //c	mc = mb - 3.39d0
+    //c	MW = 80.33d0
+    
+    //The energy scale at which calculations will occur
+    const double mubarb = mbbsg;
+    const double mub = mbbsg;
+    //c	mub = 5d0
     double thing = 1 - 2*alphasbsg(mubarb)/(3*pibsg)*h(z)/f(z);
 
 //    if(order='LO') kap = 1;
@@ -538,7 +600,7 @@ double Li2(const double z) {			//!either positive or negative arguments allowed
     double thing=0;
 
     if(z<0) {
-        thing = 0.5*Li2p(z*z) - Li2p(abs(z));
+        thing = 0.5*Li2p(z*z) - Li2p(fabs(z));
         return thing; //Why twice?
     }
     else {
@@ -551,17 +613,17 @@ double Li2(const double z) {			//!either positive or negative arguments allowed
 
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double Li2p(const double z)	{		//! positive arguments only
+double Li2p(double z)	{		//! positive arguments only
     //Undefined in the paper.
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 //    double what;
     const double pibsg = 4*atan(1);
-    double z,sum;
+    double sum;
     int i;
 
     sum = 0;
-    z = abs(z);
+    z = fabs(z);
 
     if(z<1) {
         for (i=1;i<=50;i++) {
@@ -569,7 +631,7 @@ double Li2p(const double z)	{		//! positive arguments only
         }
     }
     else {     //(z.ge.1d0) then
-        sum = pibsg**2/3-1/2*(log(z)*log(z));  //AAAHHHHH What did you do Gabe? Must check paper.
+        sum = (pibsg*pibsg)/3.0-0.5*(log(z)*log(z));  //AAAHHHHH What did you do Gabe? Must check paper.
         for (i=1;i<=50;i++) {
             sum = sum - 1/(i*i*pow(z,i));
         }
@@ -597,13 +659,13 @@ double C1beff(const int i, double eta,    particle *chhiggs){
 
     double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); //This looks like the run mass of some particle...
 
-    if(i=7) {
+    if(i==7) {
         sum = 0;
         for (j=1;j<=8;j++) {
-            sum = sum + (ei(j)*eta*E(x)+fi(j)+gi(j)*eta)*eta**(ai(j));
+            sum = sum + (ei(j)*eta*E(x)+fi(j)+gi(j)*eta)*pow(eta,(ai(j)));
         }
 
-thing = pow(eta,(39/23))*C1Weff(7) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Weff(8)
+thing = pow(eta,(39/23))*C1Weff(7,chhiggs) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Weff(8,chhiggs)
             + ( 297664/14283*pow(eta,(16/23)) - 7164416/357075*pow(eta,(14/23))
             +   256868/14283*pow(eta,(37/23)) - 6698884/357075*pow(eta,(39/23)) )*C0W(8,chhiggs)
             + 37208/4761*( pow(eta,(39/23))-pow(eta,(16/23)) )*C0W(7,chhiggs) + sum;
@@ -625,7 +687,7 @@ thing = pow(eta,(39/23))*C1Weff(7) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C
     }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0beff(const int i, const double eta,    particle chhiggs) {
+double C0beff(const int i, const double eta,    particle *chhiggs) {
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
@@ -661,8 +723,8 @@ endif
             + sum;
             break;
         case 8: thing = (C0W(8, chhiggs)+313063/363036)*pow(eta,(14/23)) -
-            .	0.9135*pow(eta,(0.4086)) + 0.0873*pow(eta,(-0.4230))
-            .	- 0.0571*pow(eta,(-0.8994)) + 0.0209*pow(eta,(0.1456));
+            	0.9135*pow(eta,(0.4086)) + 0.0873*pow(eta,(-0.4230))
+            	- 0.0571*pow(eta,(-0.8994)) + 0.0209*pow(eta,(0.1456));
             break;
         default: thing = C0b(i,eta);
             break;
@@ -727,16 +789,16 @@ endif
                 - 0.0218*pow(eta,(-0.8994)) + 0.0335*pow(eta,(0.1456));
             break;
         case 4: thing = 1/9*pow(eta,(-12/23)) + 1/21*pow(eta,(6/23))
-            .	+ 0.0237*pow(eta,0.4086) - 0.0173*pow(eta,(-0.423))
-            .	- 0.1336*pow(eta,(-0.8994)) - 0.0316*pow(eta,(0.1456));
+            	+ 0.0237*pow(eta,0.4086) - 0.0173*pow(eta,(-0.423))
+            	- 0.1336*pow(eta,(-0.8994)) - 0.0316*pow(eta,(0.1456));
             break;
         case 5: thing = 1/108*pow(eta,(-12/23)) - 1/126*pow(eta,(6/23))
-            .	+ 0.0094*pow(eta,0.4086) - 0.0100*pow(eta,(-0.423))
-            .	+ 0.0010*pow(eta,(-0.8994)) - 0.0017*pow(eta,(0.1456));
+            	+ 0.0094*pow(eta,0.4086) - 0.0100*pow(eta,(-0.423))
+            	+ 0.0010*pow(eta,(-0.8994)) - 0.0017*pow(eta,(0.1456));
             break;
         case 6: thing = -1/36*pow(eta,(-12/23)) - 1/84*pow(eta,(6/23))
-            .	+ 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
-            .	+ 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
+            	+ 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
+            	+ 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
             break;
     }
     
@@ -758,7 +820,7 @@ double C1Weff(const int i,    particle *chhiggs) {
 
     Q = mwbsg;
     x = mbart(Q)*mbart(Q)*1.0/(mwbsg*mwbsg);
-    y = Q*Q*1.0/(mwbsg*mwbsg)  //Placing this here to shorten the calculation.
+    y = Q*Q*1.0/(mwbsg*mwbsg);  //Placing this here to shorten the calculation.
 //    double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); Is this what he meant?
 
     thing = 0;
@@ -805,7 +867,7 @@ double E(const double x){
     double what;
 
     what = x*(-18+11*x+x*x)/(12*(x-1)*(x-1)*(x-1))
-            + x**2*(15-16*x+4*x*x)/(6*(x-1)*x-1)*x-1)*x-1))*log(x)
+            + x*x*(15-16*x+4*x*x)/(6*(x-1)*(x-1)*(x-1)*(x-1))*log(x)
             - 2/3*log(x);
 
 
@@ -825,14 +887,14 @@ double G7(const double x) {
 
 
     term1 = (-16*x*x*x*x-122*x*x*x+80*x*x-8*x)/(9*pow((x-1),4))*Li2(1-1/x);
-    term2 = (6*x*x*x*x+46*x*x*x-28*x*x)/(3*(x-1)**5)*pow(log(x),2);
+    term2 = (6*x*x*x*x+46*x*x*x-28*x*x)/(3*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*pow(log(x),2);
     term3 = (-102*pow(x,5)-588*x*x*x*x-2262*x*x*x+3244*x*x-1364*x+208)/(81*pow((x-1),5))*log(x);
-    term4 = (1646*x**4+12205*x**3-10740*x**2+2509*x-436)/(486*(x-1)**4);
+    term4 = (1646*x*x*x*x+12205*x*x*x-10740*x*x+2509*x-436)/(486*(x-1)*(x-1)*(x-1)*(x-1));
 
     what = term1 + term2 + term3 + term4;
 
 
-return
+    return what;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -848,12 +910,12 @@ double G8(const double x) {
 
     term1 = (-4*x*x*x*x+40*x*x*x+41*x*x+x)/(6*(x-1)*(x-1)*(x-1)*(x-1))*Li2(1-1/x);
     term2 = (-17*x*x*x-31*x*x)/(2*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*pow(log(x),2);
-    term3 = (-210*x*x*x*x*x+1086*x*x*x*x+4893*x*x*x+2857*x*x-1994*x+280)/(216*(x-1)**5)*log(x);
+    term3 = (-210*x*x*x*x*x+1086*x*x*x*x+4893*x*x*x+2857*x*x-1994*x+280)/(216*(x-1)*(x-1)*(x-1)*(x-1)*(x-1))*log(x);
     term4 = (737*x*x*x*x-14102*x*x*x-28209*x*x+610*x-508)/(1296*(x-1)*(x-1)*(x-1)*(x-1));
 
     what = term1 + term2 + term3 + term4;
 
-return
+    return what;
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -890,7 +952,7 @@ double Delta8(const double x) {
 }
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0Weff(const int i,    particle chhiggs) {
+double C0Weff(const int i,    particle *chhiggs) {
     //Why does this function exist?
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
@@ -997,7 +1059,7 @@ double C0WHiggs(int i,    particle *chhiggs) {
     const double mwbsg = 80.39;
     double sum;
     double x;
-    const int nhiggs = sizeof(chhiggs)/sizof(chhiggs[0]);
+    const int nhiggs = sizeof(chhiggs)/sizeof(chhiggs[0]);
     double Au,Ad;
 
     sum = 0;
@@ -1005,8 +1067,8 @@ double C0WHiggs(int i,    particle *chhiggs) {
         x = mbart(mwbsg)*mbart(mwbsg)/(chhiggs[j].mass*chhiggs[j].mass);
         Au = chhiggs[j].Y_t/(sqrt(2.0)*mtbsg/246.0);
         Ad = chhiggs[j].Y_b/(sqrt(2.0)*mbbsg/246.0);
-        if(i=7) sum = sum + Au*Au/3*F17(x) - Au*Ad*F27(x);
-        if(i=8) sum = sum + Au*Au/3*F18(x) - Au*Ad*F28(x);
+        if(i==7) sum = sum + Au*Au/3*F17(x) - Au*Ad*F27(x);
+        if(i==8) sum = sum + Au*Au/3*F18(x) - Au*Ad*F28(x);
     }
 
 //C0WHiggs = sum
@@ -1054,7 +1116,7 @@ double C1WHeff(int i,    particle *chhiggs){
     const double mtbsg = 175;
     double x;
     double sum =0;
-    const int nhiggs = sizeof(chhiggs)/sizof(chhiggs[0]);
+    const int nhiggs = sizeof(chhiggs)/sizeof(chhiggs[0]);
     double Au,Ad;
 
 
@@ -1067,11 +1129,11 @@ double C1WHeff(int i,    particle *chhiggs){
         Au = chhiggs[j].Y_t/(sqrt(2.0)*mtbsg/246.0);
         Ad = chhiggs[j].Y_b/(sqrt(2.0)*mbbsg/246.0);
 
-        if(i=4) sum = sum + EH(x,Au,Ad);
-        if(i=7) sum = sum + G7H(x,Au,Ad)
+        if(i==4) sum = sum + EH(x,Au,Ad);
+        if(i==7) sum = sum + G7H(x,Au,Ad)
             + Delta7H(x,Au,Ad)*log(mwbsg*mwbsg/(chhiggs[j].mass*chhiggs[j].mass))
             - 4/9*EH(x,Au,Ad);
-        if(i=8) sum = sum + G8H(x,Au,Ad)
+        if(i==8) sum = sum + G8H(x,Au,Ad)
             + Delta8H(x,Au,Ad)*log(mwbsg*mwbsg/(chhiggs[j].mass*chhiggs[j].mass))
             - 1/6*EH(x,Au,Ad);
     }
