@@ -10,6 +10,7 @@
 #define b_to_sgamma_h
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "Particle_struct.h"
 void bsg_nlo(  particle *chhiggs,double *BF,double *pull);
 

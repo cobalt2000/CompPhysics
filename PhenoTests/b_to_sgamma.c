@@ -656,13 +656,56 @@ double C1beff(const int i, double eta,    particle *chhiggs){
     int j;
     double sum;
     const double mwbsg = 80.39;
-
+    double* ai;
+    ai = (double*)malloc(sizeof(double)*8);
+    ai[0]=0.6087;
+    ai[1]=0.6957;
+    ai[2]=0.2609;
+    ai[3]=-0.5217;
+    ai[4]=0.4086;
+    ai[5]=-0.4230;
+    ai[6]=-0.8994;
+    ai[7]=0.1456;
+    
+    double* ei;
+    ei = (double*)malloc(sizeof(double)*8);
+    ei[0]=5.7064;
+    ei[1]=-3.8412;
+    ei[2]=0;
+    ei[3]=0;
+    ei[4]=-1.9043;
+    ei[5]=-0.1008;
+    ei[6]=0.1216;
+    ei[7]=0.0183;
+    
+    double* fi;
+    fi = (double*)malloc(sizeof(double)*8);
+    fi[0]= -17.3023;
+    fi[1]= 8.5027;
+    fi[2]= 4.5508;
+    fi[3]= 0.7519;
+    fi[4]= 2.0040;
+    fi[5]= 0.7476;
+    fi[6]= -0.5385;
+    fi[7]= 0.0914;
+    
+    double* gi;
+    gi = (double*)malloc(sizeof(double)*8);
+    gi[0]= 14.8088;
+    gi[1]= -10.8090;
+    gi[2]= -0.8740;
+    gi[3]= 0.4218;
+    gi[4]= -2.9347;
+    gi[5]= 0.3971;
+    gi[6]= 0.1600;
+    gi[7]= 0.0225;
+    
     double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); //This looks like the run mass of some particle...
 
     if(i==7) {
         sum = 0;
-        for (j=1;j<=8;j++) {
-            sum = sum + (ei(j)*eta*E(x)+fi(j)+gi(j)*eta)*pow(eta,(ai(j)));
+        for (j=0;j<=7;j++) {
+            sum = sum + (ei[j]*eta*E(x)+fi[j]+gi[j]*eta)*pow(eta,ai[j]);
         }
 
 thing = pow(eta,(39/23))*C1Weff(7,chhiggs) + 8/3*( pow(eta,(37/23))-pow(eta,(39/23)) )*C1Weff(8,chhiggs)
@@ -683,6 +726,11 @@ thing = pow(eta,(39/23))*C1Weff(7,chhiggs) + 8/3*( pow(eta,(37/23))-pow(eta,(39/
 
 //    if(order='LO') thing = 0;
 
+    free(ai);
+    free(ei);
+    free(fi);
+    free(gi);
+    
     return thing;
     }
 
@@ -696,6 +744,27 @@ double C0beff(const int i, const double eta,    particle *chhiggs) {
     int j;
     double sum, thing;
 
+    double* ai;
+    ai = (double*)malloc(sizeof(double)*8);
+    ai[0]=0.6087;
+    ai[1]=0.6957;
+    ai[2]=0.2609;
+    ai[3]=-0.5217;
+    ai[4]=0.4086;
+    ai[5]=-0.4230;
+    ai[6]=-0.8994;
+    ai[7]=0.1456;
+    
+    double* hi;
+    hi = (double*)malloc(sizeof(double)*8);
+    hi[0]= 2.2996;
+    hi[1]= -1.0880;
+    hi[2]= -0.4286;
+    hi[3]= -0.07143;
+    hi[4]= -0.6494;
+    hi[5]= -0.0380;
+    hi[6]= -0.0186;
+    hi[7]= -0.0057;
 /*
 if(i.eq.7) then
 sum = 0d0
@@ -715,8 +784,8 @@ endif
  */
     switch(i) {
         case 7: sum = 0;
-            for (j=1;j<=8;j++) {
-                sum = sum + pow(eta,ai(j))*hi(j); //This looks like an integral?
+            for (j=0;j<=7;j++) {
+                sum = sum + pow(eta,ai[j])*hi[j]; //This looks like an integral?
             }
             
             thing = pow(eta,(16/23))*C0W(7, chhiggs)+8/3*(pow(eta,(14/23))-pow(eta,(16/23)))*C0W(8, chhiggs)
@@ -729,7 +798,8 @@ endif
         default: thing = C0b(i,eta);
             break;
     }
-
+    free(ai);
+    free(hi);
     return thing;
 }
 
@@ -741,7 +811,67 @@ endif
 	data fi/-17.3023d0,8.5027d0,4.5508d0,0.7519d0,2.0040d0,0.7476d0,-0.5385d0,0.0914d0/
 	data gi/14.8088d0,-10.8090d0,-0.8740d0,0.4218d0,-2.9347d0,0.3971d0,0.1600d0,0.0225d0/
 	data hi/2.2996d0,-1.0880d0,-0.4286d0,-0.07143d0,-0.6494d0,-0.0380d0,-0.0186d0,-0.0057d0/
- */
+
+ double* ai;
+ ai = (double*)malloc(sizeof(double)*8);
+ ai[0]=0.6087;
+ ai[1]=0.6957;
+ ai[2]=0.2609;
+ ai[3]=-0.5217;
+ ai[4]=0.4086;
+ ai[5]=-0.4230;
+ ai[6]=-0.8994;
+ ai[7]=0.1456;
+
+ double* ei;
+ ei = (double*)malloc(sizeof(double)*8);
+ ei[0]=5.7064;
+ ei[1]=-3.8412;
+ ei[2]=0;
+ ei[3]=0;
+ ei[4]=-1.9043;
+ ei[5]=-0.1008;
+ ei[6]=0.1216;
+ ei[7]=0.0183;
+ 
+ double* fi;
+ fi = (double*)malloc(sizeof(double)*8);
+ fi[0]= -17.3023;
+ fi[1]= 8.5027;
+ fi[2]= 4.5508;
+ fi[3]= 0.7519;
+ fi[4]= 2.0040;
+ fi[5]= 0.7476;
+ fi[6]= -0.5385;
+ fi[7]= 0.0914;
+ 
+ double* gi;
+ gi = (double*)malloc(sizeof(double)*8);
+ gi[0]= 14.8088;
+ gi[1]= -10.8090;
+ gi[2]= -0.8740;
+ gi[3]= 0.4218;
+ gi[4]= -2.9347;
+ gi[5]= 0.3971;
+ gi[6]= 0.1600;
+ gi[7]= 0.0225;
+ 
+ double* hi;
+ hi = (double*)malloc(sizeof(double)*8);
+ hi[0]= 2.2996;
+ hi[1]= -1.0880;
+ hi[2]= -0.4286;
+ hi[3]= -0.07143;
+ hi[4]= -0.6494;
+ hi[5]= -0.0380;
+ hi[6]= -0.0186;
+ hi[7]= -0.0057;
+ 
+ free(ai);
+ free(ei);
+  free(fi);
+  free(gi);
+  free(hi);*/
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double C0b(const int i, double eta) {
