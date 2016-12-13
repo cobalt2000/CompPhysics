@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex.h>
-//#include "Particle_struct.c"
+#include "b_to_sgamma.h"
 
 
 
@@ -18,9 +18,9 @@
  A first try at writing a driver.
  *****************************************/
 
-int main(){
+void main(){
     
-    int i,j, k;  // Standard indexes
+//    int i,j, k;  // Standard indexes
 //    int info;    // This is a flag used to tell if the function worked correctly.
     
     const double PIVALUE = 4.0*atan(1.0);
@@ -44,12 +44,12 @@ int main(){
     double pull;
     int i;
     
-    struct Particle chhiggs[0]=malloc( sizeof(Particle));
+    struct particle chhiggs[0]=malloc( sizeof(particle));
     double *vector = 4*malloc(sizeof(double));
         
-    for(i=0; i<4; i++){
-        vector[i]=1.0/2.0;
-    }
+//    for(i=0; i<4; i++){
+//        vector[i]=1.0/2.0;
+//    }
         // initialize each element in the array to an even-weighted, normalized eigenvector
         
     chhiggs[0].mass=higgsmass;
@@ -69,10 +69,11 @@ int main(){
     bsg_nlo(chhiggs, BF, pull);
     
     // Print solution
-    printf("The ratio of the Higgs production from gamma-gamma with respect to the SM is %lg .\n",xsgaga);
-    printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
+//    printf("The brancing fractions are")
+//    printf("The ratio of the Higgs production from gamma-gamma with respect to the SM is %lg .\n",xsgaga);
+//    printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
     
     
-    return 0;
+//    return 0;
     
 }
