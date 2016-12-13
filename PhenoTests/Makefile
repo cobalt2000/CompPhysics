@@ -4,13 +4,15 @@ TAR = tar zcvf
 CC = gcc -lm 
 CFLAGS = -O
 
-all:	DriverTest Makefile
+all:	b2sgDriver Makefile
 
-DriverTest:	DriverTest.o HiggsLoops.o
+b2sgDriver:	b2sgDriver.o Particle_struct.o b_to_sgamma.o
 
-DriverTest.o:	DriverTest.c HiggsLoops.o
+b2sgDriver.o:	b2sgDriver.c
 
-HiggsLoops.o:	HiggsLoops.c HiggsLoops.h
+Particle_struct.o:	Particle_struct.c Particle_struct.h
+
+b_to_sgamma.o:	b_to_sgamma.c b_to_sgamma.h
 
 run:	DriverTest
 	./DriverTest
