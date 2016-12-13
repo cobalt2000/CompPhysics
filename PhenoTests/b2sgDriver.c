@@ -44,12 +44,14 @@ void main(){
     double pull;
     int i;
     
-    struct particle chhiggs[0]=malloc( sizeof(particle));
-    double *vector = 4*malloc(sizeof(double));
+    particle *chhiggs;
+    chhiggs = (particle*)malloc( sizeof(particle));
+    double *vector;
+    vector = (double*)malloc(sizeof(double)*4);
         
-//    for(i=0; i<4; i++){
-//        vector[i]=1.0/2.0;
-//    }
+    for(i=0; i<4; i++){
+        vector[i]=1.0/2.0;
+    }
         // initialize each element in the array to an even-weighted, normalized eigenvector
         
     chhiggs[0].mass=higgsmass;
@@ -69,11 +71,11 @@ void main(){
     bsg_nlo(chhiggs, BF, pull);
     
     // Print solution
-//    printf("The brancing fractions are")
-//    printf("The ratio of the Higgs production from gamma-gamma with respect to the SM is %lg .\n",xsgaga);
-//    printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
+    //printf("The brancing fractions are\n")
+    //printf("The ratio of the Higgs production from gamma-gamma with respect to the SM is %lg .\n",xsgaga);
+    //printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
     
     
-//    return 0;
+    return 0;
     
 }
