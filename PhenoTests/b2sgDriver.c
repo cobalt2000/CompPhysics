@@ -55,7 +55,7 @@ void main(){
         // initialize each element in the array to an even-weighted, normalized eigenvector
         
     chhiggs[0].mass=higgsmass;
-    chhiggs[0].evec=vector;
+    chhiggs[0].eigenvec=vector;
     chhiggs[0].Y_d=0;
     chhiggs[0].Y_u=0;
     chhiggs[0].Y_s=0;
@@ -68,7 +68,9 @@ void main(){
     printf("The effective yukawa couplings are: %lg and %lg . \n", ybsm, Ybeff);
     
     // Call solver
-    bsg_nlo(chhiggs, BF, pull);
+    double *ptr_BF=&BF;
+    double *ptr_pull=&pull;
+    bsg_nlo(chhiggs, ptr_BF, ptr_pull);
     
     // Print solution
     //printf("The brancing fractions are\n")
@@ -76,6 +78,6 @@ void main(){
     //printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
     
     
-    return 0;
+    return;
     
 }
