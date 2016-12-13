@@ -14,11 +14,11 @@ Particle_struct.o:	Particle_struct.c Particle_struct.h
 
 b_to_sgamma.o:	b_to_sgamma.c b_to_sgamma.h
 
-run:	DriverTest
-	./DriverTest
+run:	b2sgDriver
+	./b2sgDriver
 
 clean:
-	$(RM) DriverTest DriverTest.o HiggsLoops.o 
+	$(RM) b2sgDriver b2sgDriver.o Particle_struct.o b_to_sgamma.o
 	$(RM) *~
 
 tar:	clean
