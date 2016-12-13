@@ -55,7 +55,7 @@ void main(){
         // initialize each element in the array to an even-weighted, normalized eigenvector
         
     chhiggs[0].mass=higgsmass;
-    chhiggs[0].eigenvec=vector;
+    chhiggs[0].evec=vector;
     chhiggs[0].Y_d=0;
     chhiggs[0].Y_u=0;
     chhiggs[0].Y_s=0;
