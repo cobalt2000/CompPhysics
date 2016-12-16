@@ -34,7 +34,7 @@ c
 c
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc*/
 
-    
+    printf("I've called the top level function. \n");
     
 //real*8 xAu(maxhiggs),xAd(maxhiggs),xMh(maxhiggs)
     int i;
@@ -100,6 +100,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         //c        write(*,*) MHbsg(i),Au(i),Ad(i)
     }*/
     
+    printf("I'm calling the C0b functions. \n");
 
     delNPc = -1/9*lam2/C0b(7,eta)*(C0b(2,eta) - C0b(1,eta)/6);
 
@@ -113,6 +114,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
     BFcenu = 0.1049;	//! from PDG
+    printf("I'm calling the DtermSq and Aterm functions. \n");
 
     *BF = BFcenu * CKMproductSq * 6*alphae/(pibsg*f(z)*kap(z))
         *mbrun(mub)*mbrun(mub)/(mbbsg*mbbsg)*(DtermSq(mub, chhiggs) + Aterm(mub, eta, chhiggs))
@@ -192,6 +194,7 @@ double DtermSq(double Q,    particle *chhiggs) {
 
 
 
+    printf("I'm calling the C0beff function from within the DTermSq function. \n");
 
     sumreal = 0;
     sumreal = sumreal + C0beff(1,eta,chhiggs)*(r1r + gam0eff(1,7)*log(mbbsg/mub));
@@ -304,6 +307,7 @@ double Aterm(double Q, double eta,   particle *chhiggs) {
     }
 
 //c	write(*,*)sum
+    printf("I'm calling the C0beff function from within the Aterm functions. \n");
 
     moose = (exp(-alphasbsg(Q)*log(del)*(7+2*log(del))/(3*pibsg))-1) * C0beff(7,eta,chhiggs)*C0beff(7,eta,chhiggs)
          + alphasbsg(Q)/pibsg * sum;
