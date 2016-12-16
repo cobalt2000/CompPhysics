@@ -18,7 +18,7 @@
  A first try at writing a driver.
  *****************************************/
 
-void main(){
+int main(){
     
 //    int i,j, k;  // Standard indexes
 //    int info;    // This is a flag used to tell if the function worked correctly.
@@ -70,6 +70,7 @@ void main(){
     // Call solver
     double *ptr_BF=&BF;
     double *ptr_pull=&pull;
+    printf("Calling the solver");
     bsg_nlo(chhiggs, ptr_BF, ptr_pull);
     
     // Print solution
@@ -78,6 +79,6 @@ void main(){
     //printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
     
     
-    return;
+    return 0;
     
 }
