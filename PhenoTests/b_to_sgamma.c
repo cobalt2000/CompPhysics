@@ -34,7 +34,7 @@ c
 c
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc*/
 
-    printf("I've called the top level function. \n");
+//    printf("I've called the top level function. \n");
     
 //real*8 xAu(maxhiggs),xAd(maxhiggs),xMh(maxhiggs)
     int i;
@@ -100,10 +100,15 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         //c        write(*,*) MHbsg(i),Au(i),Ad(i)
     }*/
     
-    printf("I'm calling the C0b functions. \n");
+//    printf("I'm calling the C0b functions. \n");
 
-    delNPc = -1/9*lam2/C0b(7,eta)*(C0b(2,eta) - C0b(1,eta)/6);
+    delNPc = -1/9*lam2/C0b(7,eta,chhiggs)*(C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6);
+    printf("lam2: %lg \n",lam2);
+    printf("c0b7: %lg \n",C0b(7,eta,chhiggs));
+    printf("c0b2 and c0b1: %lg \n",C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6);
+    printf("delNPc: %lg \n",delNPc);
 
+    
     delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
     delNPgam = lam1/2 - 9/2*lam2;
     del = DEL;
@@ -114,12 +119,15 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
     BFcenu = 0.1049;	//! from PDG
-    printf("I'm calling the DtermSq and Aterm functions. \n");
+//    printf("I'm calling the DtermSq and Aterm functions. \n");
 
     *BF = BFcenu * CKMproductSq * 6*alphae/(pibsg*f(z)*kap(z))
         *mbrun(mub)*mbrun(mub)/(mbbsg*mbbsg)*(DtermSq(mub, chhiggs) + Aterm(mub, eta, chhiggs))
         *(1- delNPSL / (mbbsg*mbbsg) + delNPgam/(mbbsg*mbbsg) + delNPc / (mcbsg*mcbsg));
 
+    printf("The return of BF is: %lg . \n", BF[0]);
+ 
+    
 //c	Comparison with Experiment
 //c	Taken from HFAG world average: 1010.1589
     BFexp = 3.55*0.0001; //d-4 in Fortran
@@ -134,7 +142,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     *pull = fabs((*BF-BFexp)/sqrt(BFexpunc*BFexpunc + (*BF * relunc)*(*BF * relunc)));
 
-
+    printf("The return of pull is: %lg . \n", pull[0]);
 
 
     return;
@@ -194,7 +202,7 @@ double DtermSq(double Q,    particle *chhiggs) {
 
 
 
-    printf("I'm calling the C0beff and gam0eff functions from within the DTermSq function. \n");
+//    printf("I'm calling the C0beff and gam0eff functions from within the DTermSq function. \n");
 
     sumreal = 0;
     sumreal = sumreal + C0beff(1,eta,chhiggs)*(r1r + gam0eff(1,7)*log(mbbsg/mub));
@@ -202,20 +210,21 @@ double DtermSq(double Q,    particle *chhiggs) {
     sumreal = sumreal + C0beff(7,eta,chhiggs)*(r7 + gam0eff(7,7)*log(mbbsg/mub));
     sumreal = sumreal + C0beff(8,eta,chhiggs)*(r8r + gam0eff(8,7)*log(mbbsg/mub));
 
-    printf("I'm calling the C0beff function again from within the DTermSq function. \n");
+//    printf("I'm calling the C0beff function again from within the DTermSq function. \n");
     sumimag = 0;
     sumimag = sumimag + C0beff(1,eta,chhiggs)*r1c;
     sumimag = sumimag + C0beff(2,eta,chhiggs)*r2c;
     sumimag = sumimag + C0beff(8,eta,chhiggs)*r8c;
 
-    printf("I'm calling the C1beff functions from within the DTermSq function. \n");
+//    printf("I'm calling the C1beff functions from within the DTermSq function. \n");
     dtermreal = C0beff(7,eta,chhiggs) + alphasbsg(mub)/(4*pibsg)*(C1beff(7,eta,chhiggs) + sumreal);
     dtermimag = alphasbsg(mub)/(4*pibsg)*(sumimag);
 
     moose = (dtermreal*dtermreal + dtermimag*dtermimag);
 
 //c	write(*,*)C0beff(7),alphas(mub)/(4d0*pi)*C1beff(7),sumreal,sumimag
-    printf("Completed DTermSq function. \n");
+//    printf("I've completed the DTermSq function. \n");
+    printf("The DtermSq value is: %lg while within the function. \n", moose);
 
     return moose;
 }
@@ -249,7 +258,7 @@ double gam0eff(int i,int j) {
     //c	mub = 5d0
 
     double moose;
-    printf("I'm checking the case within the gam0eff function. \n");
+//    printf("I'm checking the case within the gam0eff function. \n");
     switch(i){
         case 1: moose = -208*1.0/243.0;
         case 2: moose = 416*1.0/81.0;
@@ -294,12 +303,10 @@ double Aterm(double Q, double eta,   particle *chhiggs) {
     //c	mc = mb - 3.39d0
     //c	MW = 80.33d0
     
-    printf("I'm starting the Aterm function. \n");
-
 
     double sum,moose;
     int i,j;
-    printf("I'm calling the C0beff and fij functions from within the Aterm function. \n");
+//    printf("I'm calling the C0beff and fij functions from within the Aterm function. \n");
 
     sum = 0;
     for (i=1;i<=8;i++){
@@ -314,7 +321,7 @@ double Aterm(double Q, double eta,   particle *chhiggs) {
     moose = (exp(-alphasbsg(Q)*log(del)*(7+2*log(del))/(3*pibsg))-1) * C0beff(7,eta,chhiggs)*C0beff(7,eta,chhiggs)
          + alphasbsg(Q)/pibsg * sum;
 
-
+    printf("The Aterm value is: %lg while within the function. \n", moose);
     return moose;
     }
 
@@ -803,7 +810,7 @@ endif
             	0.9135*pow(eta,(0.4086)) + 0.0873*pow(eta,(-0.4230))
             	- 0.0571*pow(eta,(-0.8994)) + 0.0209*pow(eta,(0.1456));
             break;
-        default: thing = C0b(i,eta);
+        default: thing = C0b(i,eta,chhiggs);
             break;
     }
     free(ai);
@@ -882,7 +889,7 @@ endif
   free(hi);*/
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0b(const int i, double eta) {
+double C0b(const int i, double eta,particle *chhiggs) {
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
@@ -938,9 +945,9 @@ endif
             	+ 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
             	+ 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
             break;
-        case 7: thing = 0;
+        case 7: thing = C0beff(7,eta,chhiggs);
             break;
-        case 8: thing = 0;
+        case 8: thing = C0beff(8,eta,chhiggs);
             break;
     }
     
@@ -1228,6 +1235,7 @@ double F27(const double x) {
 
     whatever = x*(3-5*x)/(12*(x-1)*(x-1)) + x*(3*x-2)/(6*(x-1)*(x-1)*(x-1))*log(x);
 
+    printf("The return of F27 is: %lg . \n", whatever);
 
     return whatever;
 }
@@ -1282,6 +1290,7 @@ double C1WHeff(int i,    particle *chhiggs){
 
 //    whatever = sum;
 
+    printf("The return of C1WHeff is: %lg . \n", sum);
     return sum;
     }
 
@@ -1301,6 +1310,7 @@ double EH(const double x,const double xAu,const double xAd){
     whatever = xAu*xAu*(x*(16-29*x+7*x*x)/(36*pow((x-1),3))+x*(3*x-2)/(6*pow((x-1),4))*log(x));
 
 
+    printf("The return of EH is: %lg . \n", whatever);
     return whatever;
 }
 
@@ -1334,6 +1344,7 @@ double G7H(const double x,const double xAu,const double xAd){
 
     whatever = term1 + term2;
 
+    printf("The return of G7H is: %lg . \n", whatever);
     return whatever;
 }
 
@@ -1359,6 +1370,7 @@ double Delta7H(const double x,const double xAu,const double xAd){
                                 +x*(14-23*x-3*x*x)/pow((x-1),5)*log(x)
                                 );
 
+    printf("The return of Delta7H is: %lg . \n", whatever);
     return whatever;
 }
 
@@ -1389,7 +1401,7 @@ double G8H(const double x,const double xAu,const double xAd){
     whatever = term1 + term2;
 
 
-
+    printf("The return of G8H is: %lg . \n", whatever);
     return whatever;
 }
 
@@ -1408,7 +1420,7 @@ double Delta8H(const double x,const double xAu,const double xAd){
 
 
     what = xAu*xAd*1/3*x*( (81-16*x+7*x*x)/(2*pow((x-1),3))-(19+17*x)/pow((x-1),4)*log(x) ) + xAu*xAu*1/6*x*( (-38-261*x+18*x*x-7*x*x*x)/(6*pow((x-1),4))+x*(31+17*x)/pow((x-1),5)*log(x) );
-
+    printf("The return of Delta8H is: %lg . \n", what);
     return what;
 }
 

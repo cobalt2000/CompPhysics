@@ -79,7 +79,8 @@ int main(){
     printf("Calling the solver\n");
     bsg_nlo(chhiggs, ptr_BF, ptr_pull);
 
-    printf("The branching fraction for b to s gamma is: %lg . \n", ptr_BF[0]);
+    printf("The branching fraction for b to s gamma is: %lg . \n", BF);
+    printf("The pull for b to s gamma is: %lg . \n", pull);
     
     // Print solution
     //printf("The branching fractions are\n")
