@@ -28,17 +28,17 @@ void calc_yukawa (particle *Higgs, double *Y1, double *Y2, double *Y3){
      Y2      input   Pointer to the array for the yukawas for 2nd family, strange/charm.
      Y3      input   Pointer to the array for the yukawas for 3rd family, bottom/top.
      */
-    const double n=sizeof(Higgs.evec)/sizeof(Higgs.evec[0]);
+    const double n=sizeof(Higgs->evec)/sizeof(Higgs->evec[0]);
     int i;
     for (i=0;i<n;i+=2){
-        Higgs.Y_d += Higgs.evec[i]*Y1[i];
+        Higgs->Y_d += Higgs->evec[i]*Y1[i];
         //Contracts the down-type Higgs field(s) with corresponding Yukawa couplings for down quark.
-        Higgs.Y_u += Higgs.evec[i+1]*Y1[i+1];
+        Higgs->Y_u += Higgs->evec[i+1]*Y1[i+1];
         //Contracts the up-type Higgs field(s) with corresponding Yukawa couplings for up quark.
-        Higgs.Y_s += Higgs.evec[i]*Y2[i];
-        Higgs.Y_c += Higgs.evec[i+1]*Y2[i+1];
-        Higgs.Y_b += Higgs.evec[i]*Y3[i];
-        Higgs.Y_t += Higgs.evec[i+1]*Y3[i+1];
+        Higgs->Y_s += Higgs->evec[i]*Y2[i];
+        Higgs->Y_c += Higgs->evec[i+1]*Y2[i+1];
+        Higgs->Y_b += Higgs->evec[i]*Y3[i];
+        Higgs->Y_t += Higgs->evec[i+1]*Y3[i+1];
     }
     return;
 }
@@ -52,9 +52,9 @@ void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3,
      Y3     input   Pointer to the array holding the third family Yukawa couplings.
      Higgs  output  Pointer to the struct for the particle in question.
      */
-    Higgs.mass=m;
-    Higgs.evec=A;
-    Higgs.evec_size=sizeof(A)/sizeof(A[0]);
+    Higgs->mass=m;
+    Higgs->evec=A;
+    Higgs->evec_size=sizeof(A)/sizeof(A[0]);
     calc_yukawa(Higgs,Y1,Y2,Y3);
     //Branching fraction function would need to be called here. (BFF)
     //Higgs.bf_size=sizeof(branching_frac)/sizeof(branching_frac[0]);
