@@ -70,7 +70,7 @@ int main(){
     // Call solver
     double *ptr_BF=&BF;
     double *ptr_pull=&pull;
-    printf("Calling the solver");
+    printf("Calling the solver\n");
     bsg_nlo(chhiggs, ptr_BF, ptr_pull);
     
     // Print solution
