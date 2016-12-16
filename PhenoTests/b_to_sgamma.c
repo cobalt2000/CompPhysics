@@ -194,7 +194,7 @@ double DtermSq(double Q,    particle *chhiggs) {
 
 
 
-    printf("I'm calling the C0beff function from within the DTermSq function. \n");
+    printf("I'm calling the C0beff and gam0eff functions from within the DTermSq function. \n");
 
     sumreal = 0;
     sumreal = sumreal + C0beff(1,eta,chhiggs)*(r1r + gam0eff(1,7)*log(mbbsg/mub));
@@ -202,19 +202,20 @@ double DtermSq(double Q,    particle *chhiggs) {
     sumreal = sumreal + C0beff(7,eta,chhiggs)*(r7 + gam0eff(7,7)*log(mbbsg/mub));
     sumreal = sumreal + C0beff(8,eta,chhiggs)*(r8r + gam0eff(8,7)*log(mbbsg/mub));
 
-
+    printf("I'm calling the C0beff function again from within the DTermSq function. \n");
     sumimag = 0;
     sumimag = sumimag + C0beff(1,eta,chhiggs)*r1c;
     sumimag = sumimag + C0beff(2,eta,chhiggs)*r2c;
     sumimag = sumimag + C0beff(8,eta,chhiggs)*r8c;
 
-
+    printf("I'm calling the C1beff functions from within the DTermSq function. \n");
     dtermreal = C0beff(7,eta,chhiggs) + alphasbsg(mub)/(4*pibsg)*(C1beff(7,eta,chhiggs) + sumreal);
     dtermimag = alphasbsg(mub)/(4*pibsg)*(sumimag);
 
     moose = (dtermreal*dtermreal + dtermimag*dtermimag);
 
 //c	write(*,*)C0beff(7),alphas(mub)/(4d0*pi)*C1beff(7),sumreal,sumimag
+    printf("Completed DTermSq function. \n");
 
     return moose;
 }
@@ -248,7 +249,7 @@ double gam0eff(int i,int j) {
     //c	mub = 5d0
 
     double moose;
-
+    printf("I'm checking the case within the gam0eff function. \n");
     switch(i){
         case 1: moose = -208*1.0/243.0;
         case 2: moose = 416*1.0/81.0;
@@ -293,21 +294,22 @@ double Aterm(double Q, double eta,   particle *chhiggs) {
     //c	mc = mb - 3.39d0
     //c	MW = 80.33d0
     
+    printf("I'm starting the Aterm function. \n");
 
 
     double sum,moose;
     int i,j;
+    printf("I'm calling the C0beff and fij functions from within the Aterm function. \n");
 
     sum = 0;
     for (i=1;i<=8;i++){
-        for (j=i;i<=8;j++){
+        for (j=i;j<=8;j++){
             sum = sum + C0beff(i,eta, chhiggs)*C0beff(j,eta,chhiggs)*fij(i,j);
         }
 //c	 write(*,*)i,C0beff(i)
     }
 
 //c	write(*,*)sum
-    printf("I'm calling the C0beff function from within the Aterm functions. \n");
 
     moose = (exp(-alphasbsg(Q)*log(del)*(7+2*log(del))/(3*pibsg))-1) * C0beff(7,eta,chhiggs)*C0beff(7,eta,chhiggs)
          + alphasbsg(Q)/pibsg * sum;
@@ -407,6 +409,8 @@ if(i.eq.7.and.j.eq.8) A =  0.3897;
 
 if(i.eq.8.and.j.eq.8) A =  3.2162;
 */
+//    printf("I'm starting the fij switch. \n");
+
     switch(i){
         case 1: switch (j){
             case 1: A =  0.0009; break;
