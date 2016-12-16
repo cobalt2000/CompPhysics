@@ -938,6 +938,10 @@ endif
             	+ 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
             	+ 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
             break;
+        case 7: thing = 0;
+            break;
+        case 8: thing = 0;
+            break;
     }
     
     return thing;

@@ -48,10 +48,16 @@ int main(){
     chhiggs = (particle*)malloc( sizeof(particle));
     double *vector;
     vector = (double*)malloc(sizeof(double)*4);
-        
-    for(i=0; i<4; i++){
-        vector[i]=1.0/2.0;
-    }
+
+    
+    vector[0]=1.0/sqrt(2.0);
+    vector[1]=1.0/sqrt(2.0);
+    vector[2]=0;
+    vector[3]=0;
+    
+//    for(i=0; i<4; i++){
+//        vector[i]=1.0/2.0;
+//    }
         // initialize each element in the array to an even-weighted, normalized eigenvector
         
     chhiggs[0].mass=higgsmass;
@@ -72,9 +78,11 @@ int main(){
     double *ptr_pull=&pull;
     printf("Calling the solver\n");
     bsg_nlo(chhiggs, ptr_BF, ptr_pull);
+
+    printf("The branching fraction for b to s gamma is: %lg . \n", ptr_BF[0]);
     
     // Print solution
-    //printf("The brancing fractions are\n")
+    //printf("The branching fractions are\n")
     //printf("The ratio of the Higgs production from gamma-gamma with respect to the SM is %lg .\n",xsgaga);
     //printf("The ratio of the Higgs production from gluon-gluon with respect to the SM is %lg .\n",xsglgl);
     
