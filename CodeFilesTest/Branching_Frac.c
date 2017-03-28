@@ -23,9 +23,12 @@ c-----------------------------------------------------------c*/
 
 // New challenge: number of particles is unknown, and number of decay chains is unknown
 // Each particle struct has an entry for storing the number of decay chains, and a pointer to an array with their widths
-// How do I decide the number of decay chains?
-// How do I structure the information inside the array inside the struct?
-    
+// In the current set up, there are
+//    10? decay chains for each of the 3 charged higgs particles
+//      (3 for the CP even higgses, 3 for the CP odd higgses, 2 for the lighter charged higges, tb, and cs)
+//    8 decay chains for the 4 CP even higgs, (bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l)
+//    and 12 decay chains for the 3 CP odd higgs
+//
     
 //c parameters used in this subroutine only
     double precision Yteff,Ybeff,geff;
