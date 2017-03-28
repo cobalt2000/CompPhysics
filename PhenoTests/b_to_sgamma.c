@@ -102,15 +102,15 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
 //    printf("I'm calling the C0b functions. \n");
 
-    delNPc = -1/9*lam2/C0b(7,eta,chhiggs)*(C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6);
+    delNPc = -1.0/9.0*lam2/C0b(7,eta,chhiggs)*(C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6.0);
     printf("lam2: %lg \n",lam2);
     printf("c0b7: %lg \n",C0b(7,eta,chhiggs));
-    printf("c0b2 and c0b1: %lg \n",C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6);
+    printf("c0b2 and c0b1: %lg \n",C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6.0);
     printf("delNPc: %lg \n",delNPc);
 
     
-    delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
-    delNPgam = lam1/2 - 9/2*lam2;
+    delNPSL = lam1/2.0 + 3.0*lam2/2.0*(1.0-4*pow((1-z),4)/f(z));
+    delNPgam = lam1/2.0 - 9.0/2.0*lam2;
     del = DEL;
 
 //c	write(*,*)(C0beff(i),i=1,8)
@@ -183,7 +183,7 @@ double DtermSq(double Q,    particle *chhiggs) {
     logz = log(z);
 
 
-    r2r = 2/243*(-833+144*pibsg*pibsg*pow(z,1.5)
+    r2r = 2.0/243*(-833+144*pibsg*pibsg*pow(z,1.5)
             + (1728-180*pibsg*pibsg-1296*zeta3+(1296-324*pibsg*pibsg)*logz + 108*log(z)*logz+36*logz*logz*logz)*z
                 + (648+72*pibsg*pibsg+(432-216*pibsg*pibsg)*logz+36*logz*logz*logz)*z*z
                 + (-54-84*pibsg*pibsg+1092*logz-756*logz*logz)*z*z*z);
@@ -192,13 +192,13 @@ double DtermSq(double Q,    particle *chhiggs) {
                 + (-3*pibsg*pibsg+9*logz*logz)*z*z + (28-12*logz)*z*z*z);
     
 
-    r7 = -10/3-8/9*pibsg*pibsg;
+    r7 = -10.0/3-8.0/9*pibsg*pibsg;
 
-    r8r = -4/27*(-33+2*pibsg*pibsg);
-    r8c = 24/27*pibsg;
+    r8r = -4.0/27*(-33+2*pibsg*pibsg);
+    r8c = 24.0/27*pibsg;
 
-    r1r = -1/6*r2r;
-    r1c = -1/6*r2c;
+    r1r = -1.0/6*r2r;
+    r1c = -1.0/6*r2c;
 
 
 
@@ -591,10 +591,10 @@ double h(const double z) {
     double term1,term2,term3,term4,term5,term6,term7,sum;
 
 
-    term1 = -(1-z*z)*(25/4-239/3*z+25/4*z*z);
-    term2 = z*log(z)*(20+90*z-4/3*z*z+17/3*z*z*z);
+    term1 = -(1-z*z)*(25.0/4.0-239.0/3.0*z+25.0/4.0*z*z);
+    term2 = z*log(z)*(20+90*z-4.0/3.0*z*z+17.0/3.0*z*z*z);
     term3 = z*z*(log(z)*log(z))*(36+z*z);
-    term4 = (1-z*z)*(17/3-64/3*z+17/3*z*z)*log(1-z);
+    term4 = (1-z*z)*(17.0/3.0-64.0/3.0*z+17.0/3.0*z*z)*log(1-z);
     term5 = -4*(1+30*z*z+z*z*z*z)*log(z)*log(1-z);
     term6 = -(1+16*z*z+z*z*z*z)*(6*Li2(z) - pibsg*pibsg);
     term7 = -32*pow(z,1.5)*(1+z)*(pibsg*pibsg-4*Li2(sqrt(z))+4*Li2(-sqrt(z))-2*log(z)*log((1-sqrt(z))/(1+sqrt(z))));
