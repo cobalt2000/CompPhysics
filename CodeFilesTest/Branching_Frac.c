@@ -4,11 +4,11 @@
 //
 //  Created by Valerie Plaus on 7/14/16.
 //
-//
+//  Updated by Valerie Plaus on 3/28/17.
 
 #include "Branching_Frac.h"
 //c-----------------------------------------------------------c
-branchingfractions(){
+branchingfractions(higgs,chhiggs){
 /*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine calculates the branching fractions       c
@@ -21,6 +21,12 @@ c-----------------------------------------------------------c*/
     //and memcopy(*A, *B, sizeof(A)), IF sizeof(A)=sizeof(double).n
     // where B is copied into A (B is the source, A is the new location)
 
+// New challenge: number of particles is unknown, and number of decay chains is unknown
+// Each particle struct has an entry for storing the number of decay chains, and a pointer to an array with their widths
+// How do I decide the number of decay chains?
+// How do I structure the information inside the array inside the struct?
+    
+    
 //c parameters used in this subroutine only
     double precision Yteff,Ybeff,geff;
     double decaych4(6), decaych5(4), decaych6(2), interestingcut, placeholder, decaych7(2), decaych8(2);
