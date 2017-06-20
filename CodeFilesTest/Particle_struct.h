@@ -29,5 +29,11 @@ void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3,
  Higgs  output  Pointer to the struct for the particle in question.
  */
 
+double dot_prod (double *A, double *B);
+/*
+The two vectors, A and B, are contracted using the standard inner/dot product. 
+If the vectors aren't the same length, returns print-to-screen statement and "0".
+*/
+
 
 #endif /* Particle_struct_h */

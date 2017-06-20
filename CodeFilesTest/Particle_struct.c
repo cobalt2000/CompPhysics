@@ -17,12 +17,13 @@ typedef struct {
     double Y_b; //The effective Yukawa couplings for bottom with this particle.
     double Y_t; //The effective Yukawa couplings for top with this particle.
     int evec_size;  //This tells us the number of elements in the eigenvector.
-    double* eigenvec; //The vector composition of this particle state.
+    double* evec; //The vector composition of this particle state.
     int bf_size; //This tells us the number of decay modes of the given particle.
+    double* decay;  //The array containing the various decay modes of the particle.
     double* branching_frac;  //The array containing the various decay modes of the particle.
 } particle;
 
-//Thing to remember: there will need to be a loop creating the array of particles after we cal the eigenvector/eigenvalue function.
+//Thing to remember: there will need to be a loop creating the array of particles after we call the eigenvector/eigenvalue function.
 
 
 /*
