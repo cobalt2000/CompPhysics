@@ -5,6 +5,7 @@
 //  Created by Valerie Plaus on 7/14/16.
 //
 //  Updated by Valerie Plaus on 3/28/17.
+//  Updated by Valerie Plaus on 6/16/17.
 
 #include "Branching_Frac.h"
 //c-----------------------------------------------------------c
@@ -21,21 +22,21 @@ c-----------------------------------------------------------c*/
     //and memcopy(*A, *B, sizeof(A)), IF sizeof(A)=sizeof(double).n
     // where B is copied into A (B is the source, A is the new location)
 
-// New challenge: number of particles is unknown, and number of decay chains is unknown
+// New challenge: number of particles is unknown (fixed for now), and number of decay chains is unknown
 // Each particle struct has an entry for storing the number of decay chains, and a pointer to an array with their widths
 // In the current set up, there are
 //    10? decay chains for each of the 3 charged higgs particles
 //      (3 for the CP even higgses, 3 for the CP odd higgses, 2 for the lighter charged higges, tb, and cs)
 //    8 decay chains for the 4 CP even higgs, (bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l)
-//    and 12 decay chains for the 3 CP odd higgs
-//
+//    and 12 decay chains for the 3 CP odd higgs (bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l,2 heavier CP odd to 2 lighter ones and any CP even (2x4 options for the heaviest CP odd, 1x4 for the lightest))
+
     
 //c parameters used in this subroutine only
-    double precision Yteff,Ybeff,geff;
-    double decaych4(6), decaych5(4), decaych6(2), interestingcut, placeholder, decaych7(2), decaych8(2);
-    int ch1check, ch2check, i1, i2, i3;
-    double precision yuktemp, coupling;
-    double complex yukAtemp;
+//    double precision Yteff,Ybeff,geff;
+//    double decaych4(6), decaych5(4), decaych6(2), interestingcut, placeholder, decaych7(2), decaych8(2);
+//    int ch1check, ch2check, i1, i2, i3;
+//    double precision yuktemp, coupling;
+//    double complex yukAtemp;
 
 //c Reinitializing the decay widths.
 //c charged higgs widths

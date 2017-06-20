@@ -74,7 +74,7 @@ int hzz_check(Particle *A, double *vevs){
 
 // Lep constraint
         if (A.mass>=2.0*4.7) {
-            hzz_ratio = (Dot_Prod(*A.eigenvec,*vevs))*(Dot_Prod(*A.eigenvec,*vevs))/(246.0*246.0)*(BFcpe[i][0]/BFSM[i][0]);//!(1-BFinv_decay(i));
+            hzz_ratio = (dot_prod(*A.eigenvec,*vevs))*(dot_prod(*A.eigenvec,*vevs))/(246.0*246.0)*(BFcpe[i][0]/BFSM[i][0]);//!(1-BFinv_decay(i));
         hzzcutoff = lineint(hmass[mh[i]],zzhmass,zzhcoup,217);
         /*        else if (hmass(mh(i))>=2.0*1.78) then
          hzz_ratio(i) = (v1*heigvec(1,mh(i)) + v2*heigvec(2,mh(i)) + v3*heigvec(3,mh(i)) +  v4*heigvec(4,mh(i)))**2/246.d0**2*(BFcpe(i,3)/BFSM(i,3))! need to import tau tau lep constraint. this array is a guess
@@ -132,7 +132,7 @@ c-----------------------------------------------------------c*/
         
         
 //c production rates for h_0 as ratios relative to the SM
-        geff = g2*(Dot_Prod(*vevs,*A.eigenvec));
+        geff = g2*(dot_prod(*vevs,*A.eigenvec));
         ggprod= h2glgl(A.mass,A.Y_t,A.Y_b); //! Gabe's code gives prod ratio
         gagaprod = h2gaga(A.mass,A.Y_t,A.Y_b,geff); //! Gabe's code gives prod ratio
 //c          mh_gg_prod(i) = ggprod(i)*?
