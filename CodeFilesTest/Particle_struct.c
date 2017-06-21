@@ -91,3 +91,21 @@ double dot_prod (double *A, double *B){
     }
     return Ans;
 }
+
+double W_H_rotation (double *A, double *B){
+    double Ans;
+    int i;
+    int n=sizeof(A)/sizeof(A[0]);
+    int m=sizeof(B)/sizeof(B[0]);
+    if(m!=n){
+        printf ("The arrays are not the same length.");
+        return 0;
+    }
+    else {
+        for (i=0;i<=n;i+=2){
+            Ans+=A[i]*B[i];
+            Ans-=A[i+1]*B[i+1]
+        }
+    }
+    return Ans;
+}

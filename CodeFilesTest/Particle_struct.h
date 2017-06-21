@@ -35,5 +35,10 @@ The two vectors, A and B, are contracted using the standard inner/dot product.
 If the vectors aren't the same length, returns print-to-screen statement and "0".
 */
 
+double W_H_rotation (double *A, double *B);
+/*
+ This is just to clarify the basis difference between the CP even and charged Higgs couplings to the W.
+ This matches the MSSM Feynman rules in https://arxiv.org/pdf/hep-ph/9511250.pdf
+*/
 
 #endif /* Particle_struct_h */
