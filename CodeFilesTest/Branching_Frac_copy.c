@@ -158,10 +158,11 @@ c-----------------------------------------------------------c*/
         }
 /*      do j=0,3 {
             if (chhiggs[i].mass].gt.(80.4  + cpehiggs[j].mass)) {
-            x = W_H_rotation(cpehiggs[j].evec, chhiggs[i].evec)
+            x = W_H_rotation(cpehiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[4+j] = pf(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) * x * x
             StoSV(chmass[mch[i]],cpehiggs[j].mass,80.4 ) *
             (g2/2. )*(g2/2.)/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
+            x=0;
             }
         }
  */
@@ -180,10 +181,11 @@ c-----------------------------------------------------------c*/
         }
 /*      do j=1,3 { //should exclude lightest CP odd, because it's the Goldstone
             if (chhiggs[i].mass].gt.(80.4  + cpohiggs[j].mass)) {
-            x = W_H_rotation(cpohiggs[j].evec, chhiggs[i].evec)
+            x = dot_prod(cpohiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[8+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
             StoSV(chmass[mch[i]],cpohiggs[j].mass,80.4 ) *
             (g2/2. )*(g2/2.)/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
+            x=0;
             }
          }
 */
@@ -200,7 +202,18 @@ c-----------------------------------------------------------c*/
                 ((g2*g2-g1*g1)/(G*2 ))*((g2*g2-g1*g1)/(G*2 ))/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-
+/*
+        do j=1,2 {
+            if (chhiggs[i].mass.gt.(zmass[2] + chhiggs[j].mass)) {
+                x = dot_prod(chhiggs[j].evec, chhiggs[i].evec);
+                chhiggs[i].decay[j+11] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
+                StoSV(chhiggs[i].mass,chhiggs[j].mass,zmass[2])*
+                ((g2*g2-g1*g1)/(G*2 ))*((g2*g2-g1*g1)/(G*2 ))/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
+                x=0;
+            }
+        }
+*/
+        
 //c decay to h^+ h0
         do j=1,2 {
             do k=1,4 {
