@@ -271,7 +271,7 @@ c-----------------------------------------------------------c*/
             /(8. *pi*174.3 *174.3)
             BFt[i]=decayt[i] / (decayt[i] + 1.508 );
         }
-
+/* This all appears to be a duplicate of calculations above.
 //c decay to lightest h^0 W
         if (chmass[mch[i]].gt.(80.4  + hmass[mh[1]])) {
             decaychtoh1[i]=pf(chmass[mch[i]],hmass[mh[1]],80.4 ) *
@@ -339,7 +339,7 @@ c-----------------------------------------------------------c*/
 //c       write(*,*) BFchtoh1(i),BFchtoh2(i),BFchtoh3(i)
 
         }// ??? must be the end of the i loop
-
+*/
 //c CPE Higgs to bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l
         do i=1,4 {
 
