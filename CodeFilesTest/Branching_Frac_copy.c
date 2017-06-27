@@ -394,7 +394,7 @@ c-----------------------------------------------------------c*/
             }
 
 
-//c Here we calculate the partial decay width of the lightest higgs to a pair of the lightest neutralino.
+//c Here we calculate the partial decay width of the lightest higgs to a pair of the lightest neutralino, which would be invisible to the detectors.
 //c Smartin basis: B, W3, H1, H2, H3, H4
 //c map old bases to SMartin: 1->3,2->4,3->5,4->6,5->2,6->1
 //c old basis: H1, H2, H3, H4, W3, B
@@ -422,10 +422,10 @@ c-----------------------------------------------------------c*/
 //c     . +inv_decay(i)
 
             do j=1,6 {
-                BFcpe[i][j] = decaycpe[i][j] / totaldecaycpe[i];
+                cpehiggs[i].branching_frac[j] = cpehiggs[i].decay[j] / cpehiggs[i].decay[0] ;
             }
-            BFcpe[i][7] = decaycpe[i][7]/totaldecaycpe[i] *(2*(3.3658e-2))*(2*(3.3658e-2)); //!ZZ to 4 leptons (e+mu+tau=3)
-            BFcpe[i][8] = decaycpe[i][7]/totaldecaycpe[i] *(20e-2)*(2*(3.3658e-2)); //!ZZ to 2 leptons 2 nus
+            cpehiggs[i].branching_frac[7] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(2*(3.3658e-2))*(2*(3.3658e-2)); //!ZZ to 4 leptons (e+mu+tau=3)
+            cpehiggs[i].branching_frac[8] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(20e-2)*(2*(3.3658e-2)); //!ZZ to 2 leptons 2 nus
             BFinv_decay[i] = inv_decay[i]/totaldecaycpe[i];
 
         }
