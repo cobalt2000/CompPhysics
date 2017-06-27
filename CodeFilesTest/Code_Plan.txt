@@ -1,0 +1,30 @@
+Code Plan!
+
+Main: creating the memory spaces for
+	particle structs (3 arrays of structs)
+	matrices (4 arrays)
+	yukawas (4 arrays)
+
+Loop:
+	randomize paramaters
+	
+	pass struct and matrix to diagonalizing function to calc eigenvalues and eigenvectors
+	return structs with masses and eigenvectors
+
+	pass structs and yukawa arrays to calc_yukawa 
+	return structs with effective yukawas
+	
+	pass structs to branchingfractions
+	returns structs with decay and branching_frac arrays
+	
+	pass structs to phenotests
+	returns with passing/failing observational bounds
+
+	output
+End Loop
+
+free memory
+
+End Main
+
+	
