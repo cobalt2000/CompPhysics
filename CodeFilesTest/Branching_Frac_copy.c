@@ -144,7 +144,7 @@ c-----------------------------------------------------------c*/
         (Ytau * cheigvec[1][mch[i]])*(Ytau * cheigvec[1][mch[i]])/
         (8. *pi*chmass[mch[i]]*chmass[mch[i]]);
 */
-        chhiggs[i].decay[3]= pf(chhiggs[i].mass,1.78 ,0 ) * (chhiggs[i].mass*chhiggs[i].mass -1.78*1.78) * Y_tau*Y_tau
+        chhiggs[i].decay[3]= pf(chhiggs[i].mass,1.78 ,0 ) * (chhiggs[i].mass*chhiggs[i].mass -1.78*1.78) * chhiggs[i].Y_tau*chhiggs[i].Y_tau
         /(8. *pi* chhiggs[i].mass*chhiggs[i].mass);
  
 
