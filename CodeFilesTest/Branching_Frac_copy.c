@@ -394,7 +394,7 @@ c-----------------------------------------------------------c*/
             }
 
 
-//c Here we calculate the partial decay width of the lightest higgs to a pair of the lightest neutralino, which would be invisible to the detectors.
+//c Here we calculate the partial decay width of each CP even higgs to a pair of the lightest neutralino, which would be invisible to the detectors.
 //c Smartin basis: B, W3, H1, H2, H3, H4
 //c map old bases to SMartin: 1->3,2->4,3->5,4->6,5->2,6->1
 //c old basis: H1, H2, H3, H4, W3, B
@@ -416,8 +416,8 @@ c-----------------------------------------------------------c*/
                 inv_decay[i] = 0. ;
             }
 
-/*            totaldecaycpe[i] = decaycpe[i][1] + decaycpe[i][2] + decaycpe[i][3] + decaycpe[i][4] +
-            decaycpe[i][5] + decaycpe[i][6] + decaycpe[i][7] + inv_decay[i];*/
+            cpehiggs[i].decay[0] = cpehiggs[i].decay[1] + cpehiggs[i].decay[2] + cpehiggs[i].decay[3] + cpehiggs[i].decay[4] +
+            cpehiggs[i].decay[5] + cpehiggs[i].decay[6] + cpehiggs[i].decay[7] + cpehiggs[i].decay[8];
 //c      totaldecaycpe(i)=decaycpe(i,1)+decaycpe(i,2)+decaycpe(i,3)+decaycpe(i,4)+decaycpe(i,5)+decaycpe(i,6)+decaycpe(i,7)
 //c     . +inv_decay(i)
 
