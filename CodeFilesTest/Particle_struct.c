@@ -38,7 +38,7 @@ struct { // These would either be input by the user or randomized.  Each pointer
 */
  
  
-void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3){
+void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3, double *YL){
     /*
      Higgs   input/output   Pointer to the struct for the particle.
      Y1      input   Pointer to the array for the yukawas for 1st family, down/up.
@@ -56,11 +56,13 @@ void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3){
         Higgs.Y_c += Higgs.evec[i+1]*Y2[i+1];
         Higgs.Y_b += Higgs.evec[i]*Y3[i];
         Higgs.Y_t += Higgs.evec[i+1]*Y3[i+1];
+        Higgs.Y_tau += Higgs.evec[i]*YL[i];
+        Higgs.Y_mu += Higgs.evec[i+1]*YL[i+1];
     }
     return;
 }
 
-void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, Particle *Higgs){
+void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, double *YL Particle *Higgs){
     /*
      m      input   The eigenvalue of the mass state.
      A      input   Pointer to the eigenvector of the mass state.
@@ -72,7 +74,7 @@ void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3,
     Higgs.mass=m;
     Higgs.evec=A;
     Higgs.evec_size=sizeof(A)/sizeof(A[0]);
-    calc_yukawa(Higgs,Y1,Y2,Y3);
+    calc_yukawa(Higgs,Y1,Y2,Y3,YL);
     //Branching fraction function would need to be called here. (BFF)
     //Higgs.bf_size=sizeof(branching_frac)/sizeof(branching_frac[0]);
 }
