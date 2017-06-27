@@ -17,6 +17,7 @@ typedef struct {
     double Y_b; //The effective Yukawa couplings for bottom with this particle.
     double Y_t; //The effective Yukawa couplings for top with this particle.
     double Y_tau; //The effective Yukawa couplings for tau with this particle.
+    double Y_mu; //The effective Yukawa couplings for muon with this particle.
     int evec_size;  //This tells us the number of elements in the eigenvector.
     double* evec; //The vector composition of this particle state.
     int bf_size; //This tells us the number of decay modes of the given particle.
