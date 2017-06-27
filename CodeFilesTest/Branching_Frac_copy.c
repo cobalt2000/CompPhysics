@@ -38,6 +38,8 @@ c-----------------------------------------------------------c*/
 //    double precision yuktemp, coupling;
 //    double complex yukAtemp;
 
+    double x;
+    
 //c Reinitializing the decay widths.
 //c charged higgs widths
 // these branching fractions should be initilized inside the structs
@@ -267,7 +269,7 @@ c-----------------------------------------------------------c*/
 //c      While the charged Higgs may decay through all these modes, it may also be light enough
 //c      to be a decay product of the top.  So here is a test for that decay channel.
         if (174.3  .gt. (chmass[mch[i]] + 4.7 )) {
-            decayt(i) = pf(174.3 ,chmass[mch[i]],4.7 )*
+            decayt[i] = pf(174.3 ,chmass[mch[i]],4.7 )*
             (
             (-chmass[mch[i]]*chmass[mch[i]] + 174.3 *174.3 - 4.7 *4.7) *
             ((Yb*cheigvec[1][mch[i]])*(Yb*cheigvec[1][mch[i]]) + (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])*(Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]))+
@@ -410,10 +412,10 @@ c-----------------------------------------------------------c*/
                 coupling = coupling + g2*(heigvec[1][mh[i]]*chi0vec[3][mchi0[1]] - heigvec[2][mh[i]]*chi0vec[4][mchi0[1]] +
                                           heigvec[3][mh[i]]*chi0vec[5][mchi0[1]] - heigvec[4][mh[i]]*chi0vec[6][mchi0[1]])*chi0vec[2][mchi0[1]];
 
-                inv_decay[i] = coupling*coupling*hmass[mh[i]]/(16. *pi)*pow((1. -4. *chi0mass[mchi0[1]]*chi0mass[mchi0[1]]/(hmass[mh[i]]*hmass[mh[i]])),(1.5 ));
+                cpehiggs[i].decay[8] = coupling*coupling*hmass[mh[i]]/(16. *pi)*pow((1. -4. *chi0mass[mchi0[1]]*chi0mass[mchi0[1]]/(hmass[mh[i]]*hmass[mh[i]])),(1.5 ));
             }
             else {
-                inv_decay[i] = 0. ;
+                cpehiggs[i].decay[8] = 0. ;
             }
 
             cpehiggs[i].decay[0] = cpehiggs[i].decay[1] + cpehiggs[i].decay[2] + cpehiggs[i].decay[3] + cpehiggs[i].decay[4] +
@@ -426,7 +428,7 @@ c-----------------------------------------------------------c*/
             }
             cpehiggs[i].branching_frac[7] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(2*(3.3658e-2))*(2*(3.3658e-2)); //!ZZ to 4 leptons (e+mu+tau=3)
             cpehiggs[i].branching_frac[8] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(20e-2)*(2*(3.3658e-2)); //!ZZ to 2 leptons 2 nus
-            BFinv_decay[i] = inv_decay[i]/totaldecaycpe[i];
+            cpehiggs[i].branching_frac[9] = cpehiggs[i].decay[8]/cpehiggs[i].decay[0];
 
         }
 //c      write(*,*) hmass(mh(1)), decaycpe(1,1),decaycpe(1,2),decaycpe(1,3), decaycpe(1,4)
