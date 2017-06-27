@@ -5,23 +5,23 @@ Main: creating the memory spaces for
 	matrices (4 arrays)
 	yukawas (4 arrays)
 
-Loop:
-	randomize paramaters
+	Loop:
+		randomize paramaters
 	
-	pass struct and matrix to diagonalizing function to calc eigenvalues and eigenvectors
-	return structs with masses and eigenvectors
+		pass struct and matrix to diagonalizing function to calc eigenvalues and eigenvectors
+		return structs with masses and eigenvectors
 
-	pass structs and yukawa arrays to calc_yukawa 
-	return structs with effective yukawas
+		pass structs and yukawa arrays to calc_yukawa 
+		return structs with effective yukawas
 	
-	pass structs to branchingfractions
-	returns structs with decay and branching_frac arrays
+		pass structs to branchingfractions
+		returns structs with decay and branching_frac arrays
 	
-	pass structs to phenotests
-	returns with passing/failing observational bounds
+		pass structs to phenotests
+		returns with passing/failing observational bounds
 
-	output
-End Loop
+		output
+	End Loop
 
 free memory
 
