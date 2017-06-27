@@ -104,22 +104,23 @@ c-----------------------------------------------------------c*/
 
 //c decay to cs
 //c      write(*,*) i
-        decaych[i][1] = 3.0*pf(chmass[mch[i]],1.42,0.104)*
+/*        decaych[i][1] = 3.0*pf(chmass[mch[i]],1.42,0.104)*
         (
          ( (Ys*cheigvec[1][mch[i]])*(Ys*cheigvec[1][mch[i]]) + (Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]] )*(Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]] ))*
              (chmass[mch[i]]*chmass[mch[i]]-1.42*1.42 - 0.104*0.104) +
              4. *1.42 *0.104 *(Ys*cheigvec[1][mch[i]])*(Yc*cheigvec[2][mch[i]] + Ycp*cheigvec[4][mch[i]])
         )
         /(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
-/*        chhiggs[i].decay[1]=3.0*pf(chhiggs[i].mass,1.42,0.104)*
+ */
+        chhiggs[i].decay[1]=3.0*pf(chhiggs[i].mass,1.42,0.104)*
             ((chhiggs[i].Y_s*chhiggs[i].Y_s + chhiggs[i].Y_c*chhiggs[i].Y_c)* (chhiggs[i].mass*chhiggs[i].mass-1.42*1.42 - 0.104*0.104)
             +4. *1.42 *0.104 *chhiggs[i].Y_s*chhiggs[i].Y_c)
             /(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
-*/
+
         
         
 //c decay to tb
-        if (chmass[mch[i]].gt.(174.3 +4.7 )) {
+/*        if (chmass[mch[i]].gt.(174.3 +4.7 )) {
             decaych[i][2] = 3. *pf(chmass[mch[i]],174.3 ,4.7 )*
             (
             (chmass[mch[i]]*chmass[mch[i]] - 174.3 *174.3 - 4.7 *4.7) *
@@ -128,24 +129,25 @@ c-----------------------------------------------------------c*/
             )
             /(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
         }
-    /*        chhiggs[i].decay[2]=3.0*pf(chhiggs[i].mass,174.3,4.7)*
+ */
+        chhiggs[i].decay[2]=3.0*pf(chhiggs[i].mass,174.3,4.7)*
     ((chhiggs[i].Y_b*chhiggs[i].Y_b + chhiggs[i].Y_t*chhiggs[i].Y_t)* (chhiggs[i].mass*chhiggs[i].mass-174.3*174.3 - 4.7*4.7)
     +4. *1.42 *0.104 *chhiggs[i].Y_s*chhiggs[i].Y_c)
     /(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
-    */
+    
 
 //c decay to tau nu
-        decaych[i][3] = pf(chmass[mch[i]],1.78 ,0 ) *
+/*        decaych[i][3] = pf(chmass[mch[i]],1.78 ,0 ) *
         (chmass[mch[i]]*chmass[mch[i]] - 1.78 *1.78) *
         (Ytau * cheigvec[1][mch[i]])*(Ytau * cheigvec[1][mch[i]])/
         (8. *pi*chmass[mch[i]]*chmass[mch[i]]);
-/*
+*/
         chhiggs[i].decay[3]= pf(chhiggs[i].mass,1.78 ,0 ) * (chhiggs[i].mass*chhiggs[i].mass -1.78*1.78) * Y_tau*Y_tau
         /(8. *pi* chhiggs[i].mass*chhiggs[i].mass);
- */
+ 
 
 //c decay to h^0 W: there are 4 possible h^0, which becomes decay array elements 4-7
-        do j=1,4 {
+/*        do j=1,4 {
             if (chmass[mch[i]].gt.(80.4  + hmass[mh[j]])) {
                 decaych4[j] = pf(chmass[mch[i]],hmass[mh[j]],80.4 ) *
                 (heigvec[1][mh[j]]*cheigvec[1][mch[i]] - heigvec[2][mh[j]]*cheigvec[2][mch[i]] +
@@ -156,7 +158,7 @@ c-----------------------------------------------------------c*/
                 (g2/2. )*(g2/2.)/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-/*      do j=0,3 {
+*/      do j=0,3 {
             if (chhiggs[i].mass].gt.(80.4  + cpehiggs[j].mass)) {
             x = W_H_rotation(cpehiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[4+j] = pf(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) * x * x
@@ -165,10 +167,11 @@ c-----------------------------------------------------------c*/
             x=0;
             }
         }
- */
+ 
         
-//c decay to A^0 W: there are 3 possible A^0, which becomes elements 8-10
-        do j=1,3 {
+//c decay to A^0 W: there are 3 possible A^0, which become elements 8-10
+//  The count starts at the second particle (j=1) because the first is massless
+/*        do j=1,3 {
             if (chmass[mch[i]].gt.(80.4  + cpomass[ma[j]])) {
                 decaych5[j] = pf(chmass[mch[i]],cpomass[ma[j]],80.4 ) *
                 (cpoeigvec[1][ma[j]]*cheigvec[1][mch[i]] + cpoeigvec[2][ma[j]]*cheigvec[2][mch[i]]
@@ -179,7 +182,7 @@ c-----------------------------------------------------------c*/
                 (g2/2.)*(g2/2.)/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-/*      do j=1,3 { //should exclude lightest CP odd, because it's the Goldstone
+*/      do j=1,3 { //should exclude lightest CP odd, because it's the Goldstone
             if (chhiggs[i].mass].gt.(80.4  + cpohiggs[j].mass)) {
             x = dot_prod(cpohiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[8+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
@@ -188,10 +191,10 @@ c-----------------------------------------------------------c*/
             x=0;
             }
          }
-*/
+
         
-//c decay to h^+ Z: there are 2 possible h^+_j for i!=j
-        do j=1,2 {
+//c decay to h^+ Z: there are 2 possible h^+_j for i>j
+/*        do j=1,2 {
             if (chmass[mch[i]].gt.(zmass[2] + chmass[mch[j]])) {
                 decaych6[j] = pf(chmass[mch[i]],chmass[mch[j]],zmass[2]) *
                 (cheigvec[1][mch[j]]*cheigvec[1][mch[i]] + cheigvec[2][mch[j]]*cheigvec[2][mch[i]] +
@@ -202,7 +205,7 @@ c-----------------------------------------------------------c*/
                 ((g2*g2-g1*g1)/(G*2 ))*((g2*g2-g1*g1)/(G*2 ))/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-/*
+*/
         do j=1,2 {
             if (chhiggs[i].mass.gt.(zmass[2] + chhiggs[j].mass)) {
                 x = dot_prod(chhiggs[j].evec, chhiggs[i].evec);
@@ -212,8 +215,8 @@ c-----------------------------------------------------------c*/
                 x=0;
             }
         }
-*/
-        
+
+/* Temporarily omitted because this channel was suppressed by the large masses involved
 //c decay to h^+ h0
         do j=1,2 {
             do k=1,4 {
@@ -232,6 +235,8 @@ c-----------------------------------------------------------c*/
             }
         }
 
+ */
+/* Temporarily omitted: previous scans showed that this was a suppressed channel due to the alignment of A0 and H+
 //c decay to h^+ A0
         do j=1,2 {
             do k=1,4 {
@@ -249,8 +254,8 @@ c-----------------------------------------------------------c*/
                 yukAtemp=0;
             }
         }
-
-
+*/
+/*      Not needed with the current decay array.
         decaych[i][4] = decaych4[1]+decaych4[2]+decaych4[3]+decaych4[4];
         decaych[i][5] = decaych5[1]+decaych5[2]+decaych5[3]+decaych5[4];
         decaych[i][6] = decaych6[1]+decaych6[2];
@@ -258,7 +263,7 @@ c-----------------------------------------------------------c*/
         decaych[i][8] = decaych8[1]+decaych8[2];
         totaldecaych[i] = decaych[i][1] + decaych[i][2] + decaych[i][3] + decaych[i][4] + decaych[i][5] + decaych[i][6]
          + decaych[i][7] + decaych[i][8];
-
+*/
 //c      While the charged Higgs may decay through all these modes, it may also be light enough
 //c      to be a decay product of the top.  So here is a test for that decay channel.
         if (174.3  .gt. (chmass[mch[i]] + 4.7 )) {
@@ -341,44 +346,51 @@ c-----------------------------------------------------------c*/
         }// ??? must be the end of the i loop
 */
 //c CPE Higgs to bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l
-        do i=1,4 {
+        do i=0,3 {
 
-            if (hmass[mh[i]].ge.(2 *4.7 )) {
-                decaycpe[i][1] = 3. *hmass[mh[i]]/(16. *pi) * pow((1. - 4. *4.7 *4.7/(hmass[mh[i]]*hmass[mh[i]])),(1.5) ) *
-                (Yb*heigvec[1][mh[i]])*(Yb*heigvec[1][mh[i]]);
+            if (cpehiggs[i].mass.ge.(2 *4.7 )) {
+                cpehiggs[i].decay[1] = 3. *cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5) ) *
+                (cpehiggs[i].Y_b)*(cpehiggs[i].Y_b);
             }
-            decaycpe[i][2] = 3. *hmass[mh[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(hmass[mh[i]]*hmass[mh[i]])),(1.5)) *
-            (Yc*heigvec[2][mh[i]] + Ycp*heigvec[4][mh[i]])*(Yc*heigvec[2][mh[i]] + Ycp*heigvec[4][mh[i]]);
-            if (hmass[mh[i]].ge.(2 *1.78 )) {
-                decaycpe[i][3] = hmass[mh[i]]/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(hmass[mh[i]]*hmass[mh[i]])),(1.5 )) *
-                (Ytau*heigvec[1][mh[i]])*(Ytau*heigvec[1][mh[i]]);
+            cpehiggs[i].decay[2] = 3. *cpehiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5)) *
+            (cpehiggs[i].Y_c)*(cpehiggs[i].Y_c);
+            if (cpehiggs[i].mass.ge.(2 *1.78 )) {
+                cpehiggs[i].decay[3] = cpehiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
+                ((cpehiggs[i].Y_tau)*(cpehiggs[i].Y_tau);
             }
-            decaycpe[i][4] = hmass[mh[i]]/(16. *pi) * pow((1. - 4. *0.106 *0.106/(hmass[mh[i]]*hmass[mh[i]])),(1.5 )) *
-            (Ymu*heigvec[1][mh[i]])*(Ymu*heigvec[1][mh[i]]);
+            decaycpe[i][4] = cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
+            (cpehiggs[i].Y_mu)*(cpehiggs[i].Y_mu);
 
-            if (hmass(mh(i)).ge.100 ) {
+            if (cpehiggs[i].mass.ge.100 ) {
 
 //c effective couplings are based on the composition of the mass state with respect to the gauge basis
-                Yteff = (Yt*heigvec[2][mh[i]] + Ytp*heigvec[4][mh[i]]);
-                Ybeff = Yb*heigvec[1][mh[i]];
-                geff = g2*(heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4);
-
-                decaycpe[i][5] = (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
+//                Yteff = (Yt*heigvec[2][mh[i]] + Ytp*heigvec[4][mh[i]]);
+//                Ybeff = Yb*heigvec[1][mh[i]];
+//                geff = g2*(heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4);
+                geff = g2*dot_prod(cpehiggs[i].evec,vevs);
+/*                decaycpe[i][5] = (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
                     (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
                     lineint(hmass(mh(i)),widthmass,widthww,400)/(246 *246);
-                decaycpe[i][6] = h2gaga(hmass[mh[i]],Yteff,Ybeff,geff) *lineint(hmass[mh[i]],widthmass,widthgaga,400);
-                decaycpe[i][7] = (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
-                    (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
-                    lineint(hmass[mh[i]],widthmass,widthzz,400)/(246 *246);
+ */
+                cpehiggs[i].decay[5] = dot_prod(cpehiggs[i].evec,vevs)*dot_prod(cpehiggs[i].evec,vevs)*lineint(cpehiggs[i].mass,widthmass,widthww,400)/(246 *246);
+/*                decaycpe[i][6] = h2gaga(hmass[mh[i]],Yteff,Ybeff,geff) *lineint(hmass[mh[i]],widthmass,widthgaga,400);
+ */
+                cpehiggs[i].decay[6] = h2gaga(cpehiggs[i].mass,cpehiggs[i].Y_t,cpehiggs[i].Y_b,geff) *lineint(cpehiggs[i].mass,widthmass,widthgaga,400);
+/*                decaycpe[i][7] = (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
+                (heigvec[1][mh[i]]*v1+heigvec[2][mh[i]]*v2+heigvec[3][mh[i]]*v3+heigvec[4][mh[i]]*v4)*
+                lineint(hmass[mh[i]],widthmass,widthzz,400)/(246 *246);
+                */
+                cpehiggs[i].decay[7] = dot_prod(cpehiggs[i].evec,vevs)*dot_prod(cpehiggs[i].evec,vevs)*
+                    lineint(cpehiggs[i].mass,widthmass,widthzz,400)/(246 *246);
 
-                Yteff = 0;
-                Ybeff = 0;
+//                Yteff = 0;
+//                Ybeff = 0;
                 geff = 0;
             }
             else {
-                decaycpe[i][5] = 0;
-                decaycpe[i][6] = 0;
-                decaycpe[i][7] = 0;
+                cpehiggs[i].decay[5] = 0;
+                cpehiggs[i].decay[6] = 0;
+                cpehiggs[i].decay[7] = 0;
             }
 
 
@@ -404,8 +416,8 @@ c-----------------------------------------------------------c*/
                 inv_decay[i] = 0. ;
             }
 
-            totaldecaycpe[i] = decaycpe[i][1] + decaycpe[i][2] + decaycpe[i][3] + decaycpe[i][4] +
-            decaycpe[i][5] + decaycpe[i][6] + decaycpe[i][7] + inv_decay[i];
+/*            totaldecaycpe[i] = decaycpe[i][1] + decaycpe[i][2] + decaycpe[i][3] + decaycpe[i][4] +
+            decaycpe[i][5] + decaycpe[i][6] + decaycpe[i][7] + inv_decay[i];*/
 //c      totaldecaycpe(i)=decaycpe(i,1)+decaycpe(i,2)+decaycpe(i,3)+decaycpe(i,4)+decaycpe(i,5)+decaycpe(i,6)+decaycpe(i,7)
 //c     . +inv_decay(i)
 
