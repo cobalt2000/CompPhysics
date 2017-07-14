@@ -39,6 +39,12 @@ c-----------------------------------------------------------c*/
 //    double complex yukAtemp;
 
     double x;
+    memset(chhiggs[i].decay,0,sizeof(double)*12);
+    memset(cpehiggs[i].decay,0,sizeof(double)*8);
+    memset(cpohiggs[i].decay,0,sizeof(double)*12);
+    memset(chhiggs[i].branching_frac,0,sizeof(double)*13);
+    memset(cpehiggs[i].branching_frac,0,sizeof(double)*9);
+    memset(cpohiggs[i].branching_frac,0,sizeof(double)*13);
     
 //c Reinitializing the decay widths.
 //c charged higgs widths
@@ -60,13 +66,8 @@ c-----------------------------------------------------------c*/
         BFchtoa2[i] = 0.0; //chhiggs[i].branching_frac
         BFchtoh3[i] = 0.0; //chhiggs[i].branching_frac
     }
-*/
-    memset(chhiggs[i].decay,0,sizeof(double)*12);
-    memset(cpehiggs[i].decay,0,sizeof(double)*8);
-    memset(cpohiggs[i].decay,0,sizeof(double)*12);
-    memset(chhiggs[i].branching_frac,0,sizeof(double)*13);
-    memset(cpehiggs[i].branching_frac,0,sizeof(double)*9);
-/*
+
+
 //c cpe decay widths, ours and SM.  we only check the lightest/kinematically interesting ones
     do i=1,4 {
         totaldecaycpe[i] = 0.0; //cpehiggs[i].decay[0]
