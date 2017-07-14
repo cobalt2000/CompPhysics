@@ -43,7 +43,7 @@ c-----------------------------------------------------------c*/
 //c Reinitializing the decay widths.
 //c charged higgs widths
 // these branching fractions should be initilized inside the structs
-    do i=1,3 {
+/*    do i=1,3 {
         totaldecaych[i] = 0.0; //chhiggs[i].decay[0]
         decaychtoh1[i] = 0.0; //chhiggs[i].decay
         decaychtoa1[i] = 0.0; //chhiggs[i].decay
@@ -60,13 +60,19 @@ c-----------------------------------------------------------c*/
         BFchtoa2[i] = 0.0; //chhiggs[i].branching_frac
         BFchtoh3[i] = 0.0; //chhiggs[i].branching_frac
     }
-
+*/
+    memset(chhiggs[i].decay,0,sizeof(double)*12);
+    memset(cpehiggs[i].decay,0,sizeof(double)*8);
+    memset(cpohiggs[i].decay,0,sizeof(double)*12);
+    memset(chhiggs[i].branching_frac,0,sizeof(double)*13);
+    memset(cpehiggs[i].branching_frac,0,sizeof(double)*9);
+/*
 //c cpe decay widths, ours and SM.  we only check the lightest/kinematically interesting ones
     do i=1,4 {
         totaldecaycpe[i] = 0.0; //cpehiggs[i].decay[0]
-        totaldecaySM[i] = 0.0; //cpehiggs[i].decay[0]
-        BFinv_decay[i] = 0.0; //?
-        inv_decay[i] = 0.0; //?
+        totaldecaySM[i] = 0.0; //?
+        BFinv_decay[i] = 0.0; //cpehiggs[i].decay[9]
+        inv_decay[i] = 0.0; //cpehiggs[i].decay[9]
         do j=1,7 {
             decaycpe[i][j] = 0.0; //cpehiggs[i].decay[j]
             decaySM[i][j] = 0.0; //cpehiggs[i].decay[j]
@@ -103,7 +109,7 @@ c-----------------------------------------------------------c*/
         do j=1,6 {
             decaych4[j] = 0.0;
         }
-
+*/
 //c decay to cs
 //c      write(*,*) i
 /*        decaych[i][1] = 3.0*pf(chmass[mch[i]],1.42,0.104)*
@@ -187,7 +193,7 @@ c-----------------------------------------------------------c*/
 */      do j=1,3 { //should exclude lightest CP odd, because it's the Goldstone
             if (chhiggs[i].mass].gt.(80.4  + cpohiggs[j].mass)) {
             x = dot_prod(cpohiggs[j].evec, chhiggs[i].evec);
-            chhiggs[i].decay[8+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
+            chhiggs[i].decay[7+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
             StoSV(chmass[mch[i]],cpohiggs[j].mass,80.4 ) *
             (g2/2. )*(g2/2.)/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
             x=0;
@@ -211,7 +217,7 @@ c-----------------------------------------------------------c*/
         do j=1,2 {
             if (chhiggs[i].mass.gt.(zmass[2] + chhiggs[j].mass)) {
                 x = dot_prod(chhiggs[j].evec, chhiggs[i].evec);
-                chhiggs[i].decay[j+11] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
+                chhiggs[i].decay[j+10] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
                 StoSV(chhiggs[i].mass,chhiggs[j].mass,zmass[2])*
                 ((g2*g2-g1*g1)/(G*2 ))*((g2*g2-g1*g1)/(G*2 ))/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
                 x=0;
