@@ -39,12 +39,23 @@ c-----------------------------------------------------------c*/
 //    double complex yukAtemp;
 
     double x;
-    memset(chhiggs[i].decay,0,sizeof(double)*12);
-    memset(cpehiggs[i].decay,0,sizeof(double)*8);
-    memset(cpohiggs[i].decay,0,sizeof(double)*12);
-    memset(chhiggs[i].branching_frac,0,sizeof(double)*13);
-    memset(cpehiggs[i].branching_frac,0,sizeof(double)*9);
-    memset(cpohiggs[i].branching_frac,0,sizeof(double)*13);
+    int cpen; // for finding the length of the decay arrays for the cp even higgs
+    int cpon;
+    int chn;
+    int i,j,k;
+    cpen=9;
+    cpon=9+cpohiggs[0].evec_size;
+    chn=4+cpehiggs[0].evec_size+ cpohiggs[0].evec_size+(cpehiggs[0].evec_size+cpohiggs[0].evec_size)*chhiggs[0].evecsize;
+    for (i=0,i<cpehiggs[0].evec_size;i++){
+        memset(cpehiggs[i].decay,0,sizeof(double)*cpen);
+        memset(cpehiggs[i].branching_frac,0,sizeof(double)*cpen+1);
+        memset(cpohiggs[i].decay,0,sizeof(double)*cpon);
+        memset(cpohiggs[i].branching_frac,0,sizeof(double)*cpon+1);
+    }
+    for (i=0,i<chhiggs[0].evec_size;i++){
+        memset(chhiggs[i].decay,0,sizeof(double)*chn);
+        memset(chhiggs[i].branching_frac,0,sizeof(double)*(chn+1));
+    }
     
 //c Reinitializing the decay widths.
 //c charged higgs widths
@@ -167,11 +178,11 @@ c-----------------------------------------------------------c*/
                 (g2/2. )*(g2/2.)/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-*/      do j=0,3 {
-            if (chhiggs[i].mass].gt.(80.4  + cpehiggs[j].mass)) {
+ */      for (j=0;j<=3;j++) {
+            if (chhiggs[i].mass.gt.(80.4  + cpehiggs[j].mass)) {
             x = W_H_rotation(cpehiggs[j].evec, chhiggs[i].evec);
-            chhiggs[i].decay[4+j] = pf(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) * x * x
-            StoSV(chmass[mch[i]],cpehiggs[j].mass,80.4 ) *
+            chhiggs[i].decay[4+j] = pf(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) * x * x *
+            StoSV(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) *
             (g2/2. )*(g2/2.)/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
             x=0;
             }
@@ -191,11 +202,13 @@ c-----------------------------------------------------------c*/
                 (g2/2.)*(g2/2.)/(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
             }
         }
-*/      do j=1,3 { //should exclude lightest CP odd, because it's the Goldstone
-            if (chhiggs[i].mass].gt.(80.4  + cpohiggs[j].mass)) {
+*/
+    
+    for (j=0;j<=3;j++) { //should exclude lightest CP odd, because it's the Goldstone, but we'll leave it in for testing purposes
+            if (chhiggs[i].mass.gt.(80.4  + cpohiggs[j].mass)) {
             x = dot_prod(cpohiggs[j].evec, chhiggs[i].evec);
-            chhiggs[i].decay[7+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
-            StoSV(chmass[mch[i]],cpohiggs[j].mass,80.4 ) *
+            chhiggs[i].decay[4+cpehiggs[0].evec_size+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
+            StoSV(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) *
             (g2/2. )*(g2/2.)/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
             x=0;
             }
@@ -215,10 +228,10 @@ c-----------------------------------------------------------c*/
             }
         }
 */
-        do j=1,2 {
+    for (j=0;j<=3;j++) { //j should include only the lightest massive charged higgs, but we'll leave it for testing purposes'
             if (chhiggs[i].mass.gt.(zmass[2] + chhiggs[j].mass)) {
                 x = dot_prod(chhiggs[j].evec, chhiggs[i].evec);
-                chhiggs[i].decay[j+10] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
+                chhiggs[i].decay[4+cpehiggs[0].evec_size+cpohiggs[0].evec_size+j] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
                 StoSV(chhiggs[i].mass,chhiggs[j].mass,zmass[2])*
                 ((g2*g2-g1*g1)/(G*2 ))*((g2*g2-g1*g1)/(G*2 ))/(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
                 x=0;
@@ -355,7 +368,7 @@ c-----------------------------------------------------------c*/
         }// ??? must be the end of the i loop
 */
 //c CPE Higgs to bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l
-        do i=0,3 {
+    for (i=0;i<=3,i++) {
 
             if (cpehiggs[i].mass.ge.(2 *4.7 )) {
                 cpehiggs[i].decay[1] = 3. *cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5) ) *
@@ -365,7 +378,7 @@ c-----------------------------------------------------------c*/
             (cpehiggs[i].Y_c)*(cpehiggs[i].Y_c);
             if (cpehiggs[i].mass.ge.(2 *1.78 )) {
                 cpehiggs[i].decay[3] = cpehiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
-                ((cpehiggs[i].Y_tau)*(cpehiggs[i].Y_tau);
+                (cpehiggs[i].Y_tau)*(cpehiggs[i].Y_tau);
             }
             decaycpe[i][4] = cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
             (cpehiggs[i].Y_mu)*(cpehiggs[i].Y_mu);
@@ -429,9 +442,8 @@ c-----------------------------------------------------------c*/
             cpehiggs[i].decay[5] + cpehiggs[i].decay[6] + cpehiggs[i].decay[7] + cpehiggs[i].decay[8];
 //c      totaldecaycpe(i)=decaycpe(i,1)+decaycpe(i,2)+decaycpe(i,3)+decaycpe(i,4)+decaycpe(i,5)+decaycpe(i,6)+decaycpe(i,7)
 //c     . +inv_decay(i)
-
-            do j=1,6 {
-                cpehiggs[i].branching_frac[j] = cpehiggs[i].decay[j] / cpehiggs[i].decay[0] ;
+        for (j=1;j<=6;j++) {
+            cpehiggs[i].branching_frac[j] = cpehiggs[i].decay[j] / cpehiggs[i].decay[0] ;
             }
             cpehiggs[i].branching_frac[7] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(2*(3.3658e-2))*(2*(3.3658e-2)); //!ZZ to 4 leptons (e+mu+tau=3)
             cpehiggs[i].branching_frac[8] = cpehiggs[i].decay[7]/cpehiggs[i].decay[0] *(20e-2)*(2*(3.3658e-2)); //!ZZ to 2 leptons 2 nus
@@ -445,7 +457,7 @@ c-----------------------------------------------------------c*/
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 //c decay of the cp odd Higgs to bb,cc,tau tau and mu mu
 //c now adding the Ai -> Aj hk mode
-        do i=1,3 {
+    for (i=1;i<=3;i++) {
             decaycpo[i][1] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *4.7 *4.7/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
             (Yb*cpoeigvec[1][ma[i]])*(Yb*cpoeigvec[1][ma[i]]);
             decaycpo[i][2] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
