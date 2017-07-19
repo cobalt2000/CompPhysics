@@ -21,6 +21,7 @@ typedef struct {
     int evec_size;  //This tells us the number of elements in the eigenvector.
     double* evec; //The vector composition of this particle state.
     int bf_size; //This tells us the number of decay modes of the given particle.
+    int decay_size; //This tells us the number of decay modes of the given particle.
     double* decay;  //The array containing the various decay modes of the particle.
     double* branching_frac;  //The array containing the various decay modes of the particle.
 } particle;
@@ -73,10 +74,14 @@ void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3,
      */
     Higgs.mass=m;
     Higgs.evec=A;
-    Higgs.evec_size=sizeof(A)/sizeof(A[0]);
+    Higgs.evec_size=4;//sizeof(A)/sizeof(A[0]);
     calc_yukawa(Higgs,Y1,Y2,Y3,YL);
-    //Branching fraction function would need to be called here. (BFF)
-    //Higgs.bf_size=sizeof(branching_frac)/sizeof(branching_frac[0]);
+// Moving these parts to the main, eventually.
+    Higgs.decay=(double*)malloc(sizeof(double)*Higgs.decay_size);
+    Higgs.branching_frac=(double*)malloc(sizeof(double)*Higgs.bf_size);
+    memset(Higgs.decay, 0, sizeof(double)*Higgs.decay_size);
+    memset(Higgs.branching_frac, 0, sizeof(double)*Higgs.bf_size);
+    //Branching fraction function could to be called here. (BFF)
 }
 
 double dot_prod (double *A, double *B){
