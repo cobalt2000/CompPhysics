@@ -290,15 +290,17 @@ c-----------------------------------------------------------c*/
 */
 //c      While the charged Higgs may decay through all these modes, it may also be light enough
 //c      to be a decay product of the top.  So here is a test for that decay channel.
-        if (174.3  .gt. (chmass[mch[i]] + 4.7 )) {
-            decayt[i] = pf(174.3 ,chmass[mch[i]],4.7 )*
+        if (174.3  .gt. (chhiggs[i].mass + 4.7 )) {
+            decayt[i]=pf(174.3,chhiggs[i].mass,4.7)*((-chhiggs[i].mass*chhiggs[i].mass+174.3*174.3-4.7*4.7)*(chhiggs[i].Y_b*chhiggs[i].Y_b+chhiggs[i].Y_t*chhiggs[i].Y_t)+4.*chhiggs[i].mass*4.7*chhiggs[i].Y_b*chhiggs[i].Y_t)/(8.*pi*174.3*174.3);
+            
+            /*            decayt[i] = pf(174.3 ,chmass[mch[i]],4.7 )*
             (
             (-chmass[mch[i]]*chmass[mch[i]] + 174.3 *174.3 - 4.7 *4.7) *
             ((Yb*cheigvec[1][mch[i]])*(Yb*cheigvec[1][mch[i]]) + (Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])*(Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]]))+
             4. *chmass[mch[i]]*4.7 *(Yb*cheigvec[1][mch[i]])*(Yt*cheigvec[2][mch[i]] + Ytp*cheigvec[4][mch[i]])
             )
             /(8. *pi*174.3 *174.3)
-            BFt[i]=decayt[i] / (decayt[i] + 1.508 );
+*/            BFt[i]=decayt[i] / (decayt[i] + 1.508 ); //1.508 is actually the PDG's inverse decay width, while some papers cite 2.00, the PDG table says Full width Γ = 1.41+0.19 GeV (S = 1.4)
         }
 /* This all appears to be a duplicate of calculations above.
 //c decay to lightest h^0 W
