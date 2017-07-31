@@ -150,10 +150,12 @@ c-----------------------------------------------------------c*/
             /(8. *pi*chmass[mch[i]]*chmass[mch[i]]);
         }
  */
+    if (chhigss[i].mass>(174.3+4.7)) {
         chhiggs[i].decay[2]=3.0*pf(chhiggs[i].mass,174.3,4.7)*
     ((chhiggs[i].Y_b*chhiggs[i].Y_b + chhiggs[i].Y_t*chhiggs[i].Y_t)* (chhiggs[i].mass*chhiggs[i].mass-174.3*174.3 - 4.7*4.7)
     +4. *1.42 *0.104 *chhiggs[i].Y_s*chhiggs[i].Y_c)
     /(8. *pi*chhiggs[i].mass*chhiggs[i].mass);
+    }
     
 
 //c decay to tau nu
@@ -179,7 +181,7 @@ c-----------------------------------------------------------c*/
             }
         }
  */      for (j=0;j<=3;j++) {
-            if (chhiggs[i].mass.gt.(80.4  + cpehiggs[j].mass)) {
+            if (chhiggs[i].mass>(80.4  + cpehiggs[j].mass)) {
             x = W_H_rotation(cpehiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[4+j] = pf(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) * x * x *
             StoSV(chhiggs[i].mass,cpehiggs[j].mass,80.4 ) *
@@ -205,7 +207,7 @@ c-----------------------------------------------------------c*/
 */
     
     for (j=0;j<=3;j++) { //should exclude lightest CP odd, because it's the Goldstone, but we'll leave it in for testing purposes
-            if (chhiggs[i].mass.gt.(80.4  + cpohiggs[j].mass)) {
+            if (chhiggs[i].mass>(80.4  + cpohiggs[j].mass)) {
             x = dot_prod(cpohiggs[j].evec, chhiggs[i].evec);
             chhiggs[i].decay[4+cpehiggs[0].evec_size+j] = pf(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) * x * x
             StoSV(chhiggs[i].mass,cpohiggs[j].mass,80.4 ) *
@@ -229,7 +231,7 @@ c-----------------------------------------------------------c*/
         }
 */
     for (j=0;j<=3;j++) { //j should include only the lightest massive charged higgs, but we'll leave it for testing purposes'
-            if (chhiggs[i].mass.gt.(zmass[2] + chhiggs[j].mass)) {
+            if (chhiggs[i].mass>(zmass[2] + chhiggs[j].mass)) {
                 x = dot_prod(chhiggs[j].evec, chhiggs[i].evec);
                 chhiggs[i].decay[4+cpehiggs[0].evec_size+cpohiggs[0].evec_size+j] = pf(chhiggs[i].mass,chhiggs[j].mass,zmass[2]) *x*x*
                 StoSV(chhiggs[i].mass,chhiggs[j].mass,zmass[2])*
@@ -370,20 +372,20 @@ c-----------------------------------------------------------c*/
 //c CPE Higgs to bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l
     for (i=0;i<=3,i++) {
 
-            if (cpehiggs[i].mass.ge.(2 *4.7 )) {
+            if (cpehiggs[i].mass>=(2 *4.7 )) {
                 cpehiggs[i].decay[1] = 3. *cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5) ) *
                 (cpehiggs[i].Y_b)*(cpehiggs[i].Y_b);
             }
             cpehiggs[i].decay[2] = 3. *cpehiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5)) *
             (cpehiggs[i].Y_c)*(cpehiggs[i].Y_c);
-            if (cpehiggs[i].mass.ge.(2 *1.78 )) {
+            if (cpehiggs[i].mass>=(2 *1.78 )) {
                 cpehiggs[i].decay[3] = cpehiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
                 (cpehiggs[i].Y_tau)*(cpehiggs[i].Y_tau);
             }
             decaycpe[i][4] = cpehiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpehiggs[i].mass*cpehiggs[i].mass)),(1.5 )) *
             (cpehiggs[i].Y_mu)*(cpehiggs[i].Y_mu);
 
-            if (cpehiggs[i].mass.ge.100 ) {
+            if (cpehiggs[i].mass>=100 ) {
 
 //c effective couplings are based on the composition of the mass state with respect to the gauge basis
 //                Yteff = (Yt*heigvec[2][mh[i]] + Ytp*heigvec[4][mh[i]]);
@@ -457,43 +459,56 @@ c-----------------------------------------------------------c*/
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 //c decay of the cp odd Higgs to bb,cc,tau tau and mu mu
 //c now adding the Ai -> Aj hk mode
-    for (i=1;i<=3;i++) {
-            decaycpo[i][1] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *4.7 *4.7/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
-            (Yb*cpoeigvec[1][ma[i]])*(Yb*cpoeigvec[1][ma[i]]);
-//        cpohiggs[i].decay[1] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5) ) *
-//        (cpohiggs[i].Y_b)*(cpohiggs[i].Y_b);
-        decaycpo[i][2] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
-            (Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]])*(Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]]);
-//       cpohiggs[i].decay[2] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5)) *
-//        (cpohiggs[i].Y_c)*(cpohiggs[i].Y_c);
-        decaycpo[i][3] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.78 *1.78 /cpomass[ma[i]]*cpomass[ma[i]]),(1.5 )) *
-            (Ytau*cpoeigvec[1][ma[i]])*(Ytau*cpoeigvec[1][ma[i]]);
-//        cpohiggs[i].decay[3] = cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
-//        (cpohiggs[i].Y_tau)*(cpohiggs[i].Y_tau);
-        decaycpo[i][4] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *0.106 *0.106/cpomass[ma[i]]*cpomass[ma[i]]),(1.5)) *
-            (Ymu*cpoeigvec[1][ma[i]])*(Ymu*cpoeigvec[1][ma[i]]);
-//            decaycpo[i][4] = cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
-//        (cpohiggs[i].Y_mu)*(cpohiggs[i].Y_mu);
-        do j=1,2 {
-                do k=1,4 {
-                    if (cpomass[ma[i]].gt.cpomass[ma[j]]+hmass[mh[k]]) {
-                        decaycpo[i][(4*j)+k] = pf(cpomass[ma[i]],cpomass[ma[j]],hmass[mh[k]])*
-                        (cpoeigvec[1][ma[i]]*cpoeigvec[1][ma[j]] - cpoeigvec[2][ma[i]]*cpoeigvec[2][ma[j]]
-                         + cpoeigvec[3][ma[i]]*cpoeigvec[3][ma[j]] - cpoeigvec[4][ma[i]]*cpoeigvec[4][ma[j]])*
-                        (cpoeigvec[1][ma[i]]*cpoeigvec[1][ma[j]] - cpoeigvec[2][ma[i]]*cpoeigvec[2][ma[j]]
-                         + cpoeigvec[3][ma[i]]*cpoeigvec[3][ma[j]] - cpoeigvec[4][ma[i]]*cpoeigvec[4][ma[j]])*
-                        (heigvec[1][mh[k])*v1 - heigvec[2][mh[k]]*v2 + heigvec[3][mh[k]]*v3 - heigvec[4][mh[k]]*v4)*
-                        (heigvec[1][mh[k])*v1 - heigvec[2][mh[k]]*v2 + heigvec[3][mh[k]]*v3 - heigvec[4][mh[k]]*v4)*
-                        (g2*g2+g1*g1)**2/(4. *8. *pi*cpomass[ma[i]]*cpomass[ma[i]]);
-                    }
+    for (i=0;i<=3;i++) { //Goldstone boson is i=0, massive CP odd higgs are i=1,2,3. i=0 should have no contribution!
+//            decaycpo[i][1] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *4.7 *4.7/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
+//            (Yb*cpoeigvec[1][ma[i]])*(Yb*cpoeigvec[1][ma[i]]);
+        cpohiggs[i].decay[1] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5) ) *
+        (cpohiggs[i].Y_b)*(cpohiggs[i].Y_b);
+//        decaycpo[i][2] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
+//            (Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]])*(Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]]);
+       cpohiggs[i].decay[2] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5)) *
+        (cpohiggs[i].Y_c)*(cpohiggs[i].Y_c);
+//        decaycpo[i][3] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.78 *1.78 /cpomass[ma[i]]*cpomass[ma[i]]),(1.5 )) *
+//            (Ytau*cpoeigvec[1][ma[i]])*(Ytau*cpoeigvec[1][ma[i]]);
+        cpohiggs[i].decay[3] = cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
+        (cpohiggs[i].Y_tau)*(cpohiggs[i].Y_tau);
+//        decaycpo[i][4] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *0.106 *0.106/cpomass[ma[i]]*cpomass[ma[i]]),(1.5)) *
+//            (Ymu*cpoeigvec[1][ma[i]])*(Ymu*cpoeigvec[1][ma[i]]);
+            decaycpo[i][4] = cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
+        (cpohiggs[i].Y_mu)*(cpohiggs[i].Y_mu);
+        
+        for (j=1;j<=2;j++) {
+            for (k=0;k<=3;k++) {
+                if (cpohiggs[i].mass>(cpohiggs[j].mass+cpehiggs[i].mass)){
+                    x=W_H_rotation(cpohiggs[i].evec,cpohiggs[j].evec);
+                    y=W_H_rotation(cpehiggs[k].evec,vevs);
+                    cpohiggs[i].decay[(4*j)+k]=pf(cpohiggs[i].mass,cpohiggs[j].mass,cpehiggs[k])*x*x*y*y*
+                    (g2*g2+g1*g1)*(g2*g2+g1*g1)/(4. *8. *pi*cpohiggs[i].mass*cpohiggs[i].mass);
+                }
+/*                if (cpomass[ma[i]].gt.cpomass[ma[j]]+hmass[mh[k]]) {
+                    decaycpo[i][(4*j)+k] = pf(cpomass[ma[i]],cpomass[ma[j]],hmass[mh[k]])*
+                    (cpoeigvec[1][ma[i]]*cpoeigvec[1][ma[j]] - cpoeigvec[2][ma[i]]*cpoeigvec[2][ma[j]]
+                    + cpoeigvec[3][ma[i]]*cpoeigvec[3][ma[j]] - cpoeigvec[4][ma[i]]*cpoeigvec[4][ma[j]])*
+                    (cpoeigvec[1][ma[i]]*cpoeigvec[1][ma[j]] - cpoeigvec[2][ma[i]]*cpoeigvec[2][ma[j]]
+                    + cpoeigvec[3][ma[i]]*cpoeigvec[3][ma[j]] - cpoeigvec[4][ma[i]]*cpoeigvec[4][ma[j]])*
+                    (heigvec[1][mh[k])*v1 - heigvec[2][mh[k]]*v2 + heigvec[3][mh[k]]*v3 - heigvec[4][mh[k]]*v4)*
+                    (heigvec[1][mh[k])*v1 - heigvec[2][mh[k]]*v2 + heigvec[3][mh[k]]*v3 - heigvec[4][mh[k]]*v4)*
+                    (g2*g2+g1*g1)**2/(4. *8. *pi*cpomass[ma[i]]*cpomass[ma[i]]);
+                    }*/
                 }
             }
-            do j=1,12 {
+        for (j=0;j<cpon;j++){
+            cpohiggs[i].decay[0]= cpohiggs[i].decay[0]+cpohiggs[i].decay[j];
+        }
+/*            do j=1,12 {
                 totaldecaycpo[i] = totaldecaycpo[i] + decaycpo[i][j];
-            }
-            do j=1,12 {
+            }*/
+        for (j=0;j<cpon;j++){
+            cpohiggs[i].branching_frac[j]= cpohiggs[i].decay[j]/cpohiggs[i].decay[0];
+        }
+/*        do j=1,12 {
                 BFcpo[i][j] = decaycpo[i][j] / totaldecaycpo[i];
-            }
+            }*/
         }
 
 //ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
