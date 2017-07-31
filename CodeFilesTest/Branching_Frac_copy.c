@@ -517,6 +517,7 @@ c-----------------------------------------------------------c*/
 
 //ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 //c SM Higgs to bb, cc, tau tau, mu mu, WW, ga ga, ZZ->2l 2nu, ZZ->4l
+// This set will be appended to the struct for the CPE Higgs array.
         do i=1,4 {
             if (hmass[mh[i]].ge.(2 *4.7 )) {
                 decaySM[i][1] = 3. *hmass[mh[i]]/(16. *pi) * pow((1.- 4. *4.7*4.7/(hmass[mh[i]]*hmass[mh[i]])),(1.5)) *
