@@ -460,13 +460,21 @@ c-----------------------------------------------------------c*/
     for (i=1;i<=3;i++) {
             decaycpo[i][1] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *4.7 *4.7/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
             (Yb*cpoeigvec[1][ma[i]])*(Yb*cpoeigvec[1][ma[i]]);
-            decaycpo[i][2] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
+//        cpohiggs[i].decay[1] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *4.7 *4.7/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5) ) *
+//        (cpohiggs[i].Y_b)*(cpohiggs[i].Y_b);
+        decaycpo[i][2] = 3. *cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpomass[ma[i]]*cpomass[ma[i]])),(1.5)) *
             (Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]])*(Yc*cpoeigvec[2][ma[i]] + Ycp*cpoeigvec[4][ma[i]]);
-            decaycpo[i][3] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.78 *1.78 /cpomass[ma[i]]*cpomass[ma[i]]),(1.5 )) *
+//       cpohiggs[i].decay[2] = 3. *cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.42 *1.42/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5)) *
+//        (cpohiggs[i].Y_c)*(cpohiggs[i].Y_c);
+        decaycpo[i][3] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *1.78 *1.78 /cpomass[ma[i]]*cpomass[ma[i]]),(1.5 )) *
             (Ytau*cpoeigvec[1][ma[i]])*(Ytau*cpoeigvec[1][ma[i]]);
-            decaycpo[i][4] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *0.106 *0.106/cpomass[ma[i]]*cpomass[ma[i]]),(1.5)) *
+//        cpohiggs[i].decay[3] = cpohiggs[i].mass/(16. *pi) * pow((1.  - 4. *1.78 *1.78/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
+//        (cpohiggs[i].Y_tau)*(cpohiggs[i].Y_tau);
+        decaycpo[i][4] = cpomass[ma[i]]/(16. *pi) * pow((1.  - 4. *0.106 *0.106/cpomass[ma[i]]*cpomass[ma[i]]),(1.5)) *
             (Ymu*cpoeigvec[1][ma[i]])*(Ymu*cpoeigvec[1][ma[i]]);
-            do j=1,2 {
+//            decaycpo[i][4] = cpohiggs[i].mass/(16. *pi) * pow((1. - 4. *0.106 *0.106/(cpohiggs[i].mass*cpohiggs[i].mass)),(1.5 )) *
+//        (cpohiggs[i].Y_mu)*(cpohiggs[i].Y_mu);
+        do j=1,2 {
                 do k=1,4 {
                     if (cpomass[ma[i]].gt.cpomass[ma[j]]+hmass[mh[k]]) {
                         decaycpo[i][(4*j)+k] = pf(cpomass[ma[i]],cpomass[ma[j]],hmass[mh[k]])*
