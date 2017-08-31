@@ -9,7 +9,7 @@
 
 #include "Branching_Frac.h"
 //c-----------------------------------------------------------c
-branchingfractions(cpehiggs,cpohiggs,chhiggs){
+void branchingfractions(struct particle *cpehiggs,struct particle *cpohiggs, struct particle *chhiggs){
 /*c-----------------------------------------------------------c
 c                                                           c
 c  This subroutine calculates the branching fractions       c
@@ -43,14 +43,16 @@ c-----------------------------------------------------------c*/
     int cpon;
     int chn;
     int i,j,k;
+    const double pibsg = 4*atan(1);
+
     cpen=9;
     cpon=9+cpohiggs[0].evec_size;
     chn=4+cpehiggs[0].evec_size+ cpohiggs[0].evec_size+(cpehiggs[0].evec_size+cpohiggs[0].evec_size)*chhiggs[0].evecsize;
     for (i=0,i<cpehiggs[0].evec_size;i++){
         memset(cpehiggs[i].decay,0,sizeof(double)*cpen);
-        memset(cpehiggs[i].branching_frac,0,sizeof(double)*cpen+1);
+        memset(cpehiggs[i].branching_frac,0,sizeof(double)*(cpen+1));
         memset(cpohiggs[i].decay,0,sizeof(double)*cpon);
-        memset(cpohiggs[i].branching_frac,0,sizeof(double)*cpon+1);
+        memset(cpohiggs[i].branching_frac,0,sizeof(double)*(cpon+1));
     }
     for (i=0,i<chhiggs[0].evec_size;i++){
         memset(chhiggs[i].decay,0,sizeof(double)*chn);

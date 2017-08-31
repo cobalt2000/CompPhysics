@@ -24,7 +24,7 @@ typedef struct {
     int decay_size; //This tells us the number of decay modes of the given particle.
     double* decay;  //The array containing the various decay modes of the particle.
     double* branching_frac;  //The array containing the various decay modes of the particle.
-} particle;
+} Particle;
 
 //Thing to remember: there will need to be a loop creating the array of particles after we call the eigenvector/eigenvalue function.
 
@@ -39,7 +39,7 @@ struct { // These would either be input by the user or randomized.  Each pointer
 */
  
  
-void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3, double *YL){
+void calc_yukawa (struct particle *Higgs, double *Y1, double *Y2, double *Y3, double *YL){
     /*
      Higgs   input/output   Pointer to the struct for the particle.
      Y1      input   Pointer to the array for the yukawas for 1st family, down/up.
@@ -63,7 +63,7 @@ void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3, double *Y
     return;
 }
 
-void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, double *YL Particle *Higgs){
+void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, double *YL, struct particle *Higgs){
     /*
      m      input   The eigenvalue of the mass state.
      A      input   Pointer to the eigenvector of the mass state.

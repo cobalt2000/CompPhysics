@@ -14,7 +14,7 @@
 const static double pibsg = 4*atan(1);
 
 
-double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull){
+double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull);
     /*c
      c	Calculates the B -> X_S + gamma BF from the Standard model and 2HDM
      c
@@ -37,12 +37,12 @@ double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,doub
      c
      cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc*/
 
-double DtermSq(double Q) {
+double DtermSq(double Q) ;
     /* Now we're actually getting to a calculation.
      Q  input   energy scale of the calculation.
      */
 
-double gam0eff(int i,int j) {
+double gam0eff(int i,int j) ;
     //Why does he have J as an input here?  He doesn't use it.
 
 double Aterm(double Q) ;

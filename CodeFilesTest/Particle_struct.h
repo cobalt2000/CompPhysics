@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3, double *YL);
+void calc_yukawa (struct particle *Higgs, double *Y1, double *Y2, double *Y3, double *YL);
     /*
      Higgs   input/output   Pointer to the struct for the particle.
      Y1      input   Pointer to the array for the yukawas for 1st family, down/up.
@@ -19,7 +19,7 @@ void calc_yukawa (Particle *Higgs, double *Y1, double *Y2, double *Y3, double *Y
      Y3      input   Pointer to the array for the yukawas for 3rd family, bottom/top.
      */
 
-void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, double *YL, Particle *Higgs);
+void fill_struct (const double m, double *A, double *Y1, double *Y2, double *Y3, double *YL, struct particle *Higgs);
 /*
  m      input   The eigenvalue of the mass state.
  A      input   Pointer to the eigenvector of the mass state.
