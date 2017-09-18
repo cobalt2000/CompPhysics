@@ -10,11 +10,13 @@
 #define b_to_sgamma_h
 
 #include <stdio.h>
+#include <math.h>
+#include "Particle_struct.h"
 
-const static double pibsg = 4*atan(1);
+//const static double pibsg = 4*atan(1);
 
-
-double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull);
+void bsg_nlo(particle *chhiggs,double *BF,double *pull);
+//double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,double pull);
     /*c
      c	Calculates the B -> X_S + gamma BF from the Standard model and 2HDM
      c
@@ -37,7 +39,7 @@ double bsg_nlo(double *xAu,double *xAd,double *xMH,double xnhiggs,double BF,doub
      c
      cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc*/
 
-double DtermSq(double Q) ;
+double DtermSq(double Q, particle *chhiggs) ;
     /* Now we're actually getting to a calculation.
      Q  input   energy scale of the calculation.
      */
@@ -45,7 +47,7 @@ double DtermSq(double Q) ;
 double gam0eff(int i,int j) ;
     //Why does he have J as an input here?  He doesn't use it.
 
-double Aterm(double Q) ;
+double Aterm(double Q,double eta,particle *chhiggs) ;
     /* Correction for low energy bremsstrahlang.
      Q  input   energy of calculation
      */
@@ -92,22 +94,22 @@ double Li2(const double z) ;			//!either positive or negative arguments allowed
 double Li2p(const double z)	;		//! positive arguments only
     //Undefined in the paper.
 
-double C1beff(const int i);
+double C1beff(const int i, const double eta, particle *chhiggs);
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
     
-double C0beff(const int i) ;
+double C0beff(const int i, const double eta, particle *chhiggs) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
 
-double C0b(const int i) ;
+double C0b(const int i, double eta) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
 
-double C1Weff(const int i) ;
+double C1Weff(const int i, particle *chhiggs) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
@@ -137,10 +139,10 @@ double Delta8(const double x) ;
      x   input   ratio of top mass to W mass scale.
      */
 
-double C0Weff(const int i) ;
+double C0Weff(const int i, particle *chhiggs) ;
     //Why does this function exist?
 
-double C0W(const int i) ;
+double C0W(const int i, particle *chhiggs) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      i   input   which coefficient is being calculated.
      */
@@ -155,7 +157,7 @@ double F18(const double x) ;
      x   input   running mass of the top quark at the W mass, divided by the W mass.
      */
 
-double C0WHiggs(int i);
+double C0WHiggs(int i, particle *chhiggs);
     /* Correction to the SM contributions by the charged Higgs at LO to the effective Wilson coefficients.
      i   input   which coefficient correction is being calculated.
      
@@ -173,7 +175,7 @@ double F28(const double x);
      coupling.
      */
     
-double C1WHeff(int i);
+double C1WHeff(int i, particle *chhiggs);
     // Summation of each effective Wilson coefficient (i) over all Higgses (j).
 
 double EH(const double x,const double xAu,const double xAd);
