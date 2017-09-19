@@ -103,7 +103,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
     delNPgam = lam1/2 - 9/2*lam2;
-    del = DEL;
+//    del = DEL;
 
 //c	write(*,*)(C0beff(i),i=1,8)
 //c	write(*,*)C1beff(7)
@@ -599,7 +599,42 @@ double C1beff(const int i, const double eta, particle *chhiggs){
     int j;
     double sum;
     const double mwbsg = 80.39;
-
+    double *ai,*ei,*fi,*gi;
+    ai[1]=0.6087;
+    ai[2]=0.6957;
+    ai[3]=0.2609;
+    ai[4]=-0.5217;
+    ai[5]=0.4086;
+    ai[6]=-0.4230;
+    ai[7]=-0.8994;
+    ai[8]=0.1456;
+    ei[1]=5.7064;
+    ei[2]=-3.8412;
+    ei[3]=0.0;
+    ei[4]=0.0;
+    ei[5]=-1.9043;
+    ei[6]=-0.1008;
+    ei[7]=0.1216;
+    ei[8]=0.0183;
+    fi[1]=-17.3023;
+    fi[2]=8.5027;
+    fi[3]=4.5508;
+    fi[4]=0.7519;
+    fi[5]=2.0040;
+    fi[6]=0.7476;
+    fi[7]=-0.5385;
+    fi[8]=0.0914;
+    gi[1]=14.8088;
+    gi[2]=-10.8090;
+    gi[3]=-0.8740;
+    gi[4]=0.4218;
+    gi[5]=-2.9347;
+    gi[6]=0.3971;
+    gi[7]=0.1600;
+    gi[8]=0.0225;
+    /*	data ei/5.7064d0,-3.8412d0,0d0,0d0,-1.9043d0,-0.1008d0,0.1216d0,0.0183d0/
+     data fi/-17.3023d0,8.5027d0,4.5508d0,0.7519d0,2.0040d0,0.7476d0,-0.5385d0,0.0914d0/
+     data gi/14.8088d0,-10.8090d0,-0.8740d0,0.4218d0,-2.9347d0,0.3971d0,0.1600d0,0.0225d0/*/
     double x = mbart(mwbsg)*mbart(mwbsg)/( mwbsg*mwbsg); //This looks like the run mass of some particle...
 
     if(i==7) {
@@ -656,6 +691,24 @@ else
 C0beff = C0b(i)
 endif
  */
+    double *ai, *hi;
+    ai[1]=0.6087;
+    ai[2]=0.6957;
+    ai[3]=0.2609;
+    ai[4]=-0.5217;
+    ai[5]=0.4086;
+    ai[6]=-0.4230;
+    ai[7]=-0.8994;
+    ai[8]=0.1456;
+    hi[1]=2.2996;
+    hi[2]=-1.0880;
+    hi[3]=-0.4286;
+    hi[4]=-0.07143;
+    hi[5]=-0.6494;
+    hi[6]=-0.0380;
+    hi[7]=-0.0186;
+    hi[8]=-0.0057;
+
     switch(i) {
         case 7: sum = 0;
             for (j=1;j<=8;j++) {
