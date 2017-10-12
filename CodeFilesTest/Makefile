@@ -12,8 +12,17 @@ DriverTest.o:	DriverTest.c HiggsLoops.o
 
 HiggsLoops.o:	HiggsLoops.c HiggsLoops.h
 
+b2sgDriver:	b2sgDriver.o b_to_sgamma.o
+
+b2sgDriver.o:	b2sgDriver.c b_to_sgamma.o
+
+b_to_sgamma.o:	b_to_sgamma.c b_to_sgamma.h
+
 run:	DriverTest
 	./DriverTest
+
+b2sgrun:	b2sgDriver
+		./b2sgDriver
 
 clean:
 	$(RM) DriverTest DriverTest.o HiggsLoops.o 
