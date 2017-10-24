@@ -64,7 +64,8 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     const double mubarb = mbbsg;
     const double mub = mbbsg;
     //c	mub = 5d0
-    
+    printf("Values!\n");
+
     //Parameters for the calculation from the paper.  I moved them to the correct sub-programs.
 /*    const double nf = 5;  //The top does not participate.
     const double beta0 = 11-2.0/3.0*nf;
@@ -75,6 +76,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
     const double lam1 = 0;	//! drops out anyway
     const double lam2 = 0.12; //! GeV**2
+    printf("First function.\n");
 
     const double eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
     const double z = (mcbsg*mcbsg)/(mbbsg*mbbsg);
@@ -100,6 +102,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
 
     delNPc = -1/9*lam2/C0b(7,eta)*(C0b(2,eta) - C0b(1,eta)/6);
+    printf("pieces of delNPc %lf %lf %lf \n", C0b(7,eta) , C0b(2,eta),C0b(1,eta));
 
     delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
     delNPgam = lam1/2 - 9/2*lam2;
@@ -111,10 +114,13 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
     BFcenu = 0.1049;	//! from PDG
+    printf("First chhiggs call.\n");
 
     *BF = BFcenu * CKMproductSq * 6*alphae/(pibsg*f(z)*kap(z))
         *mbrun(mub)*mbrun(mub)/(mbbsg*mbbsg)*(DtermSq(mub, chhiggs) + Aterm(mub,eta, chhiggs))
         *(1- delNPSL / (mbbsg*mbbsg) + delNPgam/(mbbsg*mbbsg) + delNPc / (mcbsg*mcbsg));
+    printf("First chhiggs call complete. BF = %lf \n", *BF);
+    printf("First chhiggs call complete. BF = %x \n", BF);
 
 //c	Comparison with Experiment
 //c	Taken from HFAG world average: 1010.1589
@@ -126,11 +132,12 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     BFthrefunc = 0.33*0.0001; //d-4 in Fortran
 
     relunc = BFthrefunc/BFthref;
-
-
+    printf("relunc = %lf. \n",relunc);
+//    printf("pull = %lf. \n", fabs((BF-BFexp)/sqrt(BFexpunc*BFexpunc + (BF * relunc)*(BF * relunc))));
     *pull = fabs((*BF-BFexp)/sqrt(BFexpunc*BFexpunc + (*BF * relunc)*(*BF * relunc)));
-
-
+    printf("pull = %lf. \n", *pull);
+    printf("pull = %x. \n", pull);
+//    printf("pull = %x. \n", *pull);
 
 
     return;
@@ -144,6 +151,7 @@ double DtermSq(double Q, particle *chhiggs) {
      Q  input   energy scale of the calculation.
      */
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+    printf("Starting DTerm\n");
 
     const double mbbsg = 4.75;
     const double mtbsg = 175;
@@ -151,6 +159,7 @@ double DtermSq(double Q, particle *chhiggs) {
     const double pibsg = 4*atan(1);
     const double mub = mbbsg;
     const double mwbsg = 80.39;
+    printf("Starting eta\n");
     const double eta = alphasbsg(mwbsg)/alphasbsg(mub); //the ratio of the strong couplings at the two renormalization scales, the W and b poles?
     double sumreal,sumimag;
     double r1r,r1c,r2r,r2c,r7,r8r,r8c;
@@ -185,6 +194,7 @@ double DtermSq(double Q, particle *chhiggs) {
     r1r = -1/6*r2r;
     r1c = -1/6*r2c;
 
+    printf("Starting gam0eff\n");
 
 
 
@@ -194,6 +204,7 @@ double DtermSq(double Q, particle *chhiggs) {
     sumreal = sumreal + C0beff(7,eta,chhiggs)*(r7 + gam0eff(7,7)*log(mbbsg/mub));
     sumreal = sumreal + C0beff(8,eta,chhiggs)*(r8r + gam0eff(8,7)*log(mbbsg/mub));
 
+    printf("C0beff and gam0eff end\n");
 
     sumimag = 0;
     sumimag = sumimag + C0beff(1,eta,chhiggs)*r1c;
@@ -205,6 +216,7 @@ double DtermSq(double Q, particle *chhiggs) {
     dtermimag = alphasbsg(mub)/(4*pibsg)*(sumimag);
 
     moose = (dtermreal*dtermreal + dtermimag*dtermimag);
+    printf("Ending DTerm = %lf. \n", moose);
 
 //c	write(*,*)C0beff(7),alphas(mub)/(4d0*pi)*C1beff(7),sumreal,sumimag
 
@@ -251,14 +263,15 @@ double Aterm(double Q, double eta,particle *chhiggs) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
     //Error: Gabe defines Q as an input, and never uses it. Instead, he uses the bottom mass, defined in mub=mbbsg above.  I used Q, so that if you change the calculation energy above, it actually changes here :).
-    
+    printf("Starting ATerm\n");
+
     const double pibsg = 4*atan(1);
     double sum,moose;
     int i,j;
 
     sum = 0;
     for (i=1;i<=8;i++){
-        for (j=i;i<=8;j++){
+        for (j=i;j<=8;j++){
             sum = sum + C0beff(i,eta, chhiggs)*C0beff(j,eta,chhiggs)*fij(i,j);
         }
 //c	 write(*,*)i,C0beff(i)
@@ -269,6 +282,7 @@ double Aterm(double Q, double eta,particle *chhiggs) {
     moose = (exp(-alphasbsg(Q)*log(DEL)*(7+2*log(DEL))/(3*pibsg))-1) * C0beff(7,eta,chhiggs)*C0beff(7,eta,chhiggs)
          + alphasbsg(Q)/pibsg * sum;
 
+    printf("Ending ATerm = %lf. \n", moose);
 
     return moose;
     }
@@ -600,6 +614,11 @@ double C1beff(const int i, const double eta, particle *chhiggs){
     double sum;
     const double mwbsg = 80.39;
     double *ai,*ei,*fi,*gi;
+    ai=(double*)malloc(sizeof(double)*9);
+    ei=(double*)malloc(sizeof(double)*9);
+    fi=(double*)malloc(sizeof(double)*9);
+    gi=(double*)malloc(sizeof(double)*9);
+
     ai[1]=0.6087;
     ai[2]=0.6957;
     ai[3]=0.2609;
@@ -660,7 +679,10 @@ thing = pow(eta,(39/23))*C1Weff(7,chhiggs) + 8/3*( pow(eta,(37/23))-pow(eta,(39/
 //c	stop
 
 //    if(order='LO') thing = 0;
-
+    free(ai);
+    free(ei);
+    free(fi);
+    free(gi);
     return thing;
     }
 
@@ -692,6 +714,9 @@ C0beff = C0b(i)
 endif
  */
     double *ai, *hi;
+    ai=(double*)malloc(sizeof(double)*9);
+    hi=(double*)malloc(sizeof(double)*9);
+
     ai[1]=0.6087;
     ai[2]=0.6957;
     ai[3]=0.2609;
@@ -725,7 +750,8 @@ endif
         default: thing = C0b(i,eta);
             break;
     }
-
+    free(ai);
+    free(hi);
     return thing;
 }
 
@@ -776,19 +802,19 @@ endif
 */
 
     switch(i){
-        case 1: thing = -pow(eta,(-12/23)) + pow(eta,(6/23));
+        case 1: thing = -pow(eta,(-12.0/23.0)) + pow(eta,(6.0/23.0));
             break;
-        case 2: thing = 1/3*pow(eta,(-12/23)) + 2/3*pow(eta,(6/23));
+        case 2: thing = 1.0/3.0*pow(eta,(-12.0/23.0)) + 2.0/3.0*pow(eta,(6.0/23.0));
             break;
-        case 3: thing = -1/27*pow(eta,(-12/23)) + 2/63*pow(eta,(6/23))
+        case 3: thing = -1.0/27.0*pow(eta,(-12.0/23.0)) + 2.0/63.0*pow(eta,(6.0/23.0))
                     - 0.0659*pow(eta,0.4086) + 0.0595*pow(eta,(-0.423))
                 - 0.0218*pow(eta,(-0.8994)) + 0.0335*pow(eta,(0.1456));
             break;
-        case 4: thing = 1/9*pow(eta,(-12/23)) + 1/21*pow(eta,(6/23))
+        case 4: thing = 1.0/9.0*pow(eta,(-12.0/23.0)) + 1.0/21.0*pow(eta,(6.0/23.0))
             + 0.0237*pow(eta,0.4086) - 0.0173*pow(eta,(-0.423))
             - 0.1336*pow(eta,(-0.8994)) - 0.0316*pow(eta,(0.1456));
             break;
-        case 5: thing = 1/108*pow(eta,(-12/23)) - 1/126*pow(eta,(6/23))
+        case 5: thing = 1.0/108.0*pow(eta,(-12.0/23.0)) - 1.0/126.0*pow(eta,(6.0/23.0))
             + 0.0094*pow(eta,0.4086) - 0.0100*pow(eta,(-0.423))
             + 0.0010*pow(eta,(-0.8994)) - 0.0017*pow(eta,(0.1456));
             break;
@@ -796,6 +822,7 @@ endif
             + 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
             + 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
             break;
+        default: thing = 
     }
     
     return thing;
@@ -1055,7 +1082,8 @@ double C0WHiggs(int i, particle *chhiggs) {
     const double mwbsg = 80.39;
     double sum;
     double x;
-    const int nhiggs = sizeof(chhiggs)/sizeof(chhiggs[0]);
+    const int nhiggs = chhiggs[0].evec_size;//sizeof(chhiggs)/sizeof(chhiggs[0]);
+//    printf("Did I do math correctly? %i \n", nhiggs);
     double Au,Ad;
 
     sum = 0;

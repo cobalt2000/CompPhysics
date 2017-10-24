@@ -2,7 +2,7 @@ SHELL = /bin/sh
 RM = rm -f
 TAR = tar zcvf
 CC = gcc -lm 
-CFLAGS = -O
+CFLAGS = -O3
 
 all:	DriverTest Makefile
 
@@ -21,7 +21,7 @@ b_to_sgamma.o:	b_to_sgamma.c b_to_sgamma.h
 run:	DriverTest
 	./DriverTest
 
-b2sgrun:	b2sgDriver
+b2sgrun:	b2sgDriver Makefile
 		./b2sgDriver
 
 clean:

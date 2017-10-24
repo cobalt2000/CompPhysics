@@ -47,7 +47,7 @@ double DtermSq(double Q, particle *chhiggs) ;
 double gam0eff(int i,int j) ;
     //Why does he have J as an input here?  He doesn't use it.
 
-double Aterm(double Q,double eta,particle *chhiggs) ;
+double Aterm(double Q,double eta, particle *chhiggs) ;
     /* Correction for low energy bremsstrahlang.
      Q  input   energy of calculation
      */

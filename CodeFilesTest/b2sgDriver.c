@@ -37,9 +37,16 @@ int main(){
 //    const double ytsm = sqrt(2.0)*mt/vev;  //Standard Model value for the top Yukawa coupling
 //    const double ybsm = sqrt(2.0)*mb/vev; //Standard Model value for the bottom Yukawa coupling
 //    const double xw = 0.2312; //weak mixing angle from Particle Data Group 2015 physical constants
-    struct particle *chhiggs;
-    chhiggs=(*particle)malloc(sizeof(particle)*1);
+//    printf("No chhiggs yet.\n");
+    particle *chhiggs;
+//    printf("No malloc yet.\n");
+
+    chhiggs=(particle*)malloc(sizeof(particle)*1);
+//    printf("Malloc works?\n");
+
     chhiggs[0].mass=130; //The mass eigenvalue of this particle state.
+//    printf("Mass win.\n");
+
     chhiggs[0].Y_d=sqrt(2.0)*md/vev; //The effective Yukawa couplings for down with this particle.
     chhiggs[0].Y_u=sqrt(2.0)*mu/vev; //The effective Yukawa couplings for up with this particle.
     chhiggs[0].Y_s=sqrt(2.0)*ms/vev; //The effective Yukawa couplings for strange with this particle.
@@ -49,12 +56,15 @@ int main(){
     chhiggs[0].Y_tau=sqrt(2.0)*mtau/vev; //The effective Yukawa couplings for tau with this particle.
     chhiggs[0].Y_mu=sqrt(2.0)*mmu/vev; //The effective Yukawa couplings for muon with this particle.
     chhiggs[0].evec_size=1;  //This tells us the number of elements in the eigenvector.
-    chhiggs[0].evec=(*double)malloc(sizeof(double)*1); //The vector composition of this particle state.
+ //   printf("No eigenvector yet.\n");
+
+    chhiggs[0].evec =(double*)malloc(sizeof(double)*10); //The vector composition of this particle state.
+    
 //    int bf_size; //This tells us the number of decay modes of the given particle.
 //    int decay_size; //This tells us the number of decay modes of the given particle.
 //    double* decay;  //The array containing the various decay modes of the particle.
 //    double* branching_frac;  //The array containing the various decay modes of the particle.
-
+//    printf("Malloc is happy after initialization.\n");
     double BF;
     double pull;
     
@@ -63,10 +73,11 @@ int main(){
     
     
     // Call solver
-    bsg_nlo( chhiggs, *BF, *pull );
-    
+    bsg_nlo( chhiggs, &BF, &pull );
+    printf("Malloc is happy after call.\n");
+
     // Print solution
-    printf("The pull for the loop order correction for the charge higgs loop is ",pull);
+    printf("The pull for the loop order correction for the charge higgs loop is %lg .\n",pull);
     
     
     return 0;
