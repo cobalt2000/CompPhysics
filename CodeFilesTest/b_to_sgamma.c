@@ -101,8 +101,8 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     }*/
     
 
-    delNPc = -1/9*lam2/C0b(7,eta)*(C0b(2,eta) - C0b(1,eta)/6);
-    printf("pieces of delNPc %lf %lf %lf \n", C0b(7,eta) , C0b(2,eta),C0b(1,eta));
+    delNPc = -1/9*lam2/C0b(7,eta,chhiggs)*(C0b(2,eta,chhiggs) - C0b(1,eta,chhiggs)/6);
+    printf("pieces of delNPc %lf %lf %lf \n", C0b(7,eta,chhiggs) , C0b(2,eta,chhiggs),C0b(1,eta,chhiggs));
 
     delNPSL = lam1/2 + 3*lam2/2*(1-4*pow((1-z),4)/f(z));
     delNPgam = lam1/2 - 9/2*lam2;
@@ -747,7 +747,7 @@ endif
             0.9135*pow(eta,(0.4086)) + 0.0873*pow(eta,(-0.4230))
             - 0.0571*pow(eta,(-0.8994)) + 0.0209*pow(eta,(0.1456));
             break;
-        default: thing = C0b(i,eta);
+        default: thing = C0b(i,eta,chhiggs);
             break;
     }
     free(ai);
@@ -766,7 +766,7 @@ endif
  */
 
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-double C0b(const int i, double eta) {
+double C0b(const int i, double eta, particle *chhiggs) {
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
@@ -822,7 +822,7 @@ endif
             + 0.0108*pow(eta,0.4086) + 0.0163*pow(eta,(-0.423))
             + 0.0103*pow(eta,(-0.8994)) + 0.0023*pow(eta,(0.1456));
             break;
-        default: thing = 
+        default: thing = C0beff(i,eta,chhiggs);
     }
     
     return thing;

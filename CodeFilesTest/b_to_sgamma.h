@@ -104,7 +104,7 @@ double C0beff(const int i, const double eta, particle *chhiggs) ;
      x   input   ratio of top mass to W mass scale.
      */
 
-double C0b(const int i, double eta) ;
+double C0b(const int i, double eta, particle *chhiggs) ;
     /* SM contributions at NLO to the effective Wilson coefficients.
      x   input   ratio of top mass to W mass scale.
      */
