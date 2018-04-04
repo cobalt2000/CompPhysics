@@ -228,6 +228,7 @@ double DtermSq(double Q, particle *chhiggs) {
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 double gam0eff(int i,int j) {
     //Why does he have J as an input here?  He doesn't use it.
+    //This is the seventh column in equation 8 from "Weak radiative B-meson decay beyond leading logarithms" by Chetyrkin, Misiak, and Munz
 //cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
     
     const double pibsg = 4*atan(1);
@@ -249,7 +250,7 @@ double gam0eff(int i,int j) {
     }
 
 
-    moose *= alphasbsg(mub)*1.0/(4*pibsg);
+    moose *= alphasbsg(mub)*1.0/(4*pibsg);  // This applies a scaling that is still being investigated.
 
     return moose;
     }
